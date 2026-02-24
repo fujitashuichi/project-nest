@@ -1,23 +1,21 @@
-import express, { json } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import routes from "./routes/index.js";
+
+const FE_URL = import.meta.env.NODE_FE_URL;
 
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: FE_URL,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/test", (_, res) => {
-  res.status(200).json({
-    id: "00000001",
-    email: "example@gmail.com"
-  });
-});
+app.use("/api", routes);
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
