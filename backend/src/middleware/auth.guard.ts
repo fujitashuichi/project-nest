@@ -7,8 +7,8 @@ export const registerValidation = (req: Request, res: Response, next: NextFuncti
   if (!parsedDto.success) {
     return res.status(400).send({
       success: false,
-      message: "Invalid Json Data: Data type is not valid"
-    })
+      message: parsedDto.error.message
+    });
   }
 
   req.body = parsedDto.data;

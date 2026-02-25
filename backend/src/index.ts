@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import routes from "./routes/index.js";
 import { ENV } from "./config/index.js";
-import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
+import { globalErrorHandler } from "./middleware/index.js";
 
 const FE_URL = ENV.FE_URL;
 
