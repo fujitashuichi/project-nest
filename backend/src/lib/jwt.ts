@@ -1,32 +1,23 @@
 import jwt from "jsonwebtoken"
-import { JWTPayloadSchema, type JWTPayload } from "../types/types.payload.js"
+import { JWTPayloadSchema, Result, type JWTPayload } from "../types/index.js"
+import { ENV } from "../config/env.js"
 
-const JWT_SECRET = import.meta.env.NODE_JWT_SECRET;
+const JWT_SECRET = ENV.JWT_SECRET;
 
-export const signToken = (payload: JWTPayload) => {
+export const signToken = (payload: JWTPayload): string => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" })
 }
 
-export const verifyToken = (token: string) => {
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const data = JWTPayloadSchema.safeParse(decoded);
+export const verifyToken = (token: string): JWTPayload => {
+  // ここでTokenが秘密鍵によって解読される
+  // JWTPayload は、ユーザデータを得るのに十分な情報を持つ.
+  const decoded = jwt.verify(token, JWT_SECRET);
+  const parsedData = JWTPayloadSchema.safeParse(decoded);
 
-    if (!data.success) {
-      return {
-        ok: false,
-        error: new Error("Invalid Token")
-      }
-    }
-
-    return {
-      ok: true,
-      data: data
-    }
-  } catch(err: unknown) {
-    return {
-      ok: false,
-      error: err
-    }
+  if (!parsedData.success) {
+    console.error("Decoded token is not valid");
+    throw parsedData.error
   }
+
+  return parsedData.data
 }

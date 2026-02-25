@@ -2,8 +2,10 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import routes from "./routes/index.js";
+import { ENV } from "./config/index.js";
+import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 
-const FE_URL = import.meta.env.NODE_FE_URL;
+const FE_URL = ENV.FE_URL;
 
 const app = express();
 
@@ -16,6 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api", routes);
+app.use(globalErrorHandler);
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
