@@ -2,10 +2,10 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import routes from "./routes/index.js";
-import { ENV } from "./config/index.js";
 import { globalErrorHandler } from "./middleware/index.js";
+import { ENV } from "./config/env.js";
 
-const FE_URL = ENV.FE_URL;
+const FE_URL = ENV.NODE_FE_URL;
 
 const app = express();
 

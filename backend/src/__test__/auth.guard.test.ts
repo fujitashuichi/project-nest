@@ -8,7 +8,7 @@ describe("auth.guard", () => {
     const res = {} as unknown as Response;
     const next = vi.fn();
 
-    registerValidation(requestMocks.validRegisterHttpReq(), res, next);
+    registerValidation(requestMocks.register.validRegisterHttpReq(), res, next);
     expect(next).toHaveBeenCalledTimes(1);
   });
 
@@ -19,7 +19,7 @@ describe("auth.guard", () => {
     } as unknown as Response;
     const next = vi.fn();
 
-    registerValidation(requestMocks.invalidRegisterHttpReq_1(), res, next);
+    registerValidation(requestMocks.register.invalidRegisterHttpReq_1(), res, next);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith(
       expect.objectContaining({ success: false })
@@ -33,7 +33,7 @@ describe("auth.guard", () => {
     } as unknown as Response;
     const next = vi.fn();
 
-    registerValidation(requestMocks.invalidRegisterHttpReq_2(), res, next);
+    registerValidation(requestMocks.register.invalidRegisterHttpReq_2(), res, next);
     expect(next).toHaveBeenCalledTimes(0);
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith(

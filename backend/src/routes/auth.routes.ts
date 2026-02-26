@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { registerValidation } from "../middleware/auth.guard.js";
+import { registerValidation } from "../middleware/index.js";
+import { register } from "../controller/index.js";
 
 const router = Router();
 
 router.post("/register",
-  registerValidation
+  registerValidation,
+  register
 );
 
 router.post("/login", (req, res) => {
