@@ -1,7 +1,7 @@
 import { RegisterDto } from "../types/index.js";
 import { hashPassword, signToken } from "../lib/index.js";
-import { usersRepository } from "../repository/user.repository.js";
 import { User } from "../types/type.db.js";
+import { usersRepository } from "../repository/index.js";
 
 
 export const registerUser = async (dto: RegisterDto): Promise<{ user: User, token: string }> => {
