@@ -20,7 +20,6 @@ export class RegisterService {
       throw new Error("Email already registered.");
     }
 
-    console.log("password:", dto.password);
     const password_hash = await hashPassword(dto.password);
 
     const newUser = {

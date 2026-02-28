@@ -11,13 +11,13 @@ export class UsersRepository {
     private readonly db: Database
   ) {}
 
-  getUsers = (): Promise<User[]> => {
+  getUsers = (): Promise<User[] | []> => {
     return new Promise((resolve, reject) => {
       this.db.all(
         `SELECT * FROM ${this.tableName}`,
         (err, rows) => {
           if (!rows) {
-            reject(new Error(`getUsers: No data found`));
+            resolve([]);
             return;
           }
           if (err) {
@@ -26,6 +26,7 @@ export class UsersRepository {
           }
           const parsedRow = UserSchema.array().safeParse(rows);
           if (!parsedRow.success) {
+            console.error(parsedRow.error);
             reject(new DatabaseGetError("AppDb", this.tableName));
             return;
           }
@@ -53,7 +54,7 @@ export class UsersRepository {
     });
   }
 
-  findById = (id: string): Promise<User | null> => {
+  findById = (id: number): Promise<User | null> => {
     return new Promise((resolve, reject) => {
       this.db.get(
         `SELECT * FROM ${this.tableName} WHERE id = ?`,
@@ -80,7 +81,6 @@ export class UsersRepository {
 
   findByEmail = (email: string): Promise<User | null> => {
     return new Promise((resolve, reject) => {
-      console.log("findByEmail running...");
       this.db.get(
         `SELECT * FROM ${this.tableName} WHERE email = ?`,
         [email],
