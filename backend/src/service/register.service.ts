@@ -1,31 +1,40 @@
 import { RegisterDto } from "../types/index.js";
 import { hashPassword, signToken } from "../lib/index.js";
 import { User } from "../types/type.db.js";
-import { usersRepository } from "../repository/index.js";
+import { UsersRepository } from "../repository/index.js";
+import { createAppDb } from "../db/app.db.js";
+import { Database } from "sqlite3";
 
 
-export const registerUser = async (dto: RegisterDto): Promise<{ user: User, token: string }> => {
-  if (await usersRepository.findByEmail(dto.email) !== null) {
-    throw new Error("Email already registered.");
+const AppDb = await createAppDb("app.db");
+
+export class RegisterService {
+  private usersRepository: UsersRepository;
+
+  constructor(db: Database = AppDb) {
+    this.usersRepository = new UsersRepository(db);
   }
 
-  const password_hash = await hashPassword(dto.password);
-//////////////////////////////////////////////
-  const id = "server creates new Id";
-//////////////////////////////////////////////
+  registerUser = async (dto: RegisterDto): Promise<{ user: User, token: string }> => {
+    if (await this.usersRepository.findByEmail(dto.email) !== null) {
+      throw new Error("Email already registered.");
+    }
 
-  const newUser: User = {
-    id: id,
-    email: dto.email,
-    password_hash: password_hash,
-    created_at: Date.now()
+    console.log("password:", dto.password);
+    const password_hash = await hashPassword(dto.password);
+
+    const newUser = {
+      email: dto.email,
+      password_hash: password_hash,
+      created_at: Date.now()
+    }
+
+    const savedUser: User = await this.usersRepository.saveUser(newUser);
+    const token: string = signToken({ email: dto.email });
+
+    return {
+      user: savedUser,
+      token: token
+    };
   }
-  await usersRepository.saveUser(newUser);
-
-  const token = signToken({ email: dto.email });
-
-  return {
-    user: newUser,
-    token: token
-  };
 }

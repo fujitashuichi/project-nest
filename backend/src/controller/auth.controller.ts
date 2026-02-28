@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { RegisterDto } from "../types/index.js";
-import { registerUser } from "../service/index.js";
+import type { RegisterService } from "../service/index.js";
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, registerService: RegisterService) => {
   const dto: RegisterDto = req.body;
 
-  const registerResult = await registerUser(dto);
+  const registerResult = await registerService.registerUser(dto);
 
   return res
     .status(201)

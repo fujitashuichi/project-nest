@@ -1,1 +1,1 @@
-export { registerUser } from "./register.service.js"
+export { RegisterService } from "./register.service.js"
