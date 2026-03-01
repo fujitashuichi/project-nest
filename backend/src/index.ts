@@ -1,9 +1,10 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import routes from "./routes/index.js";
+import { createAppRouter } from "./routes/index.js";
 import { globalErrorHandler } from "./middleware/index.js";
 import { ENV } from "./config/env.js";
+import { createAppDb } from "./db/app.db.js";
 
 const FE_URL = ENV.NODE_FE_URL;
 
@@ -17,7 +18,9 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api", routes);
+const db = await createAppDb("app.db");
+
+app.use("/api", createAppRouter(db));
 app.use(globalErrorHandler);
 
 app.listen(3000, () => {

@@ -23,4 +23,6 @@ export const createAuthRouter = (db: Database) => {
   router.post("/me", (req, res) => {
     res.status(501).send();
   });
+
+  return router;
 }
