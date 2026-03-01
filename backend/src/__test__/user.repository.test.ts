@@ -39,7 +39,7 @@ describe("user.repositoryの各メソッドを検査", () => {
 
   it("findByIdは正しく成功する", async () => {
     const { id, ...data } = userMocks.user();
-    repository?.saveUser(data);
+    await repository?.saveUser(data);
 
     const result = repository?.findById(1);
     await expect(result).resolves.toEqual(
@@ -49,7 +49,7 @@ describe("user.repositoryの各メソッドを検査", () => {
 
   it("findByEmailは正しく成功する", async () => {
     const { id, ...data } = userMocks.user();
-    repository?.saveUser(data);
+    await repository?.saveUser(data);
 
     const result = repository?.findByEmail(data.email);
     await expect(result).resolves.toEqual(
@@ -57,7 +57,7 @@ describe("user.repositoryの各メソッドを検査", () => {
     );
   });
 
-  it("userが存在しないときは[]をresolveする", async () => {
+  it("userが存在しないときは、[]をresolveする", async () => {
     const result = repository?.getUsers();
     await expect(result).resolves.toStrictEqual([]);
   });
