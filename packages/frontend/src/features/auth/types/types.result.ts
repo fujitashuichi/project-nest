@@ -1,0 +1,8 @@
+export type ApiResult = {
+  ok: boolean,
+  json: unknown
+}
+
+export type RegisterResult =
+  | { ok: false, error: Error }
+  | { ok: true, token: string }

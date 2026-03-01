@@ -1,0 +1,45 @@
+import type { ApiResult } from "../features/auth/types";
+
+type Props = {
+  path: string,
+  method: "GET" | "POST" | "PUT" | "DELETE",
+  body: object
+};
+
+export const apiClient = async ({ path, method, body }: Props): Promise<ApiResult> => {
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  try {
+    const response = await fetch(`${API_URL}${path}`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        json: await response.json()
+      }
+    }
+
+    return {
+      ok: true,
+      json: await response.json()
+    }
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      return {
+        ok: false,
+        json: { "message": e.message }
+      }
+    }
+
+    return {
+      ok: false,
+      json: { "message": "unknown error: fetch failed" }
+    }
+  }
+}
