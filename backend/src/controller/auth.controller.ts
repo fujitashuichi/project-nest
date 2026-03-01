@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { RegisterDto } from "../types/index.js";
-import type { RegisterService } from "../service/index.js";
+import { RegisterService } from "../service/index.js";
+import { Database } from "sqlite3";
 
-export const register = async (req: Request, res: Response, registerService: RegisterService) => {
+export const register = async (req: Request, res: Response, db: Database) => {
   const dto: RegisterDto = req.body;
+  const registerService = new RegisterService(db);
 
   const registerResult = await registerService.registerUser(dto);
 
