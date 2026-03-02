@@ -6,7 +6,5 @@ export const RegisterRequestSchema = z.object({
 });
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 
-export const RegisterResponseSchema = z.object({
-  token: z.string()
-});
+export const RegisterResponseSchema = z.void().or(z.object({}));
 export type ResisterResponse = z.infer<typeof RegisterResponseSchema>;

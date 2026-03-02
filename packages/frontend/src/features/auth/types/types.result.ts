@@ -5,4 +5,4 @@ export type ApiResult = {
 
 export type RegisterResult =
   | { ok: false, error: Error }
-  | { ok: true, token: string }
+  | { ok: true }

@@ -27,8 +27,5 @@ export const registerUser = async (body: UserRegisterBodyType): Promise<Register
     }
   }
 
-  return {
-    ok: true,
-    token: parsedData.data.token
-  }
+  return { ok: true }
 }

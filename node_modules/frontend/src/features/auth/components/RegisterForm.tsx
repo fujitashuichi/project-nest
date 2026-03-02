@@ -25,7 +25,13 @@ function RegisterForm() {
       alert("パスワード確認が一致しません");
       return;
     }
-    await registerUser({ email: data.email, password: data.password  });
+    const result = await registerUser({ email: data.email, password: data.password  });
+    if (!result.ok) {
+      console.error(result.error);
+      alert("登録に失敗しました");
+      return;
+    }
+    alert("登録完了");
   }
 
   return (
