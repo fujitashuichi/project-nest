@@ -5,12 +5,13 @@ import type { ApiResult, RegisterResult } from "../types/types.result";
 
 export const registerUser = async (body: UserRegisterBodyType): Promise<RegisterResult> => {
   const response: ApiResult = await apiClient({
-    path: "/api/register",
+    path: "/api/auth/register",
     method: "POST",
     body: body
   });
 
   if (!response.ok) {
+    console.error("register failed by response Error");
     return {
       ok: false,
       error: new Error("register failed")
