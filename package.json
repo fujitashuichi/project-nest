@@ -4,11 +4,13 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "build:shared": "tsc -p packages/shared"
+  },
   "devDependencies": {
     "eslint": "^10.0.2"
   },
   "dependencies": {
-    "tsc": "^2.0.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1",
     "zod": "^4.3.6"

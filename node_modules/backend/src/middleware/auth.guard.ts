@@ -1,4 +1,4 @@
-import { RegisterRequestSchema } from "@pkg-shared";
+import { RegisterRequestSchema } from "@pkg/shared";
 import { NextFunction, Request, Response } from "express";
 
 export const registerValidation = (req: Request, res: Response, next: NextFunction) => {
