@@ -1,0 +1,47 @@
+import { useEffect, useState } from "react"
+import { isLoggedIn } from "../api/isLoggedIn";
+import { LoginForm } from "./LoginForm";
+
+export type Status = "loading" | "loginSession" | "success" | "failed";
+
+export function LoginModule() {
+  const [status, setStatus] = useState<Status>("loading");
+
+  useEffect(() => {
+    const firstSession = async () => {
+      const result = await isLoggedIn();
+      if (!result) {
+        setStatus("loginSession")
+      };
+    }
+    firstSession();
+  }, []);
+
+  return (
+    <div>
+      {status === "loading" && <LoadingUI />}
+      {status === "loginSession" && LoginForm(setStatus) }
+      {status === "failed" && <FailedUI /> }
+      {status === "success" && <SuccessUI /> }
+    </div>
+  )
+}
+
+
+const LoadingUI = () => (
+  <div>
+    <h1>Now Loading...</h1>
+  </div>
+)
+
+const FailedUI = () => (
+  <div>
+    <h1>Login Failed</h1>
+  </div>
+)
+
+const SuccessUI = () => (
+  <div>
+    <h1>Login Succeed!</h1>
+  </div>
+)

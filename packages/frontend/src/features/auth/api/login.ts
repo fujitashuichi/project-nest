@@ -1,0 +1,23 @@
+import type { LoginRequest } from "@pkg/shared";
+import { apiClient } from "../../../lib";
+import type { ApiResult } from "../../../lib/types";
+import type { LoginResult } from "../types/types.result";
+
+export const login = async (body: LoginRequest): Promise<LoginResult> => {
+  const response: ApiResult = await apiClient({
+    path: "/api/auth/login",
+    method: "POST",
+    body: body
+  });
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      error: response.error
+    }
+  }
+
+  return {
+    ok: true
+  }
+}
