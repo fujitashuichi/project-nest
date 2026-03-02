@@ -1,39 +1,43 @@
-import { useState } from "react"
+import z from "zod";
+import { registerUser } from "../api/register";
+import { RegisterRequestSchema } from "@pkg-shared";
+import { parseFormData } from "../../../lib";
+import type React from "react";
+
+
+const formDataSchema = RegisterRequestSchema.extend({
+  passwordConfirm: z.string().min(8).max(20)
+});
+
 
 function RegisterForm() {
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-
-  const confirmPassword = (): boolean => {
-    if (password !== passwordConfirm) {
-      alert("パスワード確認が一致しません");
-      return false;
+  const register = async (e: React.SubmitEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
+    const formData:FormData = new FormData(e.currentTarget);
+    const parsed = await parseFormData(formData, formDataSchema);
+    if (!parsed.success) {
+      alert("入力値が正しくありません");
+      return;
     }
-    return true;
-  }
+    const data = parsed.data;
 
-  const register = () => {
-    const confirmResult = confirmPassword();
-    if (!confirmResult) return;
-
+    if (data.email !== data.passwordConfirm) {
+      alert("パスワード確認が一致しません");
+      return;
+    }
+    await registerUser({ email: data.email, password: data.password  });
   }
 
   return (
-    <form action={register}>
+    <form onSubmit={(e) => register(e)}>
       <label htmlFor="email">email</label>
-      <input type="email" />
+      <input name="email" type="email" required placeholder="example@email.com" />
 
       <label htmlFor="password">password</label>
-      <input
-        type="password" min={8} max={20}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <input name="password" type="password" required min={8} max={20} placeholder="8～20字" />
 
       <label htmlFor="passwordConfirm">type password again</label>
-      <input
-        type="password" min={8} max={20}
-        onChange={(e) => setPasswordConfirm(e.target.value)}
-      />
+      <input name="passwordConfirm" type="password" required min={8} max={20} placeholder="8～20字" />
 
       <button type="submit">submit</button>
     </form>
