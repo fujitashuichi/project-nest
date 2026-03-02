@@ -1,8 +1,8 @@
 import z from "zod";
 import { registerUser } from "../api/register";
-import { RegisterRequestSchema } from "@pkg-shared";
 import { parseFormData } from "../../../lib";
 import type React from "react";
+import { RegisterRequestSchema } from "@pkg/shared";
 
 
 const formDataSchema = RegisterRequestSchema.extend({
@@ -21,7 +21,7 @@ function RegisterForm() {
     }
     const data = parsed.data;
 
-    if (data.email !== data.passwordConfirm) {
+    if (data.password !== data.passwordConfirm) {
       alert("パスワード確認が一致しません");
       return;
     }

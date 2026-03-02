@@ -1,1 +1,1 @@
-export { RegisterRequestSchema, type RegisterRequest, RegisterResponseSchema, type ResisterResponse } from "./auth/types.dto";
+export { RegisterRequestSchema, type RegisterRequest, RegisterResponseSchema, type RegisterResponse } from "./auth/types.dto.js";

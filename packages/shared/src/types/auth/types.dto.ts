@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 
 export const RegisterRequestSchema = z.object({
   email: z.email(),
@@ -7,4 +7,4 @@ export const RegisterRequestSchema = z.object({
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 
 export const RegisterResponseSchema = z.void().or(z.object({}));
-export type ResisterResponse = z.infer<typeof RegisterResponseSchema>;
+export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
