@@ -2,8 +2,8 @@ import { Database } from "sqlite3";
 import { createAppDb } from "../db/index.js";
 import { UsersRepository } from "../repository/index.js";
 import { LoginRequest } from "@pkg/shared";
-import { hashPassword, signToken } from "../lib/index.js";
-import { ConfirmPasswordError, UserUndefinedError } from "../error/UserAuthError.js";
+import { comparePassword, signToken } from "../lib/index.js";
+import { UserUndefinedError } from "../error/UserAuthError.js";
 
 
 const appDb = await createAppDb("app.db");
@@ -17,15 +17,11 @@ export class LoginStateManagementService {
 
   tryLogin = async (dto: LoginRequest): Promise<{ token: string }> => {
     const user = await this.usersRepository.findByEmail(dto.email);
-    const dtoPassword_hash = await hashPassword(dto.password);
-
     if (!user) {
       throw new UserUndefinedError();
     }
 
-    if (user.password_hash !== dtoPassword_hash) {
-      throw new ConfirmPasswordError();
-    }
+    await comparePassword(dto.password, user.password_hash);
 
     const newToken = signToken({ email: dto.email });
 

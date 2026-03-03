@@ -3,10 +3,14 @@ import { Request } from "express"
 import { mockReq } from "sinon-express-mock"
 
 export const requestMocks = {
+  createRequest: (body: Request["body"]): Request => {
+    return mockReq({ body: body });
+  },
+
   register: {
     validRegisterHttpReq: (): Request => {
       const data: RegisterRequest = {
-        email: "example@github.com",
+        email: "example@email.com",
         password: "password"
       }
 
@@ -33,7 +37,7 @@ export const requestMocks = {
   login: {
     validRequestHttpReq: (): Request => {
       const data: LoginRequest = {
-        email: "example@gmeil.com",
+        email: "example@email.com",
         password: "password"
       }
 
@@ -55,5 +59,12 @@ export const requestMocks = {
         password: null
       })
     },
+
+    wrongPasswordHttpReq: (): Request => {
+      return mockReq({
+        email: "example@email.com",
+        password: "ThIsISWroNGpaSswOrd"
+      });
+    }
   }
 }

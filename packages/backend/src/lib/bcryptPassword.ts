@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt"
 import { User } from "../types/type.db.js";
 import { InvalidPasswordError, UserAuthError } from "../error/index.js";
-import type { UsersRepository } from "../repository/index.js";
-import { RegisterRequest } from "@pkg-shared";
+import { RegisterRequest } from "@pkg/shared";
 
 const SaltRounds = 10;
 
@@ -10,18 +9,12 @@ export const hashPassword = async (password: RegisterRequest["password"]) => {
   return await bcrypt.hash(password, SaltRounds);
 }
 
-// email と password で認証を行い、完全なユーザーデータを獲得します.
-export const comparePassword = async (email: RegisterRequest["email"], password: string, repository: UsersRepository): Promise<User> => {
-  const user = await repository.findByEmail(email);
 
-  if (!user) {
-    throw new UserAuthError("The user was not found. It means the user was deleted or DB not response properly.");
-  }
-
-  const isValid = await bcrypt.compare(password, user.password_hash);
+export const comparePassword = async (password: string, hashed_password: string): Promise<true> => {
+  const isValid = await bcrypt.compare(password, hashed_password);
 
   if (isValid) {
-    return user
+    return true
   } else {
     throw new InvalidPasswordError();
   }

@@ -18,7 +18,6 @@ describe("auth.guard", () => {
 
 
   it("register: 正しいリクエストは通過する", () => {
-    console.log("res:", res, "next:", next)
     registerValidation(requestMocks.register.validRegisterHttpReq(), res!, next!);
     expect(next).toHaveBeenCalledTimes(1);
   });

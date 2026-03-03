@@ -1,9 +1,9 @@
 vi.stubEnv("NODE_JWT_SECRET", "secret");
 
-import { Response } from "express";
+import { Request, response, Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createResponseMock, requestMocks } from "../__mock__/index.js";
-import { register } from "../controller/index.js";
+import { login, register } from "../controller/index.js";
 import { Database } from "sqlite3";
 import { createAppDb } from "../db/app.db.js";
 
@@ -20,16 +20,58 @@ describe("auth.controller", () => {
     db = null;
   });
 
-  it("バリデーション済みのdto値に対し、正常に登録が完了する", async () => {
+  // register
+  it("register: 正常に登録が完了する", async () => {
     await register(requestMocks.register.validRegisterHttpReq(), res!, db!);
 
-    expect(res?.status).toHaveBeenCalledWith(201);
-    expect(res?.cookie).toHaveBeenCalledWith(
+    expect(res!.status).toHaveBeenCalledWith(201);
+    expect(res!.cookie).toHaveBeenCalledWith(
       "token",
       expect.anything(),
       expect.objectContaining({ httpOnly: true, secure: true })
     );
 
     expect(res?.send).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
+  });
+
+  it("register: 重複するEmailは登録が失敗する", async () => {
+    await register(requestMocks.register.validRegisterHttpReq(), res!, db!);
+    res = createResponseMock();
+    await expect(register(requestMocks.register.validRegisterHttpReq(), res!, db!))
+      .rejects.toThrow();
+
+    expect(res!.status).not.toHaveBeenCalled();
+    expect(res!.cookie).not.toHaveBeenCalled();
+    expect(res!.send).not.toHaveBeenCalled();
+  });
+
+  // login
+  it("login: パスワードが一致する場合、okレスポンスを返してtokenを再発行する", async () => {
+    const requestBody: Request["body"] = { email: "example@email.com", password: "TestPassword" };
+
+    await register(requestMocks.createRequest(requestBody), res!, db!);
+    res = createResponseMock();
+    await login(requestMocks.createRequest(requestBody), res!, db!);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.cookie).toHaveBeenCalledWith(
+      "token",
+      expect.any(String),
+      expect.objectContaining({ httpOnly: true })
+    );
+  });
+
+  it("login: パスワードが一致しない場合、throwする", async () => {
+    const email = "example@email.com";
+    const registerRequestBody: Request["body"] = { email: email, password: "TestPassword" };
+    const loginRequestBody: Request["body"] = { email: email, password: "ThIsISWroNGpASswORd" };
+
+    await register(requestMocks.createRequest(registerRequestBody), res!, db!);
+    res = createResponseMock();
+    expect(login(requestMocks.createRequest(loginRequestBody), res!, db!))
+      .rejects.toThrow();
+
+    expect(res.status).not.toHaveBeenCalled();
+    expect(res.cookie).not.toHaveBeenCalled();
   });
 });
