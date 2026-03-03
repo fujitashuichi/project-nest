@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { registerValidation } from "../middleware/index.js";
+import { loginValidation, registerValidation } from "../middleware/index.js";
 import { Database } from "sqlite3";
 import { isLoggedIn, login, register } from "../controller/index.js";
-import { loginValidator } from "../middleware/auth.guard.js";
 
 
 export const createAuthRouter = (db: Database) => {
@@ -18,7 +17,7 @@ export const createAuthRouter = (db: Database) => {
   );
 
   router.post("/login",
-    loginValidator,
+    loginValidation,
     (req, res) => login(req, res, db)
   );
 

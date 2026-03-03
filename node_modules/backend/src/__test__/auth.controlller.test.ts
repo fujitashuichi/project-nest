@@ -2,7 +2,7 @@ vi.stubEnv("NODE_JWT_SECRET", "secret");
 
 import { Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { requestMocks } from "../__mock__/index.js";
+import { createResponseMock, requestMocks } from "../__mock__/index.js";
 import { register } from "../controller/index.js";
 import { Database } from "sqlite3";
 import { createAppDb } from "../db/app.db.js";
@@ -12,15 +12,11 @@ describe("auth.controller", () => {
   let db: Database | null;
 
   beforeEach(async () => {
-    res = {
-      status: vi.fn().mockReturnThis(),
-      cookie: vi.fn().mockReturnThis(),
-      send: vi.fn().mockReturnThis()
-    } as unknown as Response;
+    res = createResponseMock();
     db = await createAppDb(":memory:");
   });
   afterEach(() => {
-    res = null
+    res = null;
     db = null;
   });
 

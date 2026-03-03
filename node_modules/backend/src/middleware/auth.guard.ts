@@ -17,11 +17,11 @@ export const registerValidation = (req: Request, res: Response, next: NextFuncti
 }
 
 
-export const loginValidator = (req: Request, res: Response, next: NextFunction) => {
+export const loginValidation = (req: Request, res: Response, next: NextFunction) => {
   const parsedDto = LoginRequestSchema.safeParse(req.body);
 
   if (!parsedDto.success) {
-    res.status(400).send({
+    return res.status(400).send({
       success: false,
       message: parsedDto.error.message
     });

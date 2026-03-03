@@ -1,42 +1,66 @@
-import { describe, expect, it, vi } from "vitest"
-import { registerValidation } from "../middleware/index.js"
-import { requestMocks } from "../__mock__/index.js"
-import { Response } from "express"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { loginValidation, registerValidation } from "../middleware/index.js"
+import { createResponseMock, requestMocks } from "../__mock__/index.js"
+import { NextFunction, Response } from "express"
 
 describe("auth.guard", () => {
-  it("正しいリクエストデータは通される", () => {
-    const res = {} as unknown as Response;
-    const next = vi.fn();
+  let res: Response | null;
+  let next: NextFunction | null;
+  beforeEach(() => {
+    res = createResponseMock();
+    next = vi.fn();
+  });
+  afterEach(() => {
+    res = null;
+    next = null;
+    vi.restoreAllMocks();
+  });
 
-    registerValidation(requestMocks.register.validRegisterHttpReq(), res, next);
+
+  it("register: 正しいリクエストは通過する", () => {
+    console.log("res:", res, "next:", next)
+    registerValidation(requestMocks.register.validRegisterHttpReq(), res!, next!);
     expect(next).toHaveBeenCalledTimes(1);
   });
 
-  it("不正なリクエストデータその1はエラーレスポンスを返し、次の関数を呼ばない", () => {
-    const res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn().mockReturnThis()
-    } as unknown as Response;
-    const next = vi.fn();
-
-    registerValidation(requestMocks.register.invalidRegisterHttpReq_1(), res, next);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith(
+  it("register: Dos攻撃Request_1 は即座にエラーレスポンスを返し、次の関数を呼ばない", () => {
+    registerValidation(requestMocks.register.invalidRegisterHttpReq_1(), res!, next!);
+    expect(next).not.toHaveBeenCalled();
+    expect(res!.status).toHaveBeenCalledWith(400);
+    expect(res!.send).toHaveBeenCalledWith(
       expect.objectContaining({ success: false })
     );
   });
 
-  it("不正なリクエストデータその2はエラーレスポンスを返し、次の関数を呼ばない", () => {
-    const res = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn().mockReturnThis()
-    } as unknown as Response;
-    const next = vi.fn();
+  it("register: Dos攻撃Request_2 は即座にエラーレスポンスを返し、次の関数を呼ばない", () => {
+    registerValidation(requestMocks.register.invalidRegisterHttpReq_2(), res!, next!);
+    expect(next).not.toHaveBeenCalled();
+    expect(res!.status).toHaveBeenCalledWith(400);
+    expect(res!.send).toHaveBeenCalledWith(
+      expect.objectContaining({ success: false })
+    );
+  });
 
-    registerValidation(requestMocks.register.invalidRegisterHttpReq_2(), res, next);
-    expect(next).toHaveBeenCalledTimes(0);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith(
+
+  it ("login: 正しいリクエストは通過する", () => {
+    loginValidation(requestMocks.login.validRequestHttpReq(), res!, next!);
+    expect(next).toBeCalledTimes(1);
+  });
+
+  it ("login: Dos攻撃Request_1 は即座にエラーレスポンスを返し、次の関数を呼ばない", () => {
+    loginValidation(requestMocks.login.invalidRegisterHttpReq_1(), res!, next!);
+    expect(next).not.toHaveBeenCalled();
+    expect(res!.status).toHaveBeenCalledWith(400);
+    expect(res!.send).toHaveBeenCalledWith(
+      expect.objectContaining({ success: false })
+    )
+  });
+
+  it ("login: Dos攻撃Request_2 は即座にエラーレスポンスを返し、次の関数を呼ばない", () => {
+    loginValidation(requestMocks.login.invalidRegisterHttpReq_2(), res!, next!);
+    expect(next).not.toHaveBeenCalled();
+    expect(res!.status).toBeCalledWith(400);
+    expect(res!.send).toHaveBeenCalledWith(
       expect.objectContaining({ success: false })
     );
   });
