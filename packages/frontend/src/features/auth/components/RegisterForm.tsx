@@ -3,7 +3,9 @@ import { registerUser } from "../api/register";
 import { parseFormData } from "../../../lib";
 import type React from "react";
 import { RegisterRequestSchema } from "@pkg/shared";
+import { AppButton } from "../../../components";
 
+// Containerでラップする際は、登録再試行でストレスがないことを前提とする
 
 const formDataSchema = RegisterRequestSchema.extend({
   passwordConfirm: z.string().min(8).max(20)
@@ -27,25 +29,30 @@ export function RegisterForm() {
     }
     const result = await registerUser({ email: data.email, password: data.password  });
     if (!result.ok) {
-      console.error(result.error);
-      alert("登録に失敗しました");
-      return;
+      switch (result.errorType) {
+        case "RegisterFailed":
+          alert("登録に失敗しました");
+          return;
+        case "GetTokenFailed":
+          alert("申し訳ありません。認証トークンの取得に失敗しました");
+          return;
+      }
     }
     alert("登録完了");
   }
 
   return (
-    <form onSubmit={(e) => register(e)}>
+    <form onSubmit={register}>
       <label htmlFor="email">email</label>
-      <input name="email" type="email" required placeholder="example@email.com" />
+      <input name="email" type="email" required autoComplete="address-level3" placeholder="example@email.com" />
 
       <label htmlFor="password">password</label>
-      <input name="password" type="password" required min={8} max={20} placeholder="8～20字" />
+      <input name="password" type="password" required min={8} max={20} autoComplete="new-password" placeholder="8～20字" />
 
       <label htmlFor="passwordConfirm">type password again</label>
-      <input name="passwordConfirm" type="password" required min={8} max={20} placeholder="8～20字" />
+      <input name="passwordConfirm" type="password" required min={8} max={20} autoComplete="new-password webauthn" placeholder="8～20字" />
 
-      <button type="submit">submit</button>
+      <AppButton variant="primary" type="submit">submit</AppButton>
     </form>
   )
 }

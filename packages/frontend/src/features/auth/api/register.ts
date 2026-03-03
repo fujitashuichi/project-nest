@@ -12,11 +12,11 @@ export const registerUser = async (body: UserRegisterBodyType): Promise<Register
   });
 
   if (!response.ok) {
-    console.error("register failed by response Error");
+    console.error(response.error);
     return {
       ok: false,
-      error: response.error
-    }
+      errorType: "RegisterFailed"
+    };
   }
 
   const data = await response.body;
@@ -25,7 +25,7 @@ export const registerUser = async (body: UserRegisterBodyType): Promise<Register
   if (!parsedData.success) {
     return {
       ok: false,
-      error: new Error("invalid json: failed to get Token")
+      errorType: "GetTokenFailed"
     }
   }
 

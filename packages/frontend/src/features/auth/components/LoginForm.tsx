@@ -3,6 +3,9 @@ import type { Status } from "./LoginContainer";
 import { parseFormData } from "../../../lib";
 import { LoginRequestSchema } from "@pkg/shared";
 import { login } from "../api/login";
+import { AppButton } from "../../../components";
+
+// 原則、Container内部でのみ使用する
 
 type Props = {
   setStatus: React.Dispatch<SetStateAction<Status>>
@@ -21,10 +24,9 @@ export function LoginForm({ setStatus }: Props) {
     }
 
     const data = parsed.data;
-    const result = await login({ email: data.email, password:data.password });
-    if (!result.ok) {
+    const isLoginSucceed = await login({ email: data.email, password:data.password });
+    if (!isLoginSucceed) {
       setStatus("failed");
-      console.error(result.error);
       return;
     }
 
@@ -33,14 +35,14 @@ export function LoginForm({ setStatus }: Props) {
   }
 
   return (
-    <form onSubmit={(e) => tryLogin(e)}>
+    <form onSubmit={tryLogin}>
       <label htmlFor="email">email</label>
       <input name="email" type="email" required placeholder="example@email.com" />
 
       <label htmlFor="password">password</label>
       <input name="password" type="password" min={8} max={20} required placeholder="8～20字" />
 
-      <button type="submit">submit</button>
+      <AppButton variant="primary" type="submit">submit</AppButton>
     </form>
   )
 }
