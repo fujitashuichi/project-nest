@@ -1,1 +1,1 @@
-export { register, isLoggedIn } from "./auth.controller.js"
+export { register, isLoggedIn, login } from "./auth.controller.js"

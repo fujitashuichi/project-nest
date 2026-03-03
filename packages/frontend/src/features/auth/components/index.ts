@@ -1,2 +1,2 @@
 export { RegisterForm } from "./RegisterForm.tsx"
-export { LoginModule } from "./LoginModule.tsx"
+export { LoginContainer } from "./LoginContainer.tsx"

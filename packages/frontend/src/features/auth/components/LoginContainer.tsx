@@ -4,7 +4,7 @@ import { LoginForm } from "./LoginForm";
 
 export type Status = "loading" | "loginSession" | "success" | "failed";
 
-export function LoginModule() {
+export function LoginContainer() {
   const [status, setStatus] = useState<Status>("loading");
 
   useEffect(() => {

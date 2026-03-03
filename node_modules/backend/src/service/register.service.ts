@@ -3,7 +3,7 @@ import { User } from "../types/type.db.js";
 import { UsersRepository } from "../repository/index.js";
 import { createAppDb } from "../db/app.db.js";
 import { Database } from "sqlite3";
-import { RegisterRequest } from "@pkg-shared";
+import { RegisterRequest } from "@pkg/shared";
 
 
 const AppDb = await createAppDb("app.db");

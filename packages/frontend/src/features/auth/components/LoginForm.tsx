@@ -1,5 +1,5 @@
 import type { SetStateAction } from "react";
-import type { Status } from "./LoginModule";
+import type { Status } from "./LoginContainer";
 import { parseFormData } from "../../../lib";
 import { LoginRequestSchema } from "@pkg/shared";
 import { login } from "../api/login";

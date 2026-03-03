@@ -5,6 +5,14 @@ export class UserAuthError extends Error {
   }
 }
 
+export class UserUndefinedError extends UserAuthError {
+  constructor() {
+    super("UserData undefined: searching User is not registered");
+    this.name = "UserUndefinedError";
+  }
+}
+
+// register
 export class EmailAlreadyRegisteredError extends UserAuthError {
   constructor(email: string) {
     super(`Email already registered: ${email}`);
@@ -16,5 +24,13 @@ export class InvalidPasswordError extends UserAuthError {
   constructor() {
     super("Invalid password");
     this.name = "InvalidPasswordError";
+  }
+}
+
+// login
+export class ConfirmPasswordError extends UserAuthError {
+  constructor() {
+    super("Login failed: password is wrong");
+    this.name = "ConfirmPasswordError";
   }
 }
