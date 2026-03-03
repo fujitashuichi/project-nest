@@ -13,9 +13,15 @@ export const registerUser = async (body: UserRegisterBodyType): Promise<Register
 
   if (!response.ok) {
     console.error(response.error);
+    if (response.status === 409 || response.error.name === "AlreadyRegisteredError") {
+      return {
+        ok: false,
+        errorType: "AlreadyRegistered"
+      }
+    }
     return {
       ok: false,
-      errorType: "RegisterFailed"
+      errorType: "UnknownError"
     };
   }
 

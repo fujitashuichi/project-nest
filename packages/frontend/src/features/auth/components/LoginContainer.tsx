@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { isLoggedIn } from "../api/isLoggedIn";
 import { LoginForm } from "./LoginForm";
+import { AppButton } from "../../../components";
 
 export type Status = "loading" | "loginSession" | "success" | "failed";
 
@@ -8,13 +9,13 @@ export function LoginContainer() {
   const [status, setStatus] = useState<Status>("loading");
 
   useEffect(() => {
-    const firstSession = async () => {
+    const checkIsLoggedIn = async () => {
       const result = await isLoggedIn();
       if (!result) {
         setStatus("loginSession")
       };
     }
-    firstSession();
+    checkIsLoggedIn();
   }, []);
 
   return (
@@ -36,12 +37,16 @@ const LoadingUI = () => (
 
 const FailedUI = () => (
   <div>
-    <h1>Login Failed</h1>
+    <h1>Loginに失敗しました</h1>
+    <AppButton
+      variant="primary"
+      onClick={() => window.location.reload()}
+    >再試行</AppButton>
   </div>
 )
 
 const SuccessUI = () => (
   <div>
-    <h1>Login Succeed!</h1>
+    <h1>Loginしています</h1>
   </div>
 )
