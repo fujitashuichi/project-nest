@@ -68,7 +68,7 @@ describe("auth.controller", () => {
 
     await register(authRequestMocks.createRequest(registerRequestBody), res!, db!);
     res = createResponseMock();
-    expect(login(authRequestMocks.createRequest(loginRequestBody), res!, db!))
+    await expect(login(authRequestMocks.createRequest(loginRequestBody), res!, db!))
       .rejects.toThrow();
 
     expect(res.status).not.toHaveBeenCalled();
