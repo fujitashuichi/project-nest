@@ -69,8 +69,14 @@ graph TD
 
 * 集約ラッパー は全層を通過した場合にのみ next() が呼ばれることを確認
 
+### DB防御
+repositoryへの不正バイパスを防ぐために、repository使用とセットでDbGuardを書くことを義務付けています
+```ts
+UserDbGuard(data);
+await UsersRepository.saveUser(data);
+```
+
 ### 今後の拡張余地
-* DBセキュリティ
 * SQLインジェクション防止
 * 参照権限チェック
 * データ暗号化
