@@ -62,4 +62,47 @@ describe("project.repositoryの各メソッドを検査", () => {
       ])
     );
   });
+
+  it ("findByIdは正しく成功する", async () => {
+    const { id, ...reqBody } = userMocks.user();
+    const user = await usersRepository!.saveUser(reqBody);
+
+    const data: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: 1, updatedAt: 1 };
+    const saved = await projectsRepository!.saveProject(data);
+
+    const result = await projectsRepository!.findById(saved.id);
+    expect(result).toEqual(
+      expect.objectContaining(data)
+    );
+  });
+
+  it ("findByUserIdは正しく成功する", async () => {
+    const { id, ...reqBody } = userMocks.user();
+    const user = await usersRepository!.saveUser(reqBody);
+
+    const data: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: 1, updatedAt: 1 };
+    const saved = await projectsRepository!.saveProject(data);
+
+    const result = await projectsRepository!.findByUserId(saved.id);
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(data)
+      ])
+    );
+  });
+
+  it ("findByTitleは正しく成功する", async () => {
+    const { id, ...reqBody } = userMocks.user();
+    const user = await usersRepository!.saveUser(reqBody);
+
+    const data: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: 1, updatedAt: 1 };
+    const saved = await projectsRepository!.saveProject(data);
+
+    const result = await projectsRepository!.findByTitle(saved.title);
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(data)
+      ])
+    );
+  });
 });

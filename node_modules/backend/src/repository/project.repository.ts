@@ -57,55 +57,55 @@ export class ProjectsRepository {
           if (!row) return resolve(null);
           if (err) return reject(err);
 
-          const parsedRow = ProjectSchema.safeParse(row);
-          if (!parsedRow.success) {
-            console.error(parsedRow.error);
-            return reject(new DatabaseGetError("AppDb", this.tableName));
-          }
+          const data = dbObjectToCamel({
+            data: row,
+            nullToUndefined: true,
+            schema: ProjectSchema
+          })
 
-          return resolve(parsedRow.data);
+          return resolve(data);
         }
       );
     });
   }
 
-  findByUserId = (userId: number): Promise<Project | null> => {
+  findByUserId = (userId: number): Promise<Project[] | null> => {
     return new Promise((resolve, reject) => {
-      this.db.get(
+      this.db.all(
         `SELECT * FROM ${this.tableName} WHERE user_id = ?`,
         [userId],
-        (err, row) => {
-          if (!row) return resolve(null);
+        (err, rows) => {
+          if (!rows) return resolve(null);
           if (err) return reject(err);
 
-          const parsedRow = ProjectSchema.safeParse(row);
-          if (!parsedRow.success) {
-            console.error(parsedRow.error);
-            return reject(new DatabaseGetError("AppDb", this.tableName));
-          }
+          const data = dbObjectToCamel({
+            data: rows,
+            nullToUndefined: true,
+            schema: ProjectSchema.array()
+          })
 
-          return resolve(parsedRow.data);
+          return resolve(data);
         }
       );
     });
   }
 
-  findByTitle = (title: string): Promise<Project | null> => {
+  findByTitle = (title: string): Promise<Project[] | null> => {
     return new Promise((resolve, reject) => {
-      this.db.get(
+      this.db.all(
         `SELECT * FROM ${this.tableName} WHERE title = ?`,
         [title],
-        (err, row) => {
-          if (!row) return resolve(null);
+        (err, rows) => {
+          if (!rows) return resolve(null);
           if (err) return reject(err);
 
-          const parsedRow = ProjectSchema.safeParse(row);
-          if (!parsedRow.success) {
-            console.error(parsedRow.error);
-            return reject(new DatabaseGetError("AppDb", this.tableName));
-          }
+          const data = dbObjectToCamel({
+            data: rows,
+            nullToUndefined: true,
+            schema: ProjectSchema.array()
+          })
 
-          return resolve(parsedRow.data);
+          return resolve(data);
         }
       );
     });
