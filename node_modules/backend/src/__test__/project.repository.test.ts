@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ProjectsRepository, UsersRepository } from "../repository/index.js";
 import { createAppDb } from "../db/app.db.js";
 import { userMocks } from "../__mock__/index.js";
+import { ProjectWithoutId } from "../types/type.db.js";
 
 describe("project.repositoryの各メソッドを検査", () => {
   let db: Database | null = null;
@@ -13,18 +14,20 @@ describe("project.repositoryの各メソッドを検査", () => {
     db = await createAppDb(":memory:");
     usersRepository = new UsersRepository(db);
     projectsRepository = new ProjectsRepository(db);
+    console.info("beforeEach run");
   });
   afterEach(async () => {
     db = null;
     usersRepository = null;
     projectsRepository = null;
+    console.info("afterEach run");
   })
 
   it("正常にプロジェクトを保存できる", async () => {
     const { id, ...reqBody } = userMocks.user();
     const user = await usersRepository!.saveUser(reqBody);
 
-    const data = { userId: user.id, title: "Title", createdAt: 1, updatedAt: 1 }
+    const data: ProjectWithoutId = { userId: user.id, title: "Title", createdAt: 1, updatedAt: 1 }
     const promise = projectsRepository!.saveProject(data);
 
     await expect(promise).resolves.toEqual(
@@ -36,9 +39,27 @@ describe("project.repositoryの各メソッドを検査", () => {
     const { id, ...reqBody } = userMocks.user();
     const user = await usersRepository!.saveUser(reqBody);
 
-    const data = { userId: user.id + 1, title: "Title", createdAt: 1, updatedAt: 1 };
+    const data: ProjectWithoutId = { userId: user.id + 1, title: "Title", createdAt: 1, updatedAt: 1 };
     const promise = projectsRepository!.saveProject(data);
 
     await expect(promise).rejects.toThrow();
+  });
+
+  it ("getProjectsは正しく成功する", async () => {
+    const { id, ...reqBody } = userMocks.user();
+    const user = await usersRepository!.saveUser(reqBody);
+
+    const data_1: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: 1, updatedAt: 1 };
+    const data_2: ProjectWithoutId = { userId: user.id, title: "Title_2", createdAt: 2, updatedAt: 2 };
+    await projectsRepository!.saveProject(data_1);
+    await projectsRepository!.saveProject(data_2);
+
+    const result = await projectsRepository!.getProjects();
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(data_1),
+        expect.objectContaining(data_2)
+      ])
+    );
   });
 });

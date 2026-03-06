@@ -13,8 +13,8 @@ const productSQL = `
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     title TEXT,
-    description TEXT,
-    status TEXT,
+    description TEXT NULL,
+    status TEXT NULL,
     created_at INTEGER,
     updated_at INTEGER,
     FOREIGN KEY (user_id)

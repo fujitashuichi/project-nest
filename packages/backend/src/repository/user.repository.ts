@@ -16,14 +16,8 @@ export class UsersRepository {
       this.db.all(
         `SELECT * FROM ${this.tableName}`,
         (err, rows) => {
-          if (!rows) {
-            resolve([]);
-            return;
-          }
-          if (err) {
-            reject(err);
-            return;
-          }
+          if (!rows) return resolve([]);
+          if (err) return reject(err);
           const parsedRow = UserSchema.array().safeParse(rows);
           if (!parsedRow.success) {
             console.error(parsedRow.error);

@@ -4,6 +4,7 @@ import { Project, ProjectSchema } from "@pkg/shared";
 import { Database } from "sqlite3";
 import { DatabaseGetError } from "../error/DbError.js";
 import { ProjectWithoutId } from "../types/index.js";
+import { dbObjectToCamel } from "./dataTypeMapper.js";
 
 export class ProjectsRepository {
   private readonly tableName = "projects";
@@ -27,7 +28,7 @@ export class ProjectsRepository {
     });
   }
 
-  getProducts = (): Promise<Project[] | []> => {
+  getProjects = (): Promise<Project[] | []> => {
     return new Promise((resolve, reject) => {
       this.db.all(
         `SELECT * FROM ${this.tableName}`,
@@ -35,13 +36,13 @@ export class ProjectsRepository {
           if (!rows) return resolve([]);
           if (err) return reject(err);
 
-          const parsedRow = ProjectSchema.array().safeParse(rows);
-          if (!parsedRow.success) {
-            console.error(parsedRow.error);
-            return reject(new DatabaseGetError("AppDb", this.tableName));
-          }
+          const data = dbObjectToCamel({
+            data: rows,
+            nullToUndefined: true,
+            schema: ProjectSchema.array()
+          });
 
-          resolve(parsedRow.data);
+          resolve(data);
         }
       )
     });
