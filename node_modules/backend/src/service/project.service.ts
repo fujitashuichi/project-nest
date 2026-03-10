@@ -1,7 +1,7 @@
 import { Database } from "sqlite3";
 import { createAppDb } from "../db/index.js";
 import { ProjectsRepository, UsersRepository } from "../repository/index.js";
-import { ProjectWithoutId } from "../types/index.js";
+import { ProjectWithoutId, User } from "../types/index.js";
 import { PostProjectRequest, Project } from "@pkg/shared";
 import { UserUndefinedError } from "../error/index.js";
 
@@ -17,14 +17,15 @@ export class ProjectService {
     this.usersRepository = new UsersRepository(db);
   }
 
-  saveProject = async (dto: PostProjectRequest) => {
-    if (await this.usersRepository.findById(dto.userId) === null) {
+  saveProject = async (dto: PostProjectRequest, userId: User["id"]) => {
+    if (await this.usersRepository.findById(userId) === null) {
       console.error("Cannot create Project because User undefined");
       throw new UserUndefinedError();
     }
 
     const newProject: ProjectWithoutId = {
       ...dto,
+      userId: userId,
       createdAt: Date.now(),
       updatedAt: Date.now()
     }

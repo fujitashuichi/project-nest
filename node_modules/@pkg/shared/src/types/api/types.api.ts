@@ -2,10 +2,10 @@ export type AuthFetchPath =
   | "/api/auth/register"
   | "/api/auth/login"
   | "/api/auth/logout"
-  | "/api/me"
+  | "/api/auth/me"
 
 export type SessionFetchPath =
-  | "/api/session"
+  | "/api/auth/session"
 
 export type UserFetchPath =
   | `/api/user/${number}/products`

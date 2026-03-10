@@ -1,6 +1,6 @@
 import { LoginRequestSchema, PostProjectRequestSchema, RegisterRequestSchema } from "@pkg/shared";
 import { Request, Response } from "express";
-import { GetProjectsRequestSchema } from "../../../shared/dist/types/project/types.dto.js";
+import { GetProjectsRequestSchema } from "../../../../shared/dist/types/project/types.dto.js";
 
 export type RequestName = "register" | "login" | "postProject" | "getProjects";
 

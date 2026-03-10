@@ -1,5 +1,5 @@
 import type { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import { ConfirmPasswordError, EmailAlreadyRegisteredError, InvalidPasswordError, UserAuthError, UserUndefinedError } from "../error/index.js";
+import { ConfirmPasswordError, EmailAlreadyRegisteredError, InvalidPasswordError, UnAuthorizedError, UserAuthError, UserUndefinedError } from "../error/index.js";
 import { DuplicateProjectError, ProjectError } from "../error/ProjectError.js";
 
 export const globalErrorHandler = ((err: ErrorRequestHandler, _req: Request, res: Response, _next: NextFunction) => {
@@ -7,6 +7,10 @@ export const globalErrorHandler = ((err: ErrorRequestHandler, _req: Request, res
 
   if (err instanceof UserUndefinedError) {
     return res.status(404).json({ message: err.message, error: err });
+  }
+
+  if (err instanceof UnAuthorizedError) {
+    return res.status(401).json({ message: err.message, error: err });
   }
 
   // register

@@ -9,7 +9,7 @@ export const createProject = async (req: Request, res: Response, db: Database) =
   const dto: PostProjectRequest = req.body;
   const service = new ProjectService(db);
 
-  const postResult = await service.saveProject(dto);
+  const postResult = await service.saveProject(dto, res.locals.userId);
 
   return res.status(201).send({
     success: true,

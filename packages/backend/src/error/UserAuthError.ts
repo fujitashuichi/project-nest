@@ -5,6 +5,13 @@ export class UserAuthError extends Error {
   }
 }
 
+export class UnAuthorizedError extends UserAuthError {
+  constructor() {
+    super("User UnAuthorized: token was undefined or invalid");
+    this.name = "UnAuthorizedError";
+  }
+}
+
 export class UserUndefinedError extends UserAuthError {
   constructor() {
     super("UserData undefined: searching User is not registered");

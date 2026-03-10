@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requestValidator } from "../middleware/index.js";
+import { authorize, requestValidator } from "../middleware/index.js";
 import { createProject } from "../controller/index.js";
 import { Database } from "sqlite3";
 
@@ -9,6 +9,7 @@ export const createProjectRouter = (db: Database) => {
 
   router.post("/",
     (req, res, next) => requestValidator(req, res, next, "postProject"),
+    (req, res, next) => authorize(req, res, next, db),
     (req, res) => createProject(req, res, db)
   );
 

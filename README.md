@@ -18,65 +18,71 @@ Test Files  8 passed (8)
 flowchart LR
 
 subgraph test entity
-  GuardTest
-  ControllerTest
-  RepositoryTest
-  ErrorHandlerTest
+  GuardTest{{GuardTest}}
+  ControllerTest{{ControllerTest}}
+  RepositoryTest{{RepositoryTest}}
+  ErrorHandlerTest{{ErrorHandlerTest}}
 end
-
-GuardTest -.-> Guard
-ControllerTest -.-> Controller
-RepositoryTest -.-> Repository
-ErrorHandlerTest -.-> ErrorHandler
 
 subgraph Client Side
-  Router
-  Router --> Guard
-  ErrorHandler --> Router
+  Router([Router]) --> ErrorHandler
+  Router --> Middleware
 end
-
-Guard ==> Controller
-Controller ==> ErrorHandler
-Controller ==> Service
 
 subgraph DB execution
   Service --> Repository
   Repository --> DB[(SQLite)]
 end
+
+Middleware -.->|authorize時だけ情報を貰う| Service
+Middleware --> Controller
+Controller --> Service
+
+GuardTest -..-> Middleware
+ControllerTest -..-> Controller
+RepositoryTest -..-> Repository
+ErrorHandlerTest -..-> ErrorHandler
 ```
 
-### BE Request Flow
+### BE Request Sequence
 ```mermaid
 sequenceDiagram
   participant client
-  participant Guard as Guard(Middleware)
-  participant Error as ErrorHandler
+  box rgb(240, 255, 240) Middleware
+    participant Error as ErrorHandler
+    participant Guard as Guard / authorize
+  end
   participant Controller
   participant Service
-  participant Security
   participant Repository
   participant DB
 
-  client -> Guard: request
+  client ->> Guard: request
   alt invalid
-    Guard -> client: response
+    Guard -->> client: response
   else valid
-    Guard -> Controller: next()
+    Guard ->> Controller: next()
   end
-  Controller -> Service: execute
-  Service -> Security: data
-  alt invalid
-    Security -> Error: throw
-  else valid
-    Security -> Repository: query
-  end
-  Repository -> DB: SQL
+  Controller ->> Service: execute
+  Service ->> Repository: query
+  Repository ->> DB: SQL
+
   Note over DB: SQLite
-  DB -> Repository: result
-  Repository -> Service: result
-  Service -> Controller: entity
-  Controller -> client: response
-  alt Error thrown
-    Error -> client: response
+
+  DB -->> Repository: result
+  Repository -->> Service: result
+  Service -->> Controller: entity
+  Controller -->> client: response
+
+
+  rect rgb(200, 255, 200)
+    Note over Controller, DB: 例外はthrow
+    Controller --x Error: Error
+    Service --x Error: Error
+    Repository --x Error: Error
+    DB --x Error: Error
+    alt Error thrown
+      Error -->> client: response
+    end
   end
 ```

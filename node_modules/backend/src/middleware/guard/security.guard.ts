@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { stringValidator } from "../validator/stringValidator.js";
+import { stringValidator } from "../../validator/stringValidator.js";
 
 export const securityGuard = (req: Request, res: Response): boolean => {
   const dto = req.body;
