@@ -10,7 +10,7 @@ export const createProjectRouter = (db: Database) => {
   router.post("/",
     requestValidator("postProject"),
     authorize(db),
-    (req, res) => createProject(req, res, db)
+    createProject(db)
   );
 
   router.patch("/:id", (_, res) => {

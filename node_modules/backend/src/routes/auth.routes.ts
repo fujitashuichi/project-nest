@@ -8,17 +8,17 @@ export const createAuthRouter = (db: Database) => {
   const router = Router();
 
   router.post("/register",
-    (req, res, next) => requestValidator(req, res, next, "register"),
-    (req, res) => register(req, res, db)
+    requestValidator("register"),
+    register(db)
   );
 
   router.get("/session",
-    (req, res) => session(req, res, db)
+    session(db)
   );
 
   router.post("/login",
-    (req, res, next) => requestValidator(req, res, next, "login"),
-    (req, res) => login(req, res, db)
+    requestValidator("login"),
+    login(db)
   );
 
   router.post("/logout",
