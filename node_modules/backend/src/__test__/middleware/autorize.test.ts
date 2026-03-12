@@ -6,8 +6,7 @@ import { createAppDb } from "../../db/index.js";
 import { NextFunction, Request, Response } from "express";
 import { Database } from "sqlite3";
 import { register } from "../../controller/index.js";
-import { mockReq } from "sinon-express-mock";
-import { authorize } from "../../middleware/authorize.js";
+import { authorize } from "../../middleware/index.js";
 import { createRequestMock } from "../../__mock__/createRequest.mock.js";
 
 describe("authorize.ts", () => {
@@ -29,7 +28,7 @@ describe("authorize.ts", () => {
   });
 
   it("tokenがある場合はdtoにuserIdを付加する", async () => {
-    await register(authRequestMocks.register.validReq(), res!, db!);
+    await register(db!)(authRequestMocks.register.validReq(), res!);
 
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
     const cookies: Request["cookies"] = { [name]: value };

@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { stringValidator } from "../../validator/stringValidator.js";
 
-export const securityGuard = (req: Request, res: Response): boolean => {
+export const securityGuard = (req: Request, res: Response, next: NextFunction): boolean => {
   const dto = req.body;
 
   for (const key in dto) {
@@ -14,6 +14,7 @@ export const securityGuard = (req: Request, res: Response): boolean => {
         });
 
         console.error("Invalid Characters Detected");
+        next(new Error)
 
         return false;
       }

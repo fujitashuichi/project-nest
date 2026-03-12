@@ -3,7 +3,7 @@ import type { ApiResult } from "./types";
 
 type Props = {
   path: AuthFetchPath | ProjectFetchPath | SessionFetchPath | UserFetchPath,
-  method: "GET" | "POST" | "PUT" | "DELETE",
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
   body: object
 };
 
@@ -15,6 +15,7 @@ export const apiClient = async ({ path, method, body }: Props): Promise<ApiResul
       GET: undefined,
       POST: JSON.stringify(body),
       PUT: JSON.stringify(body),
+      PATCH: JSON.stringify(body),
       DELETE: undefined
     } as const;
 

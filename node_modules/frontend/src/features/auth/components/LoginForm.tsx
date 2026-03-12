@@ -43,10 +43,10 @@ export function LoginForm({ setStatus }: Props) {
   return (
     <form onSubmit={tryLogin}>
       <label htmlFor="email">email</label>
-      <input name="email" type="email" required placeholder="example@email.com" />
+      <input name="email" type="email" required autoComplete="email" placeholder="example@email.com" />
 
       <label htmlFor="password">password</label>
-      <input name="password" type="password" min={8} max={20} required placeholder="8～20字" />
+      <input name="password" type="password" min={8} max={20} required autoComplete="current-password" placeholder="8～20字" />
 
       <AppButton variant="primary" type="submit">submit</AppButton>
     </form>
