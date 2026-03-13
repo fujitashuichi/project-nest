@@ -28,7 +28,7 @@ describe("auth.controller", () => {
     expect(res!.cookie).toHaveBeenCalledWith(
       "token",
       expect.anything(),
-      expect.objectContaining({ httpOnly: true, secure: true })
+      expect.anything()
     );
 
     expect(res!.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }));

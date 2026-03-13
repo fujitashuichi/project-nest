@@ -27,6 +27,10 @@ Test Files  9 passed (9)
 
 Test Files  9 passed (9)
      Tests  48 passed (48)
-  Start at  12:29:50
   Duration  3.85s (transform 1.28s, setup 0ms, import 4.27s, tests 987ms, environment 1ms)
+
+Test Files  9 passed (9)
+     Tests  48 passed (48)
+  Start at  17:27:29
+  Duration  3.31s (transform 719ms, setup 0ms, import 3.13s, tests 1.04s, environment 1ms)
 ```

@@ -5,6 +5,7 @@
 <details>
   <summary>その他レポートなど</summary>
 
+  * <a href="./docs/errors/createProject_unauthorizedError.md">fetchにおけるcredential設定ミスによるエラーと解決までの道のり</a>
   * <a href="./docs/test/analyzeTestPerformance.md">テスト時間遷移における実行時間スパイクに関して</a>
   * <a href="./docs/test/testResults.md">testResults</a>
 </details>
