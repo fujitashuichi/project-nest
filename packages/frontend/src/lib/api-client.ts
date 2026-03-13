@@ -21,6 +21,7 @@ export const apiClient = async ({ path, method, body }: Props): Promise<ApiResul
 
     const response = await fetch(`${API_URL}${path}`, {
       method: method,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json"
       },
@@ -31,7 +32,7 @@ export const apiClient = async ({ path, method, body }: Props): Promise<ApiResul
       return {
         ok: false,
         status: response.status,
-        body: response.body,
+        body: await response.json(),
         error: new Error(response.statusText)
       }
     }
@@ -39,7 +40,7 @@ export const apiClient = async ({ path, method, body }: Props): Promise<ApiResul
     return {
       ok: true,
       status: response.status,
-      body: response.body
+      body: await response.json()
     }
   } catch (e: unknown) {
     if (e instanceof Error) {

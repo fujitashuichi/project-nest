@@ -1,5 +1,5 @@
 import type { Project } from "@pkg/shared";
 
 export type CreateProjectResult =
-  | { success: false, error: Error }
+  | { success: false, errorType: "ProjectAlreadyExists" | "UserNotRegisteredError" | "UnknownError" }
   | { success: true, value: Project }
