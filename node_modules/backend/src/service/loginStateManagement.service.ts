@@ -3,7 +3,7 @@ import { createAppDb } from "../db/index.js";
 import { UsersRepository } from "../repository/index.js";
 import { LoginRequest } from "@pkg/shared";
 import { comparePassword, signToken } from "../lib/index.js";
-import { UserUndefinedError } from "../error/UserAuthError.js";
+import { UserUndefinedError } from "../error/index.js";
 
 
 const appDb = await createAppDb("app.db");

@@ -11,7 +11,7 @@ export const createProject = (db: Database) => {
 
     const postResult = await service.saveProject(dto, res.locals.userId);
 
-    return res.status(201).send({
+    return res.status(201).json({
       success: true,
       project: postResult
     });
@@ -25,7 +25,7 @@ export const getProjects = (db: Database) => {
 
     const result = await service.findByUserId(userId);
 
-    return res.status(200).send({
+    return res.status(200).json({
       success: true,
       projects: result
     });

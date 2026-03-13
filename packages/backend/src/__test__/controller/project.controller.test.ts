@@ -39,7 +39,7 @@ describe("project.controller", () => {
     await createProject(db!)(mockReq({ body: { title: "Title" }, cookies: cookies }), res!);
 
     expect(res!.status).toHaveBeenCalledWith(201);
-    expect(res!.send).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
+    expect(res!.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
   });
 
   it("getProjects: 正常に成功する", async () => {
@@ -61,7 +61,7 @@ describe("project.controller", () => {
     await getProjects(db!)(createRequestMock.withoutData(), res!);
 
     expect(res!.status).toHaveBeenCalledWith(200);
-    expect(res!.send).toHaveBeenCalledWith(expect.objectContaining({
+    expect(res!.json).toHaveBeenCalledWith(expect.objectContaining({
       success: true,
       projects: expect.arrayContaining([
         expect.objectContaining(body)

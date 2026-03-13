@@ -12,4 +12,7 @@ export const ENV = {
   get JWT_SECRET() {
     return requiredEnv(process.env.NODE_JWT_SECRET, "NODE_JWT_SECRET")
   },
+  get NODE_ENV() {
+    return requiredEnv(process.env.NODE_ENV, "NODE_ENV");
+  }
 };

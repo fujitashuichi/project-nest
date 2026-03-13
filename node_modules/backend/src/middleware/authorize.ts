@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UnAuthorizedError, UserUndefinedError } from "../error/UserAuthError.js";
+import { UnAuthorizedError, UserUndefinedError } from "../error/index.js";
 import { verifyToken } from "../lib/jwt.js";
 import { UserService } from "../service/user.service.js";
 import { Database } from "sqlite3";

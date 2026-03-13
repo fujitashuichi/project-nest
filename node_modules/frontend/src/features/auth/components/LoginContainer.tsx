@@ -16,13 +16,22 @@ export function LoginContainer() {
         setStatus("loginSession");
       };
     }
+
     checkIsLoggedIn();
+
+    const interval = setInterval(() => checkIsLoggedIn(), 5 * 60 * 1000);
+    return clearInterval(interval);
   }, []);
 
   return (
     <div>
       {status === "loading" && <LoadingUI />}
-      {status === "loginSession" && <LoginForm setStatus={setStatus} /> }
+      {status === "loginSession" &&
+        <>
+          <h2>ログインしていません。</h2>
+          <LoginForm setStatus={setStatus} />
+        </>
+      }
       {status === "failed" && <FailedUI /> }
       {status === "success" && <SuccessUI /> }
     </div>

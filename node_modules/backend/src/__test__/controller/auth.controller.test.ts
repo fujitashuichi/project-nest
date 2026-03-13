@@ -31,7 +31,7 @@ describe("auth.controller", () => {
       expect.objectContaining({ httpOnly: true, secure: true })
     );
 
-    expect(res?.send).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
+    expect(res!.json).toHaveBeenCalledWith(expect.objectContaining({ success: true }));
   });
 
   it("register: 重複するEmailは登録が失敗する", async () => {
@@ -42,7 +42,7 @@ describe("auth.controller", () => {
 
     expect(res!.status).not.toHaveBeenCalled();
     expect(res!.cookie).not.toHaveBeenCalled();
-    expect(res!.send).not.toHaveBeenCalled();
+    expect(res!.json).not.toHaveBeenCalled();
   });
 
   // login

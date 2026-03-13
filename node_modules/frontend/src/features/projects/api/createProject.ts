@@ -10,9 +10,22 @@ export const createProject = async (project: PostProjectRequest): Promise<Create
   });
 
   if (!response.ok) {
+    if (response.error.name === "DuplicateProjectError") {
+      return {
+        success: false,
+        errorType: "ProjectAlreadyExists"
+      }
+    }
+    if (response.status === 401) {
+      return {
+        success: false,
+        errorType: "UserNotRegisteredError"
+      }
+    }
+
     return {
       success: false,
-      error: response.error
+      errorType: "UnknownError"
     }
   }
 

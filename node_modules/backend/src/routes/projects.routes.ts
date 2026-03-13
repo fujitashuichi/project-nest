@@ -14,11 +14,11 @@ export const createProjectRouter = (db: Database) => {
   );
 
   router.patch("/:id", (_, res) => {
-    res.status(501).send();
+    res.status(501).json();
   });
 
   router.delete("/:id", (_, res) => {
-    res.status(501).send();
+    res.status(501).json();
   });
 
   return router;

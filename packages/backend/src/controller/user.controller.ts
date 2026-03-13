@@ -3,8 +3,8 @@ import { UserService } from "../service/index.js";
 import { SessionResponse } from "@pkg/shared";
 import { verifyToken } from "../lib/index.js";
 import { User } from "../types/index.js";
-import { UserUndefinedError } from "../error/index.js";
 import { Database } from "sqlite3";
+import { UserUndefinedError } from "../error/UserError.js";
 
 export const session = (db: Database) => {
   return async (req: Request, res: Response): Promise<Response<SessionResponse>> => {
@@ -12,7 +12,7 @@ export const session = (db: Database) => {
 
     const token = req.cookies.token;
     if (!token) {
-      return res.status(401).send({
+      return res.status(401).json({
         success: false,
         user: null
       })
@@ -26,6 +26,6 @@ export const session = (db: Database) => {
       success: true,
       user: { id: user.id, email: user.email }
     }
-    return res.status(200).send(resBody);
+    return res.status(200).json(resBody);
   }
 }

@@ -3,14 +3,17 @@ import { RegisterService } from "../service/index.js";
 import { Database } from "sqlite3";
 import { LoginRequest, LoginResponse, RegisterRequest } from "@pkg/shared";
 import { LoginStateManagementService } from "../service/index.js";
+import { ENV } from "../config/env.js";
 
+const env = ENV.NODE_ENV;
 
 const tokenCookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: true,
+  secure: env === "product",
   sameSite: "lax",
   maxAge: 1000 * 60 * 60 * 24, // 1日
-}
+};
+
 
 export const register = (db: Database) => {
   return async (req: Request, res: Response) => {
@@ -22,7 +25,7 @@ export const register = (db: Database) => {
     return res
       .status(201)
       .cookie("token", registerResult.token, tokenCookieOptions)
-      .send({
+      .json({
         success: true,
         user: registerResult.user
       });
@@ -42,16 +45,16 @@ export const login = (db: Database) => {
     return res
       .status(200)
       .cookie("token", result.token, tokenCookieOptions)
-      .send({
+      .json({
         success: true
       });
   }
 }
 
 export const logout = (_: Request, res: Response) => {
-  return res.clearCookie("token", tokenCookieOptions)
+  res.clearCookie("token", tokenCookieOptions)
     .status(200)
-    .send({ message: "successfully logged out" });
+    .json({ message: "successfully logged out" });
 
   return console.info("Logout succeed");
 }
