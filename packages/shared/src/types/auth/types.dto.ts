@@ -7,7 +7,11 @@ export const RegisterRequestSchema = z.object({
 });
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 
-export const RegisterResponseSchema = z.void().or(z.object({}));
+export const RegisterResponseSchema = z.object({
+  id: z.number(),
+  email: z.email(),
+  createdAt: z.number()
+});
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
 
 // session
@@ -26,3 +30,7 @@ export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 
 export const LoginResponseSchema = z.void().or(z.object({}));
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
+
+// logout
+export const LogoutResponseSchema = z.void().or(z.object({}));
+export type LogoutResponse = z.infer<typeof LogoutResponseSchema>;

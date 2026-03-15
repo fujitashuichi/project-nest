@@ -1,6 +1,6 @@
 import { Database } from "sqlite3";
 import { ProjectService } from "../service/index.js";
-import { PatchProjectRequest, PostProjectRequest, Project } from "@pkg/shared";
+import { GetProjectsResponse, PatchProjectRequest, PatchProjectResponse, PostProjectRequest, PostProjectResponse, Project, ResponseJson } from "@pkg/shared";
 import { Request, Response } from "express";
 
 
@@ -10,8 +10,12 @@ export const createProject = (db: Database) => {
     const service = new ProjectService(db);
 
     const postResult = await service.saveProject(dto, res.locals.userId);
+    const json: ResponseJson<PostProjectResponse> = {
+      success: true,
+      data: postResult
+    }
 
-    return res.status(201).json(postResult);
+    return res.status(201).json(json);
   }
 }
 
@@ -21,8 +25,12 @@ export const getProjects = (db: Database) => {
     const service = new ProjectService(db);
 
     const result: Project[] = await service.findByUserId(userId);
+    const json: ResponseJson<GetProjectsResponse> = {
+      success: true,
+      data: result
+    }
 
-    return res.status(200).json(result);
+    return res.status(200).json(json);
   }
 }
 
@@ -34,7 +42,11 @@ export const updateProject = (db: Database) => {
     const id = Number(req.params.id);
 
     const result: Project = await service.updateProject(dto, id);
+    const json: ResponseJson<PatchProjectResponse> = {
+      success: true,
+      data: result
+    }
 
-    return res.status(201).json(result);
+    return res.status(201).json(json);
   }
 }

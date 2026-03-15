@@ -49,7 +49,7 @@ describe("globalErrorHandlerが正しく機能する", () => {
 
   // other
   it("UserAuthError", () => {
-    err = new AuthError("Any Error Massage");
+    err = new AuthError("Any Error Massage", "AuthError");
     globalErrorHandler(err as any, _req as any, res!, _next);
     expect(res!.status).toBeCalledWith(400);
   });
@@ -70,12 +70,12 @@ describe("globalErrorHandlerが正しく機能する", () => {
 
   // other
   it("OtherUserAuthError", () => {
-    err = new AuthError("Any Message");
+    err = new AuthError("Any Message", "AuthError");
     globalErrorHandler(err as any, _req as any, res!, _next);
     expect(res!.status).toBeCalledWith(400);
   });
   it("OtherProjectError", () => {
-    err = new ProjectError("Any Message");
+    err = new ProjectError("Any Message", "ProjectError");
     globalErrorHandler(err as any, _req as any, res!, _next);
     expect(res!.status).toBeCalledWith(400);
   });

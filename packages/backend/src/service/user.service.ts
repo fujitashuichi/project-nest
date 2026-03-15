@@ -1,7 +1,7 @@
 import { Database } from "sqlite3";
 import { UsersRepository } from "../repository/index.js";
 import { createAppDb } from "../db/index.js";
-import { User } from "../types/index.js";
+import { User } from "@pkg/shared";
 
 const appDb = await createAppDb("app.db");
 

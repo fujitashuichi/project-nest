@@ -1,6 +1,7 @@
-import { DatabaseGetError } from "../error/DbError.js";
-import { UserSchema, type UserWithoutId, type User } from "../types/index.js";
+import { User, UserSchema } from "@pkg/shared";
 import { Database } from "sqlite3";
+import { dbObjectToCamel } from "./dataTypeMapper.js";
+import { SaveUserPayload } from "../types/type.db.js";
 
 //// ここは型安全を保障する層ではないため、使用前に必ずバリデーションを済ませる
 
@@ -18,30 +19,35 @@ export class UsersRepository {
         (err, rows) => {
           if (!rows) return resolve([]);
           if (err) return reject(err);
-          const parsedRow = UserSchema.array().safeParse(rows);
-          if (!parsedRow.success) {
-            console.error(parsedRow.error);
-            reject(new DatabaseGetError("AppDb", this.tableName));
-            return;
-          }
-          resolve(parsedRow.data);
+
+          const users = dbObjectToCamel({
+            data: rows,
+            nullToUndefined: true,
+            schema: UserSchema.array()
+          });
+          resolve(users);
         }
       )
     });
   }
 
-  saveUser = (data: UserWithoutId): Promise<User> => {
+  saveUser = (data: SaveUserPayload): Promise<User> => {
     return new Promise((resolve, reject) => {
       this.db.run(
         `INSERT INTO ${this.tableName} (email, password_hash, created_at)
           VALUES (?, ?, ?)`,
-        [data.email, data.password_hash, data.created_at],
+        [data.email, data.passwordHash, data.createdAt],
         function (err) {
           if (err) {
             reject(err);
             return;
           }
-          const user: User = { id: this.lastID, ...data };
+          const savedUser = { id: this.lastID, ...data };
+          const user = dbObjectToCamel({
+            data: savedUser,
+            nullToUndefined: true,
+            schema: UserSchema
+          });
           resolve(user);
         }
       )
@@ -62,12 +68,12 @@ export class UsersRepository {
             reject(err);
             return;
           }
-          const parsedRow = UserSchema.safeParse(row);
-          if (!parsedRow.success) {
-            reject(new DatabaseGetError("AppDb", this.tableName));
-            return;
-          }
-          resolve(parsedRow.data);
+          const user = dbObjectToCamel({
+            data: row,
+            nullToUndefined: true,
+            schema: UserSchema
+          });
+          resolve(user);
         }
       )
     });
@@ -88,13 +94,12 @@ export class UsersRepository {
             reject(err);
             return;
           }
-          const parsedRow = UserSchema.safeParse(row);
-          if (!parsedRow.success) {
-            console.error(parsedRow.error);
-            reject(new DatabaseGetError("AppDb", this.tableName));
-            return;
-          }
-          resolve(parsedRow.data);
+          const user = dbObjectToCamel({
+            data: row,
+            nullToUndefined: true,
+            schema: UserSchema
+          })
+          resolve(user);
         }
       )
     });

@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { UserService } from "../service/index.js";
-import { SessionResponse } from "@pkg/shared";
+import { ResponseJson, SessionResponse, User } from "@pkg/shared";
 import { verifyToken } from "../lib/index.js";
-import { User } from "../types/index.js";
 import { Database } from "sqlite3";
 import { UnAuthorizedError, UserUndefinedError } from "../error/index.js";
 
@@ -19,7 +18,12 @@ export const session = (db: Database) => {
     const user: User | null = await userService.findByEmail(verified.email);
     if (!user) throw new UserUndefinedError();
 
-    const resBody: SessionResponse = { id: user.id, email: user.email };
-    return res.status(200).json(resBody);
+    const data: SessionResponse = { id: user.id, email: user.email };
+    const json: ResponseJson<SessionResponse> = {
+      success: true,
+      data: data,
+      message: "now session active"
+    }
+    return res.status(200).json(json);
   }
 }

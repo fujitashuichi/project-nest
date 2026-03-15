@@ -1,3 +1,4 @@
+export { ResponseError } from "./ResponseError.js"
 export * from "./DbError.js"
 export * from "./AuthError.js"
 export * from "./ProjectError.js"

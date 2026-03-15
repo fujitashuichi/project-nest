@@ -41,7 +41,7 @@ graph TB
 
 ```
 
-## ErrorMap
+## ErrorMap: Middleware
 ```mermaid
 graph LR
   noteTopA[/FE側で扱うエラーだけを示します。

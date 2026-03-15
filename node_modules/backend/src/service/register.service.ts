@@ -1,10 +1,11 @@
 import { hashPassword, signToken } from "../lib/index.js";
-import { User } from "../types/type.db.js";
 import { UsersRepository } from "../repository/index.js";
 import { createAppDb } from "../db/app.db.js";
 import { Database } from "sqlite3";
-import { RegisterRequest } from "@pkg/shared";
+import { RegisterRequest, User, UserSchema } from "@pkg/shared";
 import { EmailAlreadyRegisteredError } from "../error/index.js";
+import { dbObjectToCamel } from "../repository/dataTypeMapper.js";
+import { DbUser } from "../types/type.db.js";
 
 
 const AppDb = await createAppDb("app.db");
@@ -21,19 +22,25 @@ export class RegisterService {
       throw new EmailAlreadyRegisteredError(dto.email);
     }
 
-    const password_hash = await hashPassword(dto.password);
+    const hashed = await hashPassword(dto.password);
 
     const newUser = {
       email: dto.email,
-      password_hash: password_hash,
+      password_hash: hashed,
       created_at: Date.now()
     }
 
-    const savedUser: User = await this.usersRepository.saveUser(newUser);
+    const savedUser: DbUser = await this.usersRepository.saveUser(newUser);
+
+    const { password_hash, ...requiredUserData } = savedUser;
     const token: string = signToken({ email: dto.email });
 
     return {
-      user: savedUser,
+      user: dbObjectToCamel({
+        data: requiredUserData,
+        nullToUndefined: true,
+        schema: UserSchema
+      }),
       token: token
     };
   }

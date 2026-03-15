@@ -1,3 +1,6 @@
+import { z } from "zod"
+import { ResponseErrorName } from "./types.responseErrorName.js"
+
 export type AuthFetchPath =
   | "/api/auth/register"
   | "/api/auth/login"
@@ -13,3 +16,16 @@ export type UserFetchPath =
 export type ProjectFetchPath =
   | "/api/projects"
   | `/api/projects/${number}`
+
+
+export type ResponseJson<T extends unknown> =
+  | {
+    success: false,
+    errorName: ResponseErrorName,
+    message?: string,
+  }
+  | {
+    success: true,
+    data: T,
+    message?: string
+  }
