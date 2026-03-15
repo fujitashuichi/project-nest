@@ -1,16 +1,16 @@
-import { PatchProjectRequestSchema, ProjectSchema } from "@pkg/shared";
+import { ProjectSchema, UserSchema } from "@pkg/shared";
 import { z } from "zod";
 
-export const UserSchema = z.object({
+export const DbUserSchema = z.object({
   id: z.number().int(),
   email: z.email(),
   password_hash: z.string(),
   created_at: z.number().int().positive()
 });
-export type User = z.infer<typeof UserSchema>;
+export type DbUser = z.infer<typeof DbUserSchema>;
 
-const UserWithoutIdSchema = UserSchema.omit({ id: true });
-export type UserWithoutId = z.infer<typeof UserWithoutIdSchema>
+const SaveUserPayloadSchema = UserSchema.omit({ id: true }).extend({ passwordHash: z.string() });
+export type SaveUserPayload = z.infer<typeof SaveUserPayloadSchema>
 
 
 export const ProjectWithoutIdSchema = ProjectSchema.omit({ id: true });

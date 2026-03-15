@@ -18,42 +18,47 @@ describe("user.repositoryの各メソッドを検査", () => {
   })
 
   it("saveUserは正しく成功する", async () => {
-    const { id, ...data } = userMocks.user();
-    const promise = repository?.saveUser(data);
+    const payload = userMocks.saveUserPayload();
 
+    const promise = repository!.saveUser(payload);
+    const { passwordHash, ...required } = payload;
     await expect(promise).resolves.toEqual(
-      expect.objectContaining(data)
+      expect.objectContaining(required)
     );
   });
 
   it("getUsersは正しく成功する", async () => {
-    const { id, ...data } = userMocks.user();
-    await repository?.saveUser(data);
+    const payload = userMocks.saveUserPayload();
+    await repository!.saveUser(payload);
 
-    const result = repository?.getUsers();
-
-    await expect(result).resolves.toContainEqual(
-      expect.objectContaining(data)
+    const promise = repository!.getUsers();
+    const { passwordHash, ...required } = payload;
+    await expect(promise).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining(required)
+      ])
     );
   });
 
   it("findByIdは正しく成功する", async () => {
-    const { id, ...data } = userMocks.user();
-    await repository?.saveUser(data);
+    const payload = userMocks.saveUserPayload();
+    await repository!.saveUser(payload);
 
-    const result = repository?.findById(1);
-    await expect(result).resolves.toEqual(
-      expect.objectContaining(data)
+    const promise = repository!.findById(1);
+    const { passwordHash, ...required } = payload;
+    await expect(promise).resolves.toEqual(
+      expect.objectContaining(required)
     );
   });
 
   it("findByEmailは正しく成功する", async () => {
-    const { id, ...data } = userMocks.user();
-    await repository?.saveUser(data);
+    const payload = userMocks.saveUserPayload();
+    await repository?.saveUser(payload);
 
-    const result = repository?.findByEmail(data.email);
-    await expect(result).resolves.toEqual(
-      expect.objectContaining(data)
+    const promise = repository!.findByEmail(payload.email);
+    const { passwordHash, ...required } = payload;
+    await expect(promise).resolves.toEqual(
+      expect.objectContaining(required)
     );
   });
 

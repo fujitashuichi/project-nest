@@ -1,37 +1,43 @@
 ### [要件定義書](./docs/features.md)
-### [BEセキュリティ](./docs/BE_Security.md)
-### [DB図](./docs/db.mermaid.md)
 ### [全体図](./docs/PortforioFlow.mermaid)
+
+---
+
+### [規約・実装資料]
+#### FE/BE
+* [Projectドメイン: エラーレスポンスの形式](./docs/BE/BE_domainFlow/error/project.md)
+#### BE
+* [BEセキュリティ](./docs/BE_Security.md)
+* [DB図](./docs/db.mermaid.md)
 
 <details>
   <summary>その他レポートなど</summary>
 
-  * <a href="./docs/errors/createProject_unauthorizedError.md">fetchにおけるcredential設定ミスによるエラーと解決までの道のり</a>
-  * <a href="./docs/test/analyzeTestPerformance.md">テスト時間遷移における実行時間スパイクに関して</a>
-  * <a href="./docs/test/testResults.md">testResults</a>
+  * <a href="./docs/errors/createProject_unauthorizedError.md">fetchにおけるcredential設定ミスによるエラーと解決までの道のり: credential設定の欠如</a>
+  * <a href="./docs/test/analyzeTestPerformance.md">テスト時間遷移における実行時間スパイクに関して: 原因不明のまま解決した現象</a>
+  * <a href="./docs/test/testResults.md">testResults(改修後などに更新)</a>
 </details>
 
 ## 設計上の意思決定 (Architecture Decision Log)
 
-このポートフォリオでは、保守性と開発効率のバランスを考慮した設計判断を目指しています。
-具体的な判断基準については、以下の Issue 記録を参照してください。
+個人的に気になった設計判断について、以下の Issue に記録しました
 
 - **[非同期ロジックの管理方針について](/../../issues/2)**
   - なぜ Custom Hook 化をあえて見送ったのか、デバッグ効率と認知負荷の観点から論理的な境界線を定義しています。
 
-## メモ
-* features = 広義のドメインロジック
-
 ---
 
-## ポートフォリオの肝
+## ポートフォリオの根幹
 
-### BE Test
+### 直近のBEテスト実行結果
 ```sh
-Test Files  10 passed (10)
-     Tests  51 passed (51)
-  Duration  3.35s (transform 813ms, setup 0ms, import 3.35s, tests 1.11s, environment 2ms)
+current result>
+ Test Files  10 passed (10)
+      Tests  53 passed (53)
+   Duration  4.33s (transform 1.79s, setup 0ms, import 4.81s, tests 1.30s, environment 2ms)
 ```
+
+### テスト箇所と依存フロー
 ```mermaid
 flowchart LR
 
@@ -52,7 +58,7 @@ subgraph DB execution
   Repository --> DB[(SQLite)]
 end
 
-Guard -.->|authorize / project認証時だけ情報を貰う| Service
+Guard -.->|"認可に必要な情報の取得(User/Project)"| Service
 Guard --> Controller
 Controller --> Service
 
@@ -90,7 +96,7 @@ sequenceDiagram
 
 
   rect rgb(200, 255, 200)
-    Note over Controller, DB: 例外はthrow
+    Note over Guard, DB: 例外はthrow
     Guard --x Error: Error
     Controller --x Error: Error
     Service --x Error: Error

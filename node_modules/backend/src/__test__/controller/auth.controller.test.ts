@@ -20,6 +20,7 @@ describe("auth.controller", () => {
     db = null;
   });
 
+
   // register
   it("register: 正常に登録が完了する", async () => {
     await register(db!)(authRequestMocks.register.validReq(), res!);

@@ -1,13 +1,3 @@
-## テストパフォーマンス指標
-以下のチャートは、テストパフォーマンスの推移を示しています。
-
-![Test Performance Summary](./graph_testSuitePerfomance.mermaid)
-
-### パフォーマンス分析
-レイテンシのスパイク: 第3回目の実行において、実行時間の顕著な急増（6.04秒）が確認されました。詳細な分析により、これはテスト自体によるものではなく、主にモジュールのトランスフォームとインポートのオーバーヘッドによって引き起こされたことが示されています。
-
-![Run 3 Bottleneck Analysis](./graph_timeBreakDownForRun.mermaid)
-
 ```sh
 Test Files  6 passed (6)
      Tests  34 passed (34)
@@ -43,4 +33,9 @@ Test Files  10 passed (10)
      Tests  53 passed (53)
   Start at  19:40:50
   Duration  3.44s (transform 747ms, setup 0ms, import 3.44s, tests 1.19s, environment 1ms)
+
+Test Files  10 passed (10)
+     Tests  53 passed (53)
+  Start at  18:43:21
+  Duration  4.33s (transform 1.79s, setup 0ms, import 4.81s, tests 1.30s, environment 2ms)
 ```

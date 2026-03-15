@@ -1,5 +1,6 @@
+export { ResponseError } from "./ResponseError.js"
 export * from "./DbError.js"
-export * from "./UserAuthError.js"
+export * from "./AuthError.js"
 export * from "./ProjectError.js"
 export * from "./UserError.js"
 export * from "./SecurityError.js"

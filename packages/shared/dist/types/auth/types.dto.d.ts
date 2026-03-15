@@ -4,7 +4,11 @@ export declare const RegisterRequestSchema: z.ZodObject<{
     password: z.ZodString;
 }, z.core.$strip>;
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
-export declare const RegisterResponseSchema: z.ZodUnion<[z.ZodVoid, z.ZodObject<{}, z.core.$strip>]>;
+export declare const RegisterResponseSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    email: z.ZodEmail;
+    createdAt: z.ZodNumber;
+}, z.core.$strip>;
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
 export declare const SessionResponseSchema: z.ZodObject<{
     id: z.ZodNumber;
@@ -18,3 +22,5 @@ export declare const LoginRequestSchema: z.ZodObject<{
 export type LoginRequest = z.infer<typeof LoginRequestSchema>;
 export declare const LoginResponseSchema: z.ZodUnion<[z.ZodVoid, z.ZodObject<{}, z.core.$strip>]>;
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
+export declare const LogoutResponseSchema: z.ZodUnion<[z.ZodVoid, z.ZodObject<{}, z.core.$strip>]>;
+export type LogoutResponse = z.infer<typeof LogoutResponseSchema>;

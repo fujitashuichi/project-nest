@@ -2,7 +2,7 @@ import { Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 import { createResponseMock } from "../__mock__/index.js";
 import { globalErrorHandler } from "../middleware/index.js";
-import { ConfirmPasswordError, EmailAlreadyRegisteredError, InvalidPasswordError, UserAuthError,  } from "../error/index.js";
+import { ConfirmPasswordError, EmailAlreadyRegisteredError, InvalidPasswordError, AuthError } from "../error/index.js";
 import { DuplicateProjectError, ProjectError, ProjectUndefinedError } from "../error/ProjectError.js";
 import { UserUndefinedError } from "../error/UserError.js";
 
@@ -49,7 +49,7 @@ describe("globalErrorHandlerが正しく機能する", () => {
 
   // other
   it("UserAuthError", () => {
-    err = new UserAuthError("Any Error Massage");
+    err = new AuthError("Any Error Massage", "AuthError");
     globalErrorHandler(err as any, _req as any, res!, _next);
     expect(res!.status).toBeCalledWith(400);
   });
@@ -70,12 +70,12 @@ describe("globalErrorHandlerが正しく機能する", () => {
 
   // other
   it("OtherUserAuthError", () => {
-    err = new UserAuthError("Any Message");
+    err = new AuthError("Any Message", "AuthError");
     globalErrorHandler(err as any, _req as any, res!, _next);
     expect(res!.status).toBeCalledWith(400);
   });
   it("OtherProjectError", () => {
-    err = new ProjectError("Any Message");
+    err = new ProjectError("Any Message", "ProjectError");
     globalErrorHandler(err as any, _req as any, res!, _next);
     expect(res!.status).toBeCalledWith(400);
   });

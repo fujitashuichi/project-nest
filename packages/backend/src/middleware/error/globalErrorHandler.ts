@@ -3,6 +3,7 @@ import { authErrorHandler } from "./domain/authErrorHandler.js";
 import { productErrorHandler } from "./domain/projectErrorHandler.js";
 import { userErrorHandler } from "./domain/userErrorHandler.js";
 import { SecurityErrorHandler } from "./domain/SecurityErrorHandler.js";
+import { ResponseJson } from "@pkg/shared";
 
 export const globalErrorHandler: ErrorRequestHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
@@ -12,7 +13,9 @@ export const globalErrorHandler: ErrorRequestHandler = (err: Error, _req: Reques
   if (userErrorHandler(err, res)) return;
   if (SecurityErrorHandler(err, res)) return;
 
-  return res.status(500).json({
-    message: "Internal Server Error"
-  });
+  const json:ResponseJson<undefined> = {
+    success: false,
+    errorName: "InternalServerError"
+  }
+  return res.status(500).json(json);
 };

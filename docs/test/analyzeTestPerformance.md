@@ -1,3 +1,8 @@
+## テストパフォーマンス指標
+以下のチャートは、テストパフォーマンスの推移を示しています。
+
+---
+
 * Test1: Controller/Serviceなどの設計後テスト
 * Test2: 多層防御フロー見直し後のテスト
 * Test3: isLoggedInを /session にfetchする形に変更した際のテスト

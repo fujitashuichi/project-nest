@@ -1,4 +1,4 @@
-import type { AuthFetchPath, ProjectFetchPath, SessionFetchPath, UserFetchPath } from "@pkg/shared";
+import type { AuthFetchPath, ProjectFetchPath, ResponseJson, SessionFetchPath, UserFetchPath } from "@pkg/shared";
 import type { ApiResult } from "./types";
 
 type Props = {
@@ -28,19 +28,21 @@ export const apiClient = async ({ path, method, body }: Props): Promise<ApiResul
       body: bodyMap[method]
     });
 
+    const json: ResponseJson<unknown> = await response.json();
+
     if (!response.ok) {
       return {
         ok: false,
         status: response.status,
-        body: await response.json(),
-        error: new Error(response.statusText)
+        body: json,
+        error: new Error(json.success ? json.message ?? "no results" : json.errorName)
       }
     }
 
     return {
       ok: true,
       status: response.status,
-      body: await response.json()
+      body: json
     }
   } catch (e: unknown) {
     if (e instanceof Error) {

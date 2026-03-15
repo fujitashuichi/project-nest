@@ -4,9 +4,39 @@ export declare const PostProjectRequestSchema: z.ZodObject<{
     description: z.ZodOptional<z.ZodString>;
 }, z.z.core.$strict>;
 export type PostProjectRequest = z.infer<typeof PostProjectRequestSchema>;
+export declare const PostProjectResponseSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    userId: z.ZodNumber;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    status: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodNumber;
+    updatedAt: z.ZodNumber;
+}, z.z.core.$strip>;
+export type PostProjectResponse = z.infer<typeof PostProjectResponseSchema>;
+export declare const GetProjectsResponseSchema: z.ZodArray<z.ZodObject<{
+    id: z.ZodNumber;
+    userId: z.ZodNumber;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    status: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodNumber;
+    updatedAt: z.ZodNumber;
+}, z.z.core.$strip>>;
+export type GetProjectsResponse = z.infer<typeof GetProjectsResponseSchema>;
 export declare const PatchProjectRequestSchema: z.ZodObject<{
     title: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     status: z.ZodOptional<z.ZodOptional<z.ZodString>>;
 }, z.z.core.$strip>;
 export type PatchProjectRequest = z.infer<typeof PatchProjectRequestSchema>;
+export declare const PatchProjectResponseSchema: z.ZodObject<{
+    id: z.ZodNumber;
+    userId: z.ZodNumber;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodString>;
+    status: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodNumber;
+    updatedAt: z.ZodNumber;
+}, z.z.core.$strip>;
+export type PatchProjectResponse = z.infer<typeof PatchProjectResponseSchema>;
