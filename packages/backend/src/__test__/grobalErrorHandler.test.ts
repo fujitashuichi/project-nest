@@ -2,7 +2,7 @@ import { Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 import { createResponseMock } from "../__mock__/index.js";
 import { globalErrorHandler } from "../middleware/index.js";
-import { ConfirmPasswordError, EmailAlreadyRegisteredError, InvalidPasswordError, AuthError, DatabaseGetError } from "../error/index.js";
+import { ConfirmPasswordError, EmailAlreadyRegisteredError, InvalidPasswordError, AuthError, DatabaseGetError, DatabaseDeleteError } from "../error/index.js";
 import { DuplicateProjectError, ProjectError, ProjectUndefinedError } from "../error/ProjectError.js";
 import { UserUndefinedError } from "../error/UserError.js";
 
@@ -94,7 +94,7 @@ describe("globalErrorHandlerが正しく機能する", () => {
     });
 
     it("DatabaseDeleteError", () => {
-      const deleteError = new DatabaseGetError(":memory:", "table");
+      const deleteError = new DatabaseDeleteError(":memory:", "table");
       globalErrorHandler(deleteError, _req as any, res!, _next);
 
       expect(res!.status).toBeCalledWith(500);

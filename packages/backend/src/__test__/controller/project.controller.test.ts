@@ -117,7 +117,7 @@ describe("project.controller", () => {
     await isUsersProject(db!)(createRequestMock.withParams({ id: "1" }), res!, next!);
     await deleteProject(db!)(createRequestMock.withParams({ id: "1" }), res!);
 
-    expect(res!.status).toHaveBeenCalledWith(201);
+    expect(res!.status).toHaveBeenCalledWith(200);
     expect(res!.json).toHaveBeenCalledWith(
       expect.objectContaining({
         success: true,
