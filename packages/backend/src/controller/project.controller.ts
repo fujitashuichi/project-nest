@@ -64,6 +64,6 @@ export const deleteProject = (db: Database) => {
       message: "Project successfully deleted"
     }
 
-    res.status(201).json(json);
+    res.status(200).json(json);
   }
 }

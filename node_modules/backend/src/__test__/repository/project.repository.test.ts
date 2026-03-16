@@ -80,7 +80,10 @@ describe("project.repositoryの各メソッドを検査", () => {
     const payload = userMocks.saveUserPayload();
     const user = await usersRepository!.saveUser(payload);
 
-    const promise = projectsRepository!.deleteProject(user.id);
+    const data: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: 1, updatedAt: 1 };
+    const project = await projectsRepository!.saveProject(data);
+
+    const promise = projectsRepository!.deleteProject(project.id);
     await expect(promise).resolves.toBe(true);
   });
 
