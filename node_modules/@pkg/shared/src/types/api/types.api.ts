@@ -1,4 +1,3 @@
-import { z } from "zod"
 import { ResponseErrorName } from "./types.responseErrorName.js"
 
 export type AuthFetchPath =
@@ -9,9 +8,6 @@ export type AuthFetchPath =
 
 export type SessionFetchPath =
   | "/api/auth/session"
-
-export type UserFetchPath =
-  | `/api/user/${number}/products`
 
 export type ProjectFetchPath =
   | "/api/projects"
