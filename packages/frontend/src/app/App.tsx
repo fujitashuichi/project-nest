@@ -12,13 +12,13 @@ function App() {
         <Route path='/projects' element={<ProjectsPage />} />
         <Route path='/user' element={<UserPage />} />
 
-        <Route path='/test'>
+        <Route path='/test' element={<>
           <RegisterForm />
           <LoginContainer />
           <LogoutButton />
           <CreateProjectForm />
           <ProjectList />
-        </Route>
+        </>} />
       </Routes>
     </BrowserRouter>
   )
