@@ -1,17 +1,26 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { LoginContainer, LogoutButton, RegisterForm } from '../features/auth/components'
 import { CreateProjectForm } from '../features/projects/components/CreateProjectForm'
 import { ProjectList } from '../features/projects/components/ProjectList'
 import './App.css'
+import { ProjectsPage, UserPage } from './pages'
 
 function App() {
   return (
-    <>
-      <RegisterForm />
-      <LoginContainer />
-      <LogoutButton />
-      <CreateProjectForm />
-      <ProjectList />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/projects' element={<ProjectsPage />} />
+        <Route path='/user' element={<UserPage />} />
+
+        <Route path='/test'>
+          <RegisterForm />
+          <LoginContainer />
+          <LogoutButton />
+          <CreateProjectForm />
+          <ProjectList />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
