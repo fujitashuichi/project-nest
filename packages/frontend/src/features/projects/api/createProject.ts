@@ -1,6 +1,6 @@
 import { ProjectSchema, type PostProjectRequest } from "@pkg/shared";
 import { apiClient } from "../../../lib";
-import type { CreateProjectResult } from "../types";
+import type { CreateProjectResult } from "./types";
 
 export const createProject = async (project: PostProjectRequest): Promise<CreateProjectResult> => {
   const response = await apiClient({
