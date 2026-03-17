@@ -1,6 +1,6 @@
 import { ProjectSchema } from "@pkg/shared";
 import { apiClient } from "../../../lib"
-import type { GetProjectsResult } from "../types";
+import type { GetProjectsResult } from "./types";
 
 export const getProjects = async (): Promise<GetProjectsResult> => {
   const response = await apiClient({

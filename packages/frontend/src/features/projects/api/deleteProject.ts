@@ -1,6 +1,6 @@
 import { DeleteProjectResponseSchema, type Project } from "@pkg/shared"
 import { apiClient } from "../../../lib"
-import type { DeleteProjectResult } from "../types";
+import type { DeleteProjectResult } from "./types";
 
 export const deleteProject = async (id: Project["id"]): Promise<DeleteProjectResult> => {
   const response = await apiClient({
