@@ -10,9 +10,6 @@ export function ProjectList() {
   const { projects } = projectsData;
   const { get, status, errorMessage } = getProjects;
 
-  useEffect(() => {
-    get();
-  }, []);
 
 
   return (
