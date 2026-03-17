@@ -1,10 +1,11 @@
 import { AppButton } from "../../../components";
 import { AppLoadingBar } from "../../../components/AppLoadingBar";
-import { useCreateProject } from "../hooks/useCreateProject";
+import { useProject } from "../../../Context";
 
 
 export function CreateProjectForm() {
-  const { create, status, errorMessage } = useCreateProject();
+  const { create: createProject } = useProject();
+  const { create, status, errorMessage } = createProject;
 
   return (<>
     {status === "idle" &&

@@ -14,11 +14,11 @@ const errorMap = {
 
 type Result = ProjectCtxType["delete"];
 
-export const useDeleteProject = (): Result => {
+export const useDeleteProject = (reload: ProjectCtxType["getProjects"]["get"]): Result => {
   const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const tryDelete = async (id: Project["id"]) => {
+  const tryDelete: Result["delete"] = async (id: Project["id"]) => {
     setStatus("loading");
 
     const result = await deleteProject(id);
@@ -29,6 +29,7 @@ export const useDeleteProject = (): Result => {
       return;
     }
 
+    await reload(); // 楽観更新をする際はここを差し替え
     setStatus("success");
   }
 
