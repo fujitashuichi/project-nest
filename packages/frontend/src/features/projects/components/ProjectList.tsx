@@ -2,10 +2,12 @@ import { useEffect } from "react";
 import { AppLoadingBar } from "../../../components/AppLoadingBar";
 import { AppButton } from "../../../components";
 import { useGetProjects } from "../hooks/useGetProjects";
+import { useProjectsData } from "../hooks/useProjectsData";
 
 
 export function ProjectList() {
-  const { get, status, errorMessage, projects } = useGetProjects();
+  const { get, status, errorMessage } = useGetProjects();
+  const { projects } = useProjectsData();
   useEffect(() => {
     get();
   }, []);
