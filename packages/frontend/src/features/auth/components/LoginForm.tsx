@@ -1,9 +1,9 @@
 import { AppButton } from "../../../components";
-import { useAuthCtx } from "../../../Context";
+import { useAuth } from "../../../Context";
 
 
 export function LoginForm() {
-  const { login } = useAuthCtx();
+  const { login } = useAuth();
   const { login: tryLogin } = login;
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { parseFormData } from "../../../lib";
 import { PostProjectRequestSchema } from "@pkg/shared";
 import { createProject } from "../api";
@@ -14,7 +14,7 @@ const errorMap = {
 
 type Result = ProjectCtxType["create"];
 
-export const useCreateProject = (): Result => {
+export const useCreateProject = (reload: ProjectCtxType["getProjects"]["get"]): Result => {
   const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -40,6 +40,7 @@ export const useCreateProject = (): Result => {
       return;
     }
 
+    await reload(); // createはサーバーレスポンスが必須なため、ここを楽観更新に差し替えることは許容しない
     setStatus("success");
     setTimeout(() => setStatus("idle"), 3000);
   };

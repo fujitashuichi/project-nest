@@ -16,7 +16,7 @@ const errorMap = {
 
 type Result = ProjectCtxType["update"];
 
-export const useUpdateProjects = (): Result => {
+export const useUpdateProjects = (reload: ProjectCtxType["getProjects"]["get"]): Result => {
   const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 
@@ -40,6 +40,7 @@ export const useUpdateProjects = (): Result => {
       return setStatus("error");
     }
 
+    await reload(); // 楽観更新をする際はここを差し替え
     setStatus("success");
     setTimeout(() => setStatus("idle"), 3000);
   }

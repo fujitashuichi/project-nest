@@ -1,10 +1,10 @@
 import { AppButton } from "../../../components";
 import { AppLoadingBar } from "../../../components/AppLoadingBar";
-import { useAuthCtx } from "../../../Context";
+import { useAuth } from "../../../Context";
 
 
 export function RegisterForm() {
-  const { register } = useAuthCtx();
+  const { register } = useAuth();
   const { register: tryRegister, status } = register;
 
   return (<>
