@@ -13,20 +13,23 @@ graph BT
     AuthCtx[(Context)]
     AuthHooks
 
-    subgraph ProjectContext
+    subgraph AuthProvider[Provider]
       direction BT
 
-      ProjectCtx[(Context)]
-      ProjectHooks
+      AuthComponents
+    end
+  end
 
-      subgraph Provider
-        direction BT
+  subgraph ProjectContext
+    direction BT
 
-        subgraph Components
-          AuthComponents
-          ProjectComponents
-        end
-      end
+    ProjectCtx[(Context)]
+    ProjectHooks
+
+    subgraph ProjectProvider[Provider]
+      direction BT
+
+      ProjectComponents
     end
   end
 
@@ -47,7 +50,8 @@ graph BT
 
   AuthCtx -.-> AuthHooks
   ProjectCtx -.-> ProjectHooks
-  AuthComponents & ProjectComponents -.-> AuthCtx
+  AuthComponents -.-> AuthCtx
   ProjectComponents -.-> ProjectCtx
 
+  note[/両方に属するComponentもあり得る/]
 ```
