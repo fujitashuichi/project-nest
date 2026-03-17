@@ -14,11 +14,11 @@ const errorMap = {
 
 type Result = ProjectCtxType["delete"];
 
-export const useDeleteProject = (id: Project["id"]): Result => {
+export const useDeleteProject = (): Result => {
   const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const tryDelete = async () => {
+  const tryDelete = async (id: Project["id"]) => {
     setStatus("loading");
 
     const result = await deleteProject(id);

@@ -15,12 +15,12 @@ type Create = {
 type Update = {
   status: "idle" | "loading" | "error" | "success",
   errorMessage: string | null,
-  update: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>
+  update: (e: React.SubmitEvent<HTMLFormElement>, id: Project["id"]) => Promise<void>
 };
 type Delete = {
   status: "idle" | "loading" | "error" | "success",
   errorMessage: string | null,
-  delete: () => Promise<void>
+  delete: (id: Project["id"]) => Promise<void>
 };
 
 export type ProjectCtxType = {

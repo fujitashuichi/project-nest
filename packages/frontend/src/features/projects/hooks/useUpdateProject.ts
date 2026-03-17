@@ -16,11 +16,11 @@ const errorMap = {
 
 type Result = ProjectCtxType["update"];
 
-export const useUpdateProjects = (id: Project["id"]): Result => {
+export const useUpdateProjects = (): Result => {
   const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 
-  const update = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const update = async (e: React.SubmitEvent<HTMLFormElement>, id: Project["id"]) => {
     e.preventDefault();
 
     setStatus("loading");
