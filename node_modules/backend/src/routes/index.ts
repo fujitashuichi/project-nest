@@ -1,1 +1,0 @@
-export { createAppRouter } from "./app.routes.js"
