@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { AuthCtx, type AuthCtxType } from './AuthContext'
 import { useLogin, useLogout, useRegister, useSessionStatus, useUser } from '../features/auth/hooks';
-import { isSessionActive } from '../features/auth/api';
 import { useGetUserData } from '../features/auth/hooks/useGetUserData';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -12,25 +11,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const userHook = useUser();
   const getUserHook = useGetUserData(userHook.setUser);
 
+  const { status, setStatus } = sessionHook;
+  const { getUser } = getUserHook;
+
   useEffect(() => {
     // セッションを10分おきにチェック
     const checkSession = async () => {
-      const isLoggedIn = await isSessionActive();
-      console.info(isLoggedIn ? "session check: logged in" : "session check: logged out");
-      sessionHook.setStatus(isLoggedIn ? "active" : "inactive");
+      console.info("session:", status);
+      setStatus(status ? "active" : "inactive");
     };
     checkSession();
 
     const interval = setInterval(async () => await checkSession(), 10 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [sessionHook]);
+  }, [status]);
 
 
-  const { status } = sessionHook;
-  const { getUser } = getUserHook;
   useEffect(() => {
     if (status === "active") getUser();
-  }, [status, getUser]);
+  }, [status]);
 
 
   const ctxData: AuthCtxType = useMemo(() => ({
@@ -42,7 +41,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getUser: getUserHook
   }), [sessionHook, registerHook, loginHook, logoutHook, userHook, getUserHook]);
 
-  console.log(sessionHook.status);
 
   return (
     <AuthCtx.Provider value={ctxData}>
