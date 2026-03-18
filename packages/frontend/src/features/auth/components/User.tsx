@@ -15,7 +15,7 @@ export function User() {
   if (user === null) return <h1>データがありません</h1>;
 
   return (<>
-    {gettingStatus === "idle" || gettingStatus === "loading" &&
+    {(gettingStatus === "idle" || gettingStatus === "loading") &&
       <AppLoadingBar className="fixed top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-1.5" />
     }
 
