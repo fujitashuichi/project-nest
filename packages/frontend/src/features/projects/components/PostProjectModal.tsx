@@ -2,13 +2,26 @@ import { AppButton } from '../../../components';
 import { PostProjectForm } from './PostProjectForm';
 import type { Project } from '@pkg/shared';
 
-export function PostProjectModal({ id, show, close }: { id: Project["id"], show: boolean, close: () => void }) {
+export function PostProjectModal({ id, show, onClose }: { id: Project["id"], show: boolean, onClose: () => void }) {
   if (!show) return null;
 
   return (
-    <div className='fixed bg-gray-400 top-1/2 left-1/2 translate-1/2'>
-      <PostProjectForm id={id} />
-      <AppButton variant="secondary" onClick={close}>閉じる</AppButton>
+    <div
+      className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className='bg-white mb-6 rounded-2xl p-10'
+        onClick={(e) => e.stopPropagation()}
+      >
+        <PostProjectForm id={id} />
+
+        <div className="flex justify-end mt-1.5">
+          <AppButton variant="danger" onClick={onClose} className='w-auto'>
+            閉じる
+          </AppButton>
+        </div>
+      </div>
     </div>
   )
 }

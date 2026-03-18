@@ -29,30 +29,29 @@ export function ProjectPage() {
   }, [deleteStatus, resetDeleteStatus]);
 
 
-  return (<>
-    {project === undefined &&
-      <h1>データがありません</h1>
-    }
-    {project !== undefined &&
-      <div>
-        <h2 className="font-bold text-lg">{project.title}</h2>
-        <div>
-          <div>
-            <h3>詳細</h3>
-            <p className="text-gray-600 text-sm">{project.description || "no descriptions"}</p>
-          </div>
-          <div>
-            <h3>作成日時</h3>
-            <p className="mt-2 text-xs text-gray-400">
-              Created: {new Date(project.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-        </div>
+  if (!project) return <h1>データがありません</h1>;
 
-        <AppButton variant="primary" onClick={() => setEditing(true)}>編集</AppButton>
-        <AppButton variant="danger" onClick={() => tryDelete(project.id)}>削除</AppButton>
+  return (<>
+    <div>
+      <h2 className="font-bold text-lg">{project.title}</h2>
+      <div>
+        <div>
+          <h3>詳細</h3>
+          <p className="text-gray-600 text-sm">{project.description || "no descriptions"}</p>
+        </div>
+        <div>
+          <h3>作成日時</h3>
+          <p className="mt-2 text-xs text-gray-400">
+            Created: {new Date(project.createdAt).toLocaleDateString()}
+          </p>
+        </div>
       </div>
-    }
+
+      <AppButton variant="primary" onClick={() => setEditing(true)}>編集</AppButton>
+      <AppButton variant="danger" onClick={() => tryDelete(project.id)}>削除</AppButton>
+    </div>
+
+
     {deleteStatus === "loading" &&
       <AppLoadingBar className="fixed top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-1.5" />
     }
@@ -66,7 +65,7 @@ export function ProjectPage() {
     <PostProjectModal
       id={id}
       show={editing}
-      close={() => setEditing(false)}
+      onClose={() => setEditing(false)}
     />
   </>)
 }
