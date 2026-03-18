@@ -2,10 +2,13 @@ import type { Project } from "@pkg/shared";
 import { useProject } from "../../../Context";
 import { AppButton } from "../../../components";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AppLoadingBar } from "../../../components/AppLoadingBar";
+import { PostProjectModal } from "./PostProjectModal";
 
 export function ProjectPage() {
+  const [editing, setEditing] = useState<boolean>(false);
+
   const { id: idParam } = useParams();
   const id: Project["id"] = Number(idParam);
 
@@ -46,7 +49,7 @@ export function ProjectPage() {
           </div>
         </div>
 
-        <AppButton variant="primary">編集</AppButton>
+        <AppButton variant="primary" onClick={() => setEditing(true)}>編集</AppButton>
         <AppButton variant="danger" onClick={() => tryDelete(project.id)}>削除</AppButton>
       </div>
     }
@@ -59,5 +62,11 @@ export function ProjectPage() {
         <p>{errorMessage}</p>
       </>
     }
+
+    <PostProjectModal
+      id={id}
+      show={editing}
+      close={() => setEditing(false)}
+    />
   </>)
 }
