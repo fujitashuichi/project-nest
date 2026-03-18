@@ -1,15 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { AuthCtx, type AuthCtxType } from './AuthContext'
 import { useLogin, useLogout, useRegister, useSessionStatus } from '../features/auth/hooks';
 import { isSessionActive } from '../features/auth/api';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const useSession = useSessionStatus();
+  const useSessionHook = useSessionStatus();
+  const useRegisterHook = useRegister(useSessionHook);
+  const useLoginHook = useLogin(useSessionHook);
+  const useLogoutHook = useLogout(useSessionHook);
 
   useEffect(() => {
     const check = async () => {
       const isLoggedIn = await isSessionActive();
-      if (isLoggedIn) useSession.setStatus("active");
+      if (isLoggedIn) useSessionHook.setStatus("active");
     };
     check();
 
@@ -17,12 +20,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, []);
 
-  const ctxData: AuthCtxType = {
-    register: useRegister(useSession),
-    login: useLogin(useSession),
-    logout: useLogout(useSession),
-    session: useSession
-  }
+  const ctxData: AuthCtxType = useMemo(() => ({
+    session: useSessionHook,
+    register: useRegisterHook,
+    login: useLoginHook,
+    logout: useLogoutHook,
+  }), [useSessionHook, useRegisterHook, useLoginHook, useLogoutHook]);
 
   return (
     <AuthCtx.Provider value={ctxData}>
