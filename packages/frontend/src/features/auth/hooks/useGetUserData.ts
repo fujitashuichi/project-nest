@@ -10,7 +10,7 @@ const errorMap = {
   UnknownError: "エラーが発生しました"
 } as const;
 
-export const useGetUserData = (setUser: AuthCtxType["user"]["setUser"]) => {
+export const useGetUserData = (setUser: AuthCtxType["useUser"]["setUser"]) => {
   const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 

@@ -5,38 +5,38 @@ import { isSessionActive } from '../features/auth/api';
 import { useGetUserData } from '../features/auth/hooks/useGetUserData';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const useSessionHook = useSessionStatus();
-  const useRegisterHook = useRegister(useSessionHook);
-  const useLoginHook = useLogin(useSessionHook);
-  const useLogoutHook = useLogout(useSessionHook);
-  const userData = useUser();
-  const useGetUser = useGetUserData(userData.setUser);
+  const sessionHook = useSessionStatus();
+  const registerHook = useRegister(sessionHook);
+  const loginHook = useLogin(sessionHook);
+  const logoutHook = useLogout(sessionHook);
+  const userHook = useUser();
+  const getUserHook = useGetUserData(userHook.setUser);
 
   useEffect(() => {
     // セッションを10分おきにチェック
     const checkSession = async () => {
       const isLoggedIn = await isSessionActive();
-      useSessionHook.setStatus(isLoggedIn ? "active" : "idle");
+      sessionHook.setStatus(isLoggedIn ? "active" : "idle");
     };
     checkSession();
 
     const interval = setInterval(async () => await checkSession(), 10 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [useSessionHook]);
+  }, [sessionHook]);
 
   useEffect(() => {
-    if (useSessionHook.status === "active") useGetUser.getUser();
-  }, [useSessionHook.status, useGetUser]);
+    if (sessionHook.status === "active") getUserHook.getUser();
+  }, [sessionHook.status, getUserHook]);
 
 
   const ctxData: AuthCtxType = useMemo(() => ({
-    session: useSessionHook,
-    register: useRegisterHook,
-    login: useLoginHook,
-    logout: useLogoutHook,
-    user: userData,
-    getUser: useGetUser
-  }), [useSessionHook, useRegisterHook, useLoginHook, useLogoutHook, userData, useGetUser]);
+    session: sessionHook,
+    register: registerHook,
+    login: loginHook,
+    logout: logoutHook,
+    useUser: userHook,
+    getUser: getUserHook
+  }), [sessionHook, registerHook, loginHook, logoutHook, userHook, getUserHook]);
 
   return (
     <AuthCtx.Provider value={ctxData}>

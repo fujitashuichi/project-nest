@@ -22,13 +22,13 @@ type GetUser = {
   errorMessage: string | null,
   getUser: () => Promise<void>
 };
-type UserData = {
+type UseUser = {
   user: User | null,
   setUser: React.Dispatch<SetStateAction<User | null>>
 };
 
 export type AuthCtxType = {
-  register: Register, login: Login, logout: Logout, session: Session, getUser: GetUser, user: UserData
+  register: Register, login: Login, logout: Logout, session: Session, getUser: GetUser, useUser: UseUser
 }
 
 
