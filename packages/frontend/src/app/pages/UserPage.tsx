@@ -6,7 +6,7 @@ export function UserPage() {
   const { status: sessionStatus } = session;
 
 
-  return (<div>
+  return (<>
     {sessionStatus === "idle" &&
       <div>
         <h1>ログインしていません</h1>
@@ -16,6 +16,5 @@ export function UserPage() {
     {sessionStatus === "active" &&
       <h1>ユーザー情報</h1>
     }
-
-  </div>)
+  </>)
 }
