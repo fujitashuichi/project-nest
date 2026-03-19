@@ -11,7 +11,7 @@ export function CreateProjectForm() {
   useEffect(() => {
     if (status === "success") {
       const timer = setTimeout(() => reset(), 3000);
-      return () => clearInterval(timer);
+      return () => clearTimeout(timer);
     }
   }, [status, reset]);
 

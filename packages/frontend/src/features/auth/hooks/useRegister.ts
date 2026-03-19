@@ -4,6 +4,7 @@ import { register } from "../api/register";
 import { RegisterRequestSchema, type RegisterRequest } from "@pkg/shared";
 import type { AuthCtxType } from "../../../Context";
 import { parseFormData } from "../../../lib";
+import { useState } from "react";
 
 
 type Result = AuthCtxType["register"];
@@ -20,18 +21,19 @@ const formDataSchema = RegisterRequestSchema.extend({
 
 
 export const useRegister = (setSessionStatus: AuthCtxType["session"]["setStatus"]): Result => {
+  const [overrideStatus, setOverrideStatus] = useState<"error" | null>(null);
+
   const mutation = useMutation({
     mutationFn: (body: RegisterRequest) => register(body),
     onSuccess: (result) => {
       if (!result.ok) {
-        if (!result.ok) {
-          setSessionStatus("inactive");
-          alert(errorMap[result.errorType]);
-          return;
-        }
-        setSessionStatus("active");
-        alert("登録完了");
-      };
+        setSessionStatus("inactive");
+        setOverrideStatus("error");
+        alert(errorMap[result.errorType]);
+        return;
+      }
+      setSessionStatus("active");
+      alert("登録完了");
     },
     onError: () => alert("通信に失敗しました。時間をおいて再度お試しください。")
   });
@@ -56,5 +58,8 @@ export const useRegister = (setSessionStatus: AuthCtxType["session"]["setStatus"
     mutation.mutate({ email: data.email, password: data.password });
   }
 
-  return { status: mutation.status, register: tryRegister }
+
+  const trulyStatus = overrideStatus ?? mutation.status;
+
+  return { status: trulyStatus, register: tryRegister }
 }
