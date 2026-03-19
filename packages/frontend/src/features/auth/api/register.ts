@@ -1,7 +1,14 @@
 import { RegisterResponseSchema, type RegisterRequest } from "@pkg/shared";
 import { apiClient } from "../../../lib/api-client";
 import type { ApiResult } from "../../../lib/types";
-import type { RegisterResult } from "../types";
+import type { RegisterResult } from "./types";
+import { useMutation } from "@tanstack/react-query";
+
+
+const mutation = useMutation({
+  mutationFn: (body: RegisterRequest) => register(body),
+  onSuccess: () =>
+});
 
 export const register = async (body: RegisterRequest): Promise<RegisterResult> => {
   const response: ApiResult = await apiClient({
@@ -9,6 +16,7 @@ export const register = async (body: RegisterRequest): Promise<RegisterResult> =
     method: "POST",
     body: body
   });
+
 
   if (!response.ok) {
     console.error(response.error);

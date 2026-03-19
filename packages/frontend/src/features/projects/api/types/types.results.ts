@@ -5,21 +5,21 @@ type ServiceResult<T, P> =
   | { success: true, value: P }
 
 export type CreateProjectResult = ServiceResult<
-  "ProjectAlreadyExists" | "UnAuthorized" | "InvalidData" | "UnknownError",
+  "ProjectAlreadyExists" | "UnAuthorized" | "InvalidData",
   Project
 >
 
 export type GetProjectsResult = ServiceResult<
-  "InvalidDataError" | "UnAuthorized" | "UnknownError",
+  "InvalidDataError" | "UnAuthorized",
   Project[]
 >
 
 export type UpdateProjectResult = ServiceResult<
-  "UnAuthorized" | "UserUndefined" | "ProjectUndefined" | "InvalidData" | "UnknownError",
+  "UnAuthorized" | "UserUndefined" | "ProjectUndefined" | "InvalidData",
   Project
 >
 
 export type DeleteProjectResult = ServiceResult<
-  "UnAuthorized" | "UserUndefined" | "ProjectUndefined" | "InvalidData" | "UnknownError",
+  "UnAuthorized" | "UserUndefined" | "ProjectUndefined" | "InvalidData",
   undefined
 >

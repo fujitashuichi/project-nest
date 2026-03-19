@@ -1,6 +1,6 @@
 import { MeResponseSchema } from "@pkg/shared";
 import { apiClient } from "../../../lib"
-import type { GetUserDataResult } from "../types";
+import type { GetUserDataResult } from "./types";
 
 export const getUserData = async (): Promise<GetUserDataResult> => {
   const response = await apiClient({
