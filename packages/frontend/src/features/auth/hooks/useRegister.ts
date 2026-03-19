@@ -1,15 +1,12 @@
 import { z } from "zod";
-import { useState } from "react";
-import { parseFormData } from "../../../lib";
-import { RegisterRequestSchema } from "@pkg/shared";
-import { register } from "../api";
+import { useMutation } from "@tanstack/react-query";
+import { register } from "../api/register";
+import { RegisterRequestSchema, type RegisterRequest } from "@pkg/shared";
 import type { AuthCtxType } from "../../../Context";
+import { parseFormData } from "../../../lib";
+
 
 type Result = AuthCtxType["register"];
-
-const formDataSchema = RegisterRequestSchema.extend({
-  passwordConfirm: z.string().min(8).max(20)
-});
 
 const errorMap = {
   AlreadyRegistered: "登録済のアカウントです",
@@ -17,47 +14,49 @@ const errorMap = {
   UnknownError: "エラーが発生しました"
 } as const;
 
+const formDataSchema = RegisterRequestSchema.extend({
+  passwordConfirm: z.string().min(8).max(20)
+});
+
 
 export const useRegister = (setSessionStatus: AuthCtxType["session"]["setStatus"]): Result => {
-  const [status, setStatus] = useState<Result["status"]>("idle");
+  const mutation = useMutation({
+    mutationFn: (body: RegisterRequest) => register(body),
+    onSuccess: (result) => {
+      if (!result.ok) {
+        if (!result.ok) {
+          setSessionStatus("inactive");
+          alert(errorMap[result.errorType]);
+          return;
+        }
+        setSessionStatus("active");
+        alert("登録完了");
+      };
+    },
+    onError: () => {
+      alert("通信に失敗しました。時間をおいて再度お試しください。");
+    }
+  });
+
 
   const tryRegister = async (e: React.SubmitEvent<HTMLFormElement>): Promise<void> => {
-      e.preventDefault();
+    e.preventDefault();
 
-      setStatus("loading");
-
-      const formData:FormData = new FormData(e.currentTarget);
-      const parsed = await parseFormData(formData, formDataSchema);
-      if (!parsed.success) {
-        setStatus("idle");
-        alert("入力値が正しくありません");
-        return;
-      }
-
-      const data = parsed.data;
-      if (data.password !== data.passwordConfirm) {
-        setStatus("idle");
-
-        alert("パスワード確認が一致しません");
-        return;
-      }
-
-      const result = await register({ email: data.email, password: data.password  });
-      if (!result.ok) {
-        setStatus("idle");
-        setSessionStatus("inactive");
-        alert(errorMap[result.errorType]);
-        return;
-      }
-
-      setSessionStatus("active");
-      setStatus("success");
-      alert("登録完了");
+    const formData:FormData = new FormData(e.currentTarget);
+    const parsed = await parseFormData(formData, formDataSchema);
+    if (!parsed.success) {
+      alert("入力値が正しくありません");
+      return;
     }
 
+    const data = parsed.data;
+    if (data.password !== data.passwordConfirm) {
+      alert("パスワード確認が一致しません");
+      return;
+    }
 
-  return {
-    status,
-    register: tryRegister
+    mutation.mutate({ ...data });
   }
+
+  return { status: mutation.status, register: tryRegister }
 }
