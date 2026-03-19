@@ -35,6 +35,7 @@ export const useLogin = (setSessionStatus: AuthCtxType["session"]["setStatus"]):
       return;
     }
 
+    setOverrideStatus(null);
     setSessionStatus("idle");
     mutation.mutate(parsed.data);
   }
