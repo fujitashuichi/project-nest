@@ -1,5 +1,5 @@
-import { getUserData } from "../../api";
-import type { AuthCtxType } from "../../../../Context";
+import { getUserData } from "../api";
+import type { AuthCtxType } from "../../../Context";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -20,9 +20,9 @@ export const useGetUserData = (setUser: AuthCtxType["useUser"]["setUser"]): Resu
     mutationFn: () => getUserData(),
     onSuccess: (result) => {
       if (!result.ok) return setErrorMessage(errorMap[result.errorType]);
-
       setUser(result.data);
-    }
+    },
+    onError: () => alert("通信に失敗しました。時間をおいて再度お試しください。")
   });
 
 

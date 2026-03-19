@@ -33,9 +33,7 @@ export const useRegister = (setSessionStatus: AuthCtxType["session"]["setStatus"
         alert("登録完了");
       };
     },
-    onError: () => {
-      alert("通信に失敗しました。時間をおいて再度お試しください。");
-    }
+    onError: () => alert("通信に失敗しました。時間をおいて再度お試しください。")
   });
 
 
