@@ -30,7 +30,7 @@ export const updateProject = async (project: PostProjectRequest, id: Project["id
       }
     }
 
-    console.log("updateProjects failed with fetch Error");
+    throw new Error("updateProjects failed with fetch Error");
   }
 
 
