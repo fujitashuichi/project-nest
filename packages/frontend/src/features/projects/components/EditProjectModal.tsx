@@ -1,8 +1,8 @@
 import { AppButton } from '../../../components';
-import { PostProjectForm } from './PostProjectForm';
+import { EditProjectForm } from './EditProjectForm';
 import type { Project } from '@pkg/shared';
 
-export function PostProjectModal({ id, show, onClose }: { id: Project["id"], show: boolean, onClose: () => void }) {
+export function EditProjectModal({ id, show, onClose }: { id: Project["id"], show: boolean, onClose: () => void }) {
   if (!show) return null;
 
   return (
@@ -14,7 +14,7 @@ export function PostProjectModal({ id, show, onClose }: { id: Project["id"], sho
         className='bg-white mb-6 rounded-2xl p-10'
         onClick={(e) => e.stopPropagation()}
       >
-        <PostProjectForm id={id} />
+        <EditProjectForm id={id} />
 
         <div className="flex justify-end mt-1.5">
           <AppButton variant="danger" onClick={onClose} className='w-auto'>

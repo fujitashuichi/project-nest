@@ -1,6 +1,6 @@
 import { AppLoadingBar } from "../../components/AppLoadingBar";
 import { useAuth } from "../../Context";
-import { LoginContainer, User } from "../../features/auth/components";
+import { LoginContainer, RegisterForm, User } from "../../features/auth/components";
 
 export function UserPage() {
   const { session } = useAuth();
@@ -12,7 +12,12 @@ export function UserPage() {
     }
 
     {status === "inactive" &&
-      <LoginContainer />
+      <>
+        <h1>ログイン</h1>
+        <LoginContainer />
+        <h1>未登録の場合はこちら</h1>
+        <RegisterForm />
+      </>
     }
 
     {status === "active" &&

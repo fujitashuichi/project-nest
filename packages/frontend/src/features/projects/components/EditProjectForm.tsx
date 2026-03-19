@@ -6,13 +6,13 @@ import { useProject } from "../../../Context";
 import { useEffect } from "react";
 
 
-export function PostProjectForm({ id }: { id: Project["id"] }) {
+export function EditProjectForm({ id }: { id: Project["id"] }) {
   const { update: updateProject } = useProject();
   const { update, status, errorMessage, reset } = updateProject;
   const tryUpdate = (e: React.SubmitEvent<HTMLFormElement>) => update(e, id);
 
   useEffect(() => {
-    if (status === "error") {
+    if (status === "error" || status === "success") {
       const timer = setTimeout(() => reset(), 3000);
       return () => {
         reset();
@@ -28,10 +28,11 @@ export function PostProjectForm({ id }: { id: Project["id"] }) {
 
         <div className="space-y-2">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title
-            <span className="text-red-500 ml-1">*</span> {/* 必須マーク（minLength={1}のため） */}
+            <p>
+              <strong>Title</strong>
+            </p>
           </label>
-          <input name="title" type="text" minLength={1} maxLength={30}
+          <input name="title" type="text" maxLength={30}
             className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
             placeholder="プロジェクト名を入力"
           />
@@ -39,7 +40,9 @@ export function PostProjectForm({ id }: { id: Project["id"] }) {
 
         <div className="space-y-2">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            Description
+            <p>
+              <strong>Description</strong>
+            </p>
           </label>
           <textarea name="description" rows={3} maxLength={100}
             className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
@@ -60,6 +63,7 @@ export function PostProjectForm({ id }: { id: Project["id"] }) {
     }
     {status === "error" &&
       <div>
+        <h1>エラーが発生しました</h1>
         <h2>{errorMessage}</h2>
       </div>
     }

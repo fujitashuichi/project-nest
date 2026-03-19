@@ -4,7 +4,7 @@ import { AppButton } from "../../../components";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AppLoadingBar } from "../../../components/AppLoadingBar";
-import { PostProjectModal } from "./PostProjectModal";
+import { EditProjectModal } from "./EditProjectModal";
 
 export function ProjectPage() {
   const [editing, setEditing] = useState<boolean>(false);
@@ -25,6 +25,9 @@ export function ProjectPage() {
     if (deleteStatus === "error") {
       const timer = setTimeout(() => resetDeleteStatus(), 3000);
       return () => clearTimeout(timer);
+    }
+    if (deleteStatus === "success") {
+      window.location.replace("/projects");
     }
   }, [deleteStatus, resetDeleteStatus]);
 
@@ -61,8 +64,11 @@ export function ProjectPage() {
         <p>{errorMessage}</p>
       </>
     }
+    {deleteStatus === "success" &&
+      <h1>正常に削除されました</h1>
+    }
 
-    <PostProjectModal
+    <EditProjectModal
       id={id}
       show={editing}
       onClose={() => setEditing(false)}
