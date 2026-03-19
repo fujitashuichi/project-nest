@@ -2,6 +2,7 @@ import React, { useState, type SetStateAction } from "react";
 import { getProjects } from "../api";
 import type { ProjectCtxType } from "../../../Context";
 import type { Project } from "@pkg/shared";
+import { useMutation } from "@tanstack/react-query";
 
 
 const ErrorMap = {
@@ -13,23 +14,18 @@ const ErrorMap = {
 type Result = ProjectCtxType["getProjects"];
 
 export const useGetProjects = (setProjects: React.Dispatch<SetStateAction<Project[]>>): Result => {
-  const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 
-  const get: Result["get"] = async () => {
-    setStatus("loading");
-    const result = await getProjects();
+  const mutation = useMutation({
+    mutationFn: () => getProjects(),
+    onSuccess: (result) => {
+      if (!result.success) return setErrorMessage(ErrorMap[result.errorType]);
+      setProjects(result.value);
+    }
+  });
 
-    if (!result.success) {
-      setStatus("error");
-      setErrorMessage(ErrorMap[result.errorType]);
-      return;
-    };
-
-    setProjects(result.value);
-    setStatus("success");
-  }
+  const get: Result["get"] = async () => mutation.mutate();
 
 
-  return { get, status, errorMessage };
+  return { get, status: mutation.status, errorMessage };
 };
