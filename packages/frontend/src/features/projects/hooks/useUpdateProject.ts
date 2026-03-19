@@ -1,10 +1,11 @@
+import { z } from "zod";
 import { useState } from "react";
 import { parseFormData } from "../../../lib";
-import { PostProjectRequestSchema } from "@pkg/shared";
+import { PatchProjectRequestSchema, type PatchProjectRequest } from "@pkg/shared";
 import { updateProject } from "../api";
-import type { PostProjectRequest, Project } from "@pkg/shared";
 import type { ProjectCtxType } from "../../../Context";
 import { useMutation } from "@tanstack/react-query";
+import type { Project } from "@pkg/shared";
 
 
 const errorMap = {
@@ -15,6 +16,11 @@ const errorMap = {
   UnknownError: "エラーが発生しました"
 } as const;
 
+// 文字数制限を無効化（Formが "" を返すため）
+const FormDataSchema = PatchProjectRequestSchema.extend({
+  title: z.string().optional()
+});
+
 type Result = ProjectCtxType["update"];
 
 
@@ -22,7 +28,7 @@ export const useUpdateProjects = (reload: ProjectCtxType["getProjects"]["get"]):
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 
   const mutation = useMutation({
-    mutationFn: ({ project, id }: { project: PostProjectRequest, id: Project["id"] }) => updateProject(project, id),
+    mutationFn: ({ project, id }: { project: PatchProjectRequest, id: Project["id"] }) => updateProject(project, id),
     onSuccess: async (result) => {
       if (!result.success) return setErrorMessage(errorMap[result.errorType]);
 
@@ -34,7 +40,7 @@ export const useUpdateProjects = (reload: ProjectCtxType["getProjects"]["get"]):
     e.preventDefault();
 
     const formData: FormData = new FormData(e.currentTarget);
-    const parsed = await parseFormData(formData, PostProjectRequestSchema);
+    const parsed = await parseFormData(formData, FormDataSchema);
 
     if (!parsed.success) return alert("入力内容に不備があります");
 

@@ -12,7 +12,11 @@ export function UserPage() {
     }
 
     {status === "inactive" &&
-      <LoginContainer />
+      <>
+        <h1>ログイン</h1>
+        <span />
+        <LoginContainer />
+      </>
     }
 
     {status === "active" &&

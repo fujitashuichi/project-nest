@@ -3,14 +3,20 @@ import { parseFormData } from "../../../lib";
 import { login } from "../api";
 import type { AuthCtxType } from "../../../Context";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
 type Result = AuthCtxType["login"];
 
 export const useLogin = (setSessionStatus: AuthCtxType["session"]["setStatus"]): Result => {
+  const [overrideStatus, setOverrideStatus] = useState<"error" | null>(null);
+
   const mutation = useMutation({
     mutationFn: (body: LoginRequest) => login(body),
     onSuccess: (isLoginSucceed) => {
-      if (!isLoginSucceed) return setSessionStatus("inactive");
+      if (!isLoginSucceed) {
+        setOverrideStatus("error");
+        return setSessionStatus("inactive");
+      }
       return setSessionStatus("active");
     },
     onError: () => alert("通信に失敗しました。時間をおいて再度お試しください。")
@@ -29,11 +35,12 @@ export const useLogin = (setSessionStatus: AuthCtxType["session"]["setStatus"]):
       return;
     }
 
+    setSessionStatus("idle");
     mutation.mutate(parsed.data);
   }
 
 
-  const status = mutation.status === "success" ? "loggedIn" : mutation.status;
+  const trulyStatus = overrideStatus ?? (mutation.status === "success" ? "loggedIn" : mutation.status);
 
-  return { status: status, login: tryLogin }
+  return { status: trulyStatus, login: tryLogin }
 }
