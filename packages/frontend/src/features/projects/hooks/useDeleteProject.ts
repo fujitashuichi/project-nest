@@ -2,6 +2,7 @@ import type { Project } from "@pkg/shared";
 import { useState } from "react";
 import { deleteProject } from "../api";
 import type { ProjectCtxType } from "../../../Context";
+import { useMutation } from "@tanstack/react-query";
 
 
 const errorMap = {
@@ -14,27 +15,26 @@ const errorMap = {
 
 type Result = ProjectCtxType["delete"];
 
+
 export const useDeleteProject = (reload: ProjectCtxType["getProjects"]["get"]): Result => {
-  const [status, setStatus] = useState<Result["status"]>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const tryDelete: Result["delete"] = async (id: Project["id"]) => {
-    setStatus("loading");
+  const mutation = useMutation({
+    mutationFn: (id: Project["id"]) => deleteProject(id),
+    onSuccess: async (result) => {
+      if (!result.success) return setErrorMessage(errorMap[result.errorType]);
 
-    const result = await deleteProject(id);
-
-    if (!result.success) {
-      setErrorMessage(errorMap[result.errorType]);
-      setStatus("error");
-      return;
+      await reload(); // 楽観更新をする際はここを差し替え
     }
+  });
 
-    await reload(); // 楽観更新をする際はここを差し替え
-    setStatus("success");
-  }
-
-  const reset = () => setStatus("idle");
+  const tryDelete: Result["delete"] = async (id: Project["id"]) => mutation.mutate(id);
 
 
-  return { delete: tryDelete, status, errorMessage, reset };
+  return {
+    delete: tryDelete,
+    reset: mutation.reset,
+    status: mutation.status,
+    errorMessage
+  };
 }

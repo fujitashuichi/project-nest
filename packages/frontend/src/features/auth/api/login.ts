@@ -1,7 +1,7 @@
 import type { LoginRequest } from "@pkg/shared";
 import { apiClient } from "../../../lib";
 import type { ApiResult } from "../../../lib/types";
-import type { LoginResult } from "../types/index";
+import type { LoginResult } from "./types/index";
 
 export const login = async (body: LoginRequest): Promise<LoginResult> => {
   const response: ApiResult = await apiClient({

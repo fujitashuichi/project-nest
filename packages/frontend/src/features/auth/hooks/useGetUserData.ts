@@ -1,6 +1,8 @@
 import { getUserData } from "../api";
 import type { AuthCtxType } from "../../../Context";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+
 
 type Result = AuthCtxType["getUser"];
 
@@ -10,24 +12,29 @@ const errorMap = {
   UnknownError: "エラーが発生しました"
 } as const;
 
-export const useGetUserData = (setUser: AuthCtxType["useUser"]["setUser"]) => {
-  const [status, setStatus] = useState<Result["status"]>("idle");
+
+export const useGetUserData = (setUser: AuthCtxType["useUser"]["setUser"]): Result => {
+  const [overrideStatus, setOverrideStatus] = useState<"error" | null>(null);
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 
-  const getUser: Result["getUser"] = async () => {
-    setStatus("loading");
+  const mutation = useMutation({
+    mutationFn: () => getUserData(),
+    onSuccess: (result) => {
+      if (!result.ok) {
+        setErrorMessage(errorMap[result.errorType]);
+        setOverrideStatus("error");
+        return;
+      }
+      setUser(result.data);
+    },
+    onError: () => alert("通信に失敗しました。時間をおいて再度お試しください。")
+  });
 
-    const result = await getUserData();
-    if (!result.ok) {
-      setStatus("failed");
-      setErrorMessage(errorMap[result.errorType]);
-      return;
-    }
 
-    setUser(result.data);
-    setStatus("success");
-  }
+  const getUser: Result["getUser"] = async () => mutation.mutate();
 
 
-  return { getUser, status, errorMessage };
+  const trulyStatus = overrideStatus ?? mutation.status;
+
+  return { status: trulyStatus, errorMessage, getUser };
 }

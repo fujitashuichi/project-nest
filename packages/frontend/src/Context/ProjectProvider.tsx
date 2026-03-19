@@ -1,7 +1,7 @@
 import type React from 'react'
-import { ProjectCtx, type ProjectCtxType } from './ProjectsContext'
 import { useCreateProject, useDeleteProject, useGetProjects, useProjectsData, useUpdateProjects } from '../features/projects/hooks'
 import { useEffect, useMemo } from 'react'
+import { ProjectCtx, type ProjectCtxType } from './ProjectContext';
 
 export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const projectsHook = useProjectsData();

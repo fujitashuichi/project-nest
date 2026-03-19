@@ -1,16 +1,17 @@
 import type { User } from "@pkg/shared";
+import type { MutationStatus } from "@tanstack/react-query";
 import React, { createContext, useContext, type SetStateAction } from "react";
 
 type Register = {
-  status: "idle" | "loading" | "failed" | "success",
+  status: MutationStatus,
   register: (e: React.SubmitEvent<HTMLFormElement>) => void
 };
 type Login = {
-  status: "idle" | "loading" | "failed" | "loggedIn",
+  status: Exclude<MutationStatus, "success"> | "loggedIn",
   login: (e: React.SubmitEvent<HTMLFormElement>) => void
 };
 type Logout = {
-  status: "idle" | "loading" | "loggedOut",
+  status: Exclude<MutationStatus, "success"> | "loggedOut",
   logout: () => void
 };
 type Session = {
@@ -21,7 +22,7 @@ type GetSession = {
   getSession: () => Promise<void>
 };
 type GetUser = {
-  status: "idle" | "loading" | "failed" | "success",
+  status: MutationStatus,
   errorMessage: string | null,
   getUser: () => Promise<void>
 };

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AppButton } from "../../../components";
 import { AppLoadingBar } from "../../../components/AppLoadingBar";
 import { useProject } from "../../../Context";
@@ -5,7 +6,14 @@ import { useProject } from "../../../Context";
 
 export function CreateProjectForm() {
   const { create: createProject } = useProject();
-  const { create, status, errorMessage } = createProject;
+  const { create, reset, status, errorMessage } = createProject;
+
+  useEffect(() => {
+    if (status === "success") {
+      const timer = setTimeout(() => reset(), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status, reset]);
 
   return (<>
     {status === "idle" &&
@@ -34,7 +42,7 @@ export function CreateProjectForm() {
       </form>
     }
 
-    {status === "loading" &&
+    {status === "pending" &&
       <AppLoadingBar className="fixed top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-1.5" />
     }
 

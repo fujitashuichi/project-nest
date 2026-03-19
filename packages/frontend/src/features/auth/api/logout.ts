@@ -1,6 +1,6 @@
 import { apiClient } from "../../../lib"
 import type { ApiResult } from "../../../lib/types";
-import type { LogoutResult } from "../types";
+import type { LogoutResult } from "./types";
 
 export const logout = async (): Promise<LogoutResult> => {
   const response: ApiResult = await apiClient({
@@ -10,8 +10,8 @@ export const logout = async (): Promise<LogoutResult> => {
   });
 
   if (!response.ok && response.status !== 200) {
-    console.error(response.error);
-    return false;
+    console.error("logout failed");
+    throw response.error;
   }
 
   console.log("Now logged out.");

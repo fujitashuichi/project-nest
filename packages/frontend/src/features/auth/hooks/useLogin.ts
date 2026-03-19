@@ -1,44 +1,39 @@
-import { LoginRequestSchema } from "@pkg/shared";
+import { LoginRequestSchema, type LoginRequest } from "@pkg/shared";
 import { parseFormData } from "../../../lib";
 import { login } from "../api";
-import React, { useState } from "react";
 import type { AuthCtxType } from "../../../Context";
+import { useMutation } from "@tanstack/react-query";
 
 type Result = AuthCtxType["login"];
 
 export const useLogin = (setSessionStatus: AuthCtxType["session"]["setStatus"]): Result => {
-  const [status, setStatus] = useState<Result["status"]>("idle");
+  const mutation = useMutation({
+    mutationFn: (body: LoginRequest) => login(body),
+    onSuccess: (isLoginSucceed) => {
+      if (!isLoginSucceed) return setSessionStatus("inactive");
+      return setSessionStatus("active");
+    },
+    onError: () => alert("通信に失敗しました。時間をおいて再度お試しください。")
+  });
+
 
   const tryLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setStatus("loading");
 
     const formData = new FormData(e.currentTarget);
     const parsed = await parseFormData(formData, LoginRequestSchema);
 
     if (!parsed.success) {
-      setStatus("idle");
       setSessionStatus("inactive");
       alert("入力値に不備があります");
       return;
     }
 
-    const data = parsed.data;
-    const isLoginSucceed = await login({ email: data.email, password: data.password });
-    if (!isLoginSucceed) {
-      setSessionStatus("inactive");
-      setStatus("failed");
-      return;
-    }
-
-    setSessionStatus("active");
-    setStatus("loggedIn");
-    return;
+    mutation.mutate(parsed.data);
   }
 
-  return {
-    status: status,
-    login: tryLogin
-  }
+
+  const status = mutation.status === "success" ? "loggedIn" : mutation.status;
+
+  return { status: status, login: tryLogin }
 }

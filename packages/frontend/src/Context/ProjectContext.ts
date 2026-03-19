@@ -1,4 +1,5 @@
 import type { Project } from "@pkg/shared";
+import type { MutationStatus } from "@tanstack/react-query";
 import React, { createContext, useContext, type SetStateAction } from "react";
 
 type ProjectsData = {
@@ -6,23 +7,24 @@ type ProjectsData = {
   setProjects: React.Dispatch<SetStateAction<Project[]>>
 }
 type GetProjects = {
-  status: "idle" | "loading" | "error" | "success",
+  status: MutationStatus,
   errorMessage: string | null,
   get: () => Promise<void>
 }
 type Create = {
-  status: "idle" | "loading" | "error" | "success",
+  status: MutationStatus,
   errorMessage: string | null,
-  create: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>
+  create: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>,
+  reset: () => void
 };
 type Update = {
-  status: "idle" | "loading" | "error" | "success",
+  status: MutationStatus,
   errorMessage: string | null,
   update: (e: React.SubmitEvent<HTMLFormElement>, id: Project["id"]) => Promise<void>
   reset: () => void
 };
 type Delete = {
-  status: "idle" | "loading" | "error" | "success",
+  status: MutationStatus,
   errorMessage: string | null,
   delete: (id: Project["id"]) => Promise<void>
   reset: () => void

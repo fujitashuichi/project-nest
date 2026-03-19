@@ -1,6 +1,6 @@
 import { MeResponseSchema } from "@pkg/shared";
 import { apiClient } from "../../../lib"
-import type { GetUserDataResult } from "../types";
+import type { GetUserDataResult } from "./types";
 
 export const getUserData = async (): Promise<GetUserDataResult> => {
   const response = await apiClient({
@@ -17,10 +17,7 @@ export const getUserData = async (): Promise<GetUserDataResult> => {
       }
     }
 
-    return {
-      ok: false,
-      errorType: "UnknownError"
-    }
+    throw new Error("getUserData failed with fetch Error");
   }
 
   const parsed = MeResponseSchema.safeParse(response.body);
