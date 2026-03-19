@@ -14,7 +14,8 @@ type GetProjects = {
 type Create = {
   status: MutationStatus,
   errorMessage: string | null,
-  create: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>
+  create: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>,
+  reset: () => void
 };
 type Update = {
   status: MutationStatus,
