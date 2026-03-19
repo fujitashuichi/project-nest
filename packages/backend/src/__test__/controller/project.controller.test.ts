@@ -121,7 +121,7 @@ describe("project.controller", () => {
     expect(res!.json).toHaveBeenCalledWith(
       expect.objectContaining({
         success: true,
-        data: null
+        data: {}
       })
     );
   });

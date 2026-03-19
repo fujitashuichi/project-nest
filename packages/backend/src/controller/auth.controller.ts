@@ -75,12 +75,9 @@ export const me = (db: Database) => {
   return async (req: Request, res: Response) => {
     const service = new UserService(db);
 
-    const token = req.cookies.token;
-    if (!token) throw new UnAuthorizedError();
+    const id = res.locals.userId;
 
-    const verified = verifyToken(token);
-
-    const user = await service.findByEmail(verified.email);
+    const user = await service.findById(id);
     if (user === null) throw new UserUndefinedError();
 
     const json: ResponseJson<MeResponse> = {

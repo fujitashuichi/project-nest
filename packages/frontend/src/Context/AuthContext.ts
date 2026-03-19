@@ -17,6 +17,9 @@ type Session = {
   status: "idle" | "inactive" | "active",
   setStatus: React.Dispatch<Session["status"]>
 };
+type GetSession = {
+  getSession: () => Promise<void>
+};
 type GetUser = {
   status: "idle" | "loading" | "failed" | "success",
   errorMessage: string | null,
@@ -28,7 +31,7 @@ type UseUser = {
 };
 
 export type AuthCtxType = {
-  register: Register, login: Login, logout: Logout, session: Session, getUser: GetUser, useUser: UseUser
+  register: Register, login: Login, logout: Logout, session: Session, getSession: GetSession, getUser: GetUser, useUser: UseUser
 }
 
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Database } from "sqlite3";
 import { session, login, logout, register, me } from "../controller/index.js";
-import { requestValidator } from "../middleware/index.js";
+import { authorize, requestValidator } from "../middleware/index.js";
 
 
 export const createAuthRouter = (db: Database) => {
@@ -28,6 +28,7 @@ export const createAuthRouter = (db: Database) => {
 
   router.post("/me",
     requestValidator("me"),
+    authorize(db),
     me(db)
   );
 

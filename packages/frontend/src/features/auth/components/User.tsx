@@ -10,15 +10,15 @@ export function User() {
   const { status: gettingStatus, errorMessage } = getUser;
 
 
+  if (gettingStatus === "idle" || gettingStatus === "loading") {
+    return <AppLoadingBar className="fixed top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-1.5" />
+  }
+
   if (sessionStatus === "idle") return <h1>ログインしていください</h1>
 
   if (user === null) return <h1>データがありません</h1>;
 
   return (<>
-    {(gettingStatus === "idle" || gettingStatus === "loading") &&
-      <AppLoadingBar className="fixed top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-1.5" />
-    }
-
     {gettingStatus === "failed" &&
       <>
         <h1>{errorMessage}</h1>
