@@ -16,7 +16,7 @@
 <details>
   <summary>その他レポートなど</summary>
 
-  * <a href="./docs/errors/createProject_unauthorizedError.md">fetchにおけるcredential設定ミスによるエラーと解決までの道のり: credential設定の欠如</a>
+  * <a href="./docs/BE/introducePrisma.md">Prismaへの移行: 生SQLとライブラリのトレードオフ</a>
   * <a href="./docs/test/analyzeTestPerformance.md">テスト時間遷移における実行時間スパイクに関して: 原因不明のまま解決した現象</a>
   * <a href="./docs/test/testResults.md">testResults(改修後などに更新)</a>
 </details>
