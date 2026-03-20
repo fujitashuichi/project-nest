@@ -1,9 +1,9 @@
 ### ・大まかな概要
 #### [要件定義書](./docs/features.md)
 #### [全体図](./docs/PortforioFlow.mermaid.md)
+#### [セットアップ方法](./docs/howToSetup.md)
 
 ---
-
 ### ・規約・実装資料
 #### FE/BE
 * メモ: [Projectドメイン: エラーレスポンスの形式](./docs/BE/BE_domainFlow/error/project.md)
