@@ -40,6 +40,12 @@
 # 依存関係のインストール
 npm install
 
+# dbコマンド
+npm run db:generate
+npm run db:push
+npm run db:studio
+npm run setupDb   # npm run db:generate && npm run db:push
+
 # パッケージのビルド (shared)
 npm run build:shared
 
