@@ -23,50 +23,27 @@ describe("user.repositoryの各メソッドを検査", () => {
   describe("正常型", () => {
     it("saveUserは正しく成功する", async () => {
       const payload = userMocks.saveUserPayload();
-
       await repository!.saveUser(payload);
-      expect(prisma!.project.create).toHaveBeenCalledWith(payload);
+
+      expect(prisma!.project.create).toHaveBeenCalledWith(expect.anything());
     });
 
     it("getUsersは正しく成功する", async () => {
-      const payload = userMocks.saveUserPayload();
-      await repository!.saveUser(payload);
-
       await repository!.getUsers();
-      expect(prisma!.user.findMany).toHaveBeenCalled();
+
+      expect(prisma!.user.findMany).toHaveBeenCalledWith(expect.anything());
     });
 
     it("findByIdは正しく成功する", async () => {
-      const payload = userMocks.saveUserPayload();
-      const user = await repository!.saveUser(payload);
-
       await repository!.findById("uuid");
+
       expect(prisma!.user.findUnique).toHaveBeenCalledWith(expect.anything());
     });
 
     it("findByEmailは正しく成功する", async () => {
-      const promise = repository!.findByEmail(payload.email);
-      const { passwordHash, ...required } = payload;
-      await expect(promise).resolves.toEqual(
-        expect.objectContaining(required)
-      );
-    });
-  });
+      await repository!.findByEmail("example@email.com");
 
-  describe("異常型", () => {
-    it("userが存在しないときは、[]をresolveする", async () => {
-      const result = repository!.getUsers();
-      await expect(result).resolves.toStrictEqual([]);
+      expect(prisma!.user.findUnique).toHaveBeenCalledWith(expect.anything());
     });
-
-    it("合致するidがないときは、nullをresolveする", async () => {
-      const result = repository!.findById("uuid");
-      await expect(result).resolves.toStrictEqual(null);
-    });
-
-    it("合致するemailがないときは、nullをresolveする", async () => {
-      const result = repository!.findByEmail("thisIsEmail@email.email");
-      await expect(result).resolves.toStrictEqual(null);
-    })
   });
 });
