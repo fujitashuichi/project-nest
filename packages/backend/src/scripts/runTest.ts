@@ -15,8 +15,46 @@ else process.stdout.write(styleText(["green"], "ENV>> DATABASE_URL successfully 
 
 const npxCommand = process.platform === "win32" ? "npx.cmd" : "npx";
 
-spawnSync(npxCommand, ['vitest', ...process.argv.slice(2)], {
-  stdio: "inherit",
-  shell: true,
-  env: { ...process.env }
-});
+// コマンド失敗時に強制throeする関数
+const execute = (args: string[]) => {
+  const result = spawnSync(npxCommand, args, { stdio: "inherit", shell: true });
+  if (result.status !== 0) throw new Error(`Command failed>> cleanUpDb failed with status ${result.status}`);
+};
+
+
+const runCommand = () => {
+  try {
+    // テスト前にDBをクリーンアップ
+    execute(["prisma", "generate", ...process.argv.slice(3)]);
+    execute(["prisma", "db", "push", "--config", "./src/prisma.config.ts", ...process.argv.slice(5)]);
+
+    process.stdout.write(styleText(
+      ["green"],
+      "Init_DB>> successfully cleaned up"
+    ));
+
+
+    // vitest
+    const vitest = spawnSync(npxCommand, ['vitest', ...process.argv.slice(2)], {
+      shell: true,
+      env: { ...process.env }
+    });
+
+    if (vitest.status !== 0) {
+      process.exitCode = vitest.status ?? 1;
+    }
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      console.error(styleText("red", e.message));
+      process.exit(1);
+    }
+    throw e;
+  } finally {
+    // DBクリーンアップ
+    console.info("Cleaning up database...");
+    spawnSync(npxCommand, ["prisma", "migrate", "reset", "--force"], { stdio: "inherit" });
+  }
+}
+
+
+runCommand();
