@@ -7,7 +7,6 @@ export class UsersRepository {
   private readonly select = {
     id: true,
     email: true,
-    name: true,
     createdAt: true,
   }
 

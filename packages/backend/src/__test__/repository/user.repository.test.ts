@@ -7,10 +7,12 @@ import { userMocks } from "../../__mock__/index.js";
 describe("user.repositoryの各メソッドを検査", () => {
   let db: Database | null = null;
   let repository: UsersRepository | null = null;
+  let prisma = prismaMo
 
   beforeEach(async () => {
     db = await createAppDb(":memory:");
-    repository = new UsersRepository(db);
+    repository = new UsersRepository();
+
   });
   afterEach(async () => {
     db = null;
@@ -43,9 +45,9 @@ describe("user.repositoryの各メソッドを検査", () => {
 
     it("findByIdは正しく成功する", async () => {
       const payload = userMocks.saveUserPayload();
-      await repository!.saveUser(payload);
+      const user = await repository!.saveUser(payload);
 
-      const promise = repository!.findById(1);
+      const promise = repository!.findById(user.id);
       const { passwordHash, ...required } = payload;
       await expect(promise).resolves.toEqual(
         expect.objectContaining(required)
@@ -54,7 +56,7 @@ describe("user.repositoryの各メソッドを検査", () => {
 
     it("findByEmailは正しく成功する", async () => {
       const payload = userMocks.saveUserPayload();
-      await repository?.saveUser(payload);
+      const user = await repository!.saveUser(payload);
 
       const promise = repository!.findByEmail(payload.email);
       const { passwordHash, ...required } = payload;
@@ -66,20 +68,18 @@ describe("user.repositoryの各メソッドを検査", () => {
 
   describe("異常型", () => {
     it("userが存在しないときは、[]をresolveする", async () => {
-      const result = repository?.getUsers();
+      const result = repository!.getUsers();
       await expect(result).resolves.toStrictEqual([]);
     });
 
     it("合致するidがないときは、nullをresolveする", async () => {
-      const result = repository?.findById(1);
+      const result = repository!.findById("uuid");
       await expect(result).resolves.toStrictEqual(null);
     });
 
     it("合致するemailがないときは、nullをresolveする", async () => {
-      const result = repository?.findByEmail("thisIsEmail@email.email");
+      const result = repository!.findByEmail("thisIsEmail@email.email");
       await expect(result).resolves.toStrictEqual(null);
     })
   });
-
-
 });
