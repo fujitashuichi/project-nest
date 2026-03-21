@@ -1,4 +1,4 @@
-import { ProjectSchema, UserSchema } from "@pkg/shared";
+import { ProjectSchema, schemaTransformer, UserSchema } from "@pkg/shared";
 import { z } from "zod";
 
 export const DbUserSchema = z.object({

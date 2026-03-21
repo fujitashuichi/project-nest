@@ -1,5 +1,5 @@
-import { Project, ProjectSchema } from "@pkg/shared";
-import { ProjectWithoutId, UpdateProjectPayload } from "../types/index.js";
+import { PatchProjectRequest, Project, ProjectSchema } from "@pkg/shared";
+import { ProjectWithoutId } from "../types/index.js";
 import { prisma } from "../lib/prisma.js";
 
 
@@ -8,11 +8,8 @@ export class ProjectsRepository {
     return await prisma.project.create({ data });
   }
 
-  updateProject = async (data: UpdateProjectPayload, id: Project["id"]): Promise<Project> => {
-    const cleanData = Object.fromEntries(
-      Object.entries(data).filter(([_, v]) => v !== undefined)
-    );
-    return await prisma.project.update({ data: cleanData, where: { id } });
+  updateProject = async (data: PatchProjectRequest, id: Project["id"]): Promise<Project> => {
+    return await prisma.project.update({ data, where: { id } });
   }
 
   deleteProject = async (id: Project["id"]): Promise<Project> => {

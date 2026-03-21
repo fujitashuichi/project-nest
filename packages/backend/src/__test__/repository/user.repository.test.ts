@@ -1,18 +1,17 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { UsersRepository } from "../../repository/index.js";
 import { createAppDb } from "../../db/app.db.js";
 import { Database } from "sqlite3";
 import { userMocks } from "../../__mock__/index.js";
 
+
 describe("user.repositoryの各メソッドを検査", () => {
   let db: Database | null = null;
   let repository: UsersRepository | null = null;
-  let prisma = prismaMo
 
   beforeEach(async () => {
     db = await createAppDb(":memory:");
     repository = new UsersRepository();
-
   });
   afterEach(async () => {
     db = null;

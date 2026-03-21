@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ProjectsRepository, UsersRepository } from "../../repository/index.js";
 import { createAppDb } from "../../db/index.js";
 import { userMocks } from "../../__mock__/index.js";
-import { ProjectWithoutId, UpdateProjectPayload } from "../../types/index.js";
+import { ProjectWithoutId } from "../../types/index.js";
 
 describe("project.repositoryの各メソッドを検査", () => {
   let db: Database | null = null;
@@ -25,7 +25,7 @@ describe("project.repositoryの各メソッドを検査", () => {
     const payload = userMocks.saveUserPayload();
     const user = await usersRepository!.saveUser(payload);
 
-    const data: ProjectWithoutId = { userId: user.id, title: "Title", createdAt: 1, updatedAt: 1 }
+    const data: ProjectWithoutId = { userId: user.id, title: "Title", createdAt: new Date(), updatedAt: new Date() }
     const promise = projectsRepository!.saveProject(data);
 
     await expect(promise).resolves.toEqual(
@@ -37,7 +37,7 @@ describe("project.repositoryの各メソッドを検査", () => {
     const payload = userMocks.saveUserPayload();
     const user = await usersRepository!.saveUser(payload);
 
-    const data: ProjectWithoutId = { userId: user.id + 1, title: "Title", createdAt: 1, updatedAt: 1 };
+    const data: ProjectWithoutId = { userId: user.id + 1, title: "Title", createdAt: new Date(), updatedAt: new Date() };
     const promise = projectsRepository!.saveProject(data);
 
     await expect(promise).rejects.toThrow();
@@ -47,8 +47,8 @@ describe("project.repositoryの各メソッドを検査", () => {
     const payload = userMocks.saveUserPayload();
     const user = await usersRepository!.saveUser(payload);
 
-    const data_1: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: 1, updatedAt: 1 };
-    const data_2: ProjectWithoutId = { userId: user.id, title: "Title_2", createdAt: 2, updatedAt: 2 };
+    const data_1: ProjectWithoutId = { userId: user.id, title: "Title_1", createdAt: new Date(), updatedAt: new Date() };
+    const data_2: ProjectWithoutId = { userId: user.id, title: "Title_2", createdAt: new Date(), updatedAt: new Date() };
     await projectsRepository!.saveProject(data_1);
     await projectsRepository!.saveProject(data_2);
 
