@@ -5,11 +5,7 @@ export const RegisterRequestSchema = z.object({
     email: z.email(),
     password: z.string().min(8).max(20)
 });
-export const RegisterResponseSchema = z.object({
-    id: z.number(),
-    email: z.email(),
-    createdAt: z.number()
-});
+export const RegisterResponseSchema = UserSchema;
 // session
 export const SessionResponseSchema = z.object({
     id: z.number(),

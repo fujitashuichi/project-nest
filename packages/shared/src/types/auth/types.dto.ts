@@ -8,11 +8,7 @@ export const RegisterRequestSchema = z.object({
 });
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 
-export const RegisterResponseSchema = z.object({
-  id: z.number(),
-  email: z.email(),
-  createdAt: z.number()
-});
+export const RegisterResponseSchema = UserSchema;
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
 
 // session
