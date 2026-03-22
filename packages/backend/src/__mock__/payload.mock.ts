@@ -1,9 +1,10 @@
+import { User } from "@pkg/shared";
 import { SaveProjectPayload } from "../types/type.db.js";
 
 export const projectPayloadMock = {
-  SaveProjectPayload: (): SaveProjectPayload => {
+  SaveProjectPayload: (user: User): SaveProjectPayload => {
     return {
-      userId: "uuid",
+      userId: user.id,
       title: "title",
       description: "description",
       status: null,

@@ -19,6 +19,8 @@ export class UsersRepository {
   }
 
   deleteUser = async (id: User["id"]): Promise<User> => {
+    // Foreign_key制約によって、プロジェクトの削除が必須
+    await prisma.project.deleteMany();
     return await prisma.user.delete({ where: { id } });
   }
 
