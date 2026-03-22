@@ -2,6 +2,7 @@ import { NextFunction, Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createResponseMock, projectRequestMocks } from "../../__mock__/index.js";
 import { requestValidator } from "../../middleware/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 describe("project: request.guard", () => {
   let res: Response | null;
@@ -9,7 +10,9 @@ describe("project: request.guard", () => {
   beforeEach(() => {
     res = createResponseMock();
     next = vi.fn();
-  });
+    prisma.project.deleteMany();
+    prisma.user.deleteMany();
+  }, 50000);
   afterEach(() => {
     res = null;
     next = null;

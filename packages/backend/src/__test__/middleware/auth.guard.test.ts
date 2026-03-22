@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createResponseMock, authRequestMocks } from "../../__mock__/index.js"
 import { NextFunction, Response } from "express"
 import { requestValidator } from "../../middleware/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 describe("auth: request.guard", () => {
   let res: Response | null;
@@ -9,7 +10,9 @@ describe("auth: request.guard", () => {
   beforeEach(() => {
     res = createResponseMock();
     next = vi.fn();
-  });
+    prisma.project.deleteMany();
+    prisma.user.deleteMany();
+  }, 50000);
   afterEach(() => {
     res = null;
     next = null;

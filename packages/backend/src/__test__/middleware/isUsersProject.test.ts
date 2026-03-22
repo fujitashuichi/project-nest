@@ -8,6 +8,7 @@ import { createProject, register } from "../../controller/index.js";
 import { authorize } from "../../middleware/index.js";
 import { isUsersProject } from "../../middleware/isUsersProject.js";
 import { ProjectUndefinedError } from "../../error/ProjectError.js";
+import { prisma } from "../../lib/prisma.js";
 
 describe("isUsersProject", () => {
   let res: Response | null = null;
@@ -18,7 +19,9 @@ describe("isUsersProject", () => {
     res = createResponseMock();
     next = vi.fn();
     res = createResponseMock();
-  });
+    await prisma.project.deleteMany();
+    await prisma.user.deleteMany();
+  }, 50000);
   afterEach(() => {
     res = null;
     next = null;
@@ -38,7 +41,7 @@ describe("isUsersProject", () => {
     const req = createRequestMock.withParams({ id: "1" });
     await isUsersProject()(req, res!, next!);
 
-    expect(next).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith();
   });
 
   it("ユーザーが所持していないprojectに対して、ErrorHandlerを呼ぶ", async () => {

@@ -1,7 +1,7 @@
 vi.stubEnv("NODE_JWT_SECRET", "secret");
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { authRequestMocks, createRequestMock, createResponseMock } from "../../__mock__/index.js";
+import { authRequestMocks, createRequestMock, createResponseMock, projectRequestMocks } from "../../__mock__/index.js";
 import { NextFunction, Request, Response } from "express";
 import { createProject, getProjects, register } from "../../controller/index.js";
 import { PostProjectRequest } from "@pkg/shared";
@@ -9,6 +9,7 @@ import { authorize } from "../../middleware/index.js";
 import { mockReq } from "sinon-express-mock";
 import { isUsersProject } from "../../middleware/isUsersProject.js";
 import { deleteProject, updateProject } from "../../controller/project.controller.js";
+import { prisma } from "../../lib/prisma.js";
 
 describe("project.controller", () => {
   let res: Response | null;
@@ -18,6 +19,8 @@ describe("project.controller", () => {
     res = createResponseMock();
     next = vi.fn();
     res = createResponseMock();
+    prisma.project.deleteMany();
+    prisma.user.deleteMany();
   });
   afterEach(() => {
     res = null;
@@ -41,7 +44,7 @@ describe("project.controller", () => {
   it("getProjects: 正常に成功する", async () => {
     await register()(authRequestMocks.register.validReq(), res!);
 
-    const body: PostProjectRequest = { title: "Title", description: null };
+    const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
 
     // 保存されたcookieを取得
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
@@ -68,7 +71,7 @@ describe("project.controller", () => {
   it("updateProjects: 正常に成功する", async () => {
     await register()(authRequestMocks.register.validReq(), res!);
 
-    const body: PostProjectRequest = { title: "Title", description: null };
+    const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
 
     // 保存されたcookieを取得
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
@@ -96,7 +99,7 @@ describe("project.controller", () => {
   it("deleteProjects: 正常に完了する", async () => {
     await register()(authRequestMocks.register.validReq(), res!);
 
-    const body: PostProjectRequest = { title: "Title", description: null };
+    const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
 
     // 保存されたcookieを取得
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;

@@ -1,4 +1,3 @@
-import { Database } from "sqlite3";
 import { ProjectsRepository, UsersRepository } from "../repository/index.js";
 import { PatchProjectRequest, PostProjectRequest, Project, User } from "@pkg/shared";
 import { ProjectUndefinedError, UserUndefinedError } from "../error/index.js";

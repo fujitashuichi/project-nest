@@ -7,6 +7,7 @@ import { Database } from "sqlite3";
 import { register } from "../../controller/index.js";
 import { authorize } from "../../middleware/index.js";
 import { createRequestMock } from "../../__mock__/createRequest.mock.js";
+import { prisma } from "../../lib/prisma.js";
 
 describe("authorize.ts", () => {
   let res: Response | null = null;
@@ -17,7 +18,9 @@ describe("authorize.ts", () => {
     res = createResponseMock();
     next = vi.fn();
     res = createResponseMock(); // resを設定し直さないとテストバグの原因になる（チェーンの呼び出し回数など）
-  });
+    prisma.project.deleteMany();
+    prisma.user.deleteMany();
+  }, 50000);
   afterEach(() => {
     res = null;
     next = null;

@@ -77,7 +77,7 @@ describe("project.repositoryの各メソッドを検査", () => {
     const saved = await projectsRepository!.saveProject(data);
 
     const result = await projectsRepository!.findById(saved.id);
-    expect(result).toEqual(
+    expect(result).toStrictEqual(
       expect.objectContaining(data)
     );
   });

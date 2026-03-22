@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authRequestMocks, createRequestMock, createResponseMock } from "../../__mock__/index.js";
 import { login, register } from "../../controller/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 
 describe("auth.controller", () => {
@@ -11,7 +12,9 @@ describe("auth.controller", () => {
 
   beforeEach(async () => {
     res = createResponseMock();
-  });
+    prisma.project.deleteMany();
+    prisma.user.deleteMany();
+  }, 50000);
   afterEach(() => {
     res = null;
   });

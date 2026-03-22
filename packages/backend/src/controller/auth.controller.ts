@@ -1,6 +1,5 @@
 import { CookieOptions, Request, Response } from "express";
 import { RegisterService, UserService } from "../service/index.js";
-import { Database } from "sqlite3";
 import { LoginRequest, LoginResponse, LogoutResponse, MeResponse, RegisterRequest, RegisterResponse, ResponseJson } from "@pkg/shared";
 import { LoginStateManagementService } from "../service/index.js";
 import { ENV } from "../config/env.js";
@@ -70,9 +69,9 @@ export const logout = (_: Request, res: Response) => {
   return console.info("Logout succeed");
 }
 
-export const me = (db: Database) => {
+export const me = () => {
   return async (req: Request, res: Response) => {
-    const service = new UserService(db);
+    const service = new UserService();
 
     const id = res.locals.userId;
 

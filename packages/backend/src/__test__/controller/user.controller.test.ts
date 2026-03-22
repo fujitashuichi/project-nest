@@ -1,11 +1,11 @@
 vi.stubEnv("NODE_JWT_SECRET", "secret");
 
 import { Request, Response } from "express";
-import { Database } from "sqlite3";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authRequestMocks, createRequestMock, createResponseMock } from "../../__mock__/index.js";
 import { logout, register, session } from "../../controller/index.js";
 import { UnAuthorizedError } from "../../error/index.js";
+import { prisma } from "../../lib/prisma.js";
 
 describe("user.controller", () => {
   let res: Response | null;
@@ -13,7 +13,9 @@ describe("user.controller", () => {
   beforeEach(async () => {
     res = createResponseMock();
     res = createResponseMock(); // resを設定し直さないとテストバグの原因になる（チェーンの呼び出し回数など）
-  });
+    prisma.project.deleteMany();
+    prisma.user.deleteMany();
+  }, 50000);
   afterEach(() => {
     res = null;
     vi.restoreAllMocks();
