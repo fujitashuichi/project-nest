@@ -18,6 +18,10 @@ export class UsersRepository {
     return await prisma.user.create({ data, select: this.select });
   }
 
+  deleteUser = async (id: User["id"]): Promise<User> => {
+    return await prisma.user.delete({ where: { id } });
+  }
+
   findById = async (id: User["id"]): Promise<AppUser | null> => {
     return await prisma.user.findUnique({ where: { id }, select: this.select });
   }
