@@ -7,11 +7,11 @@ import { prisma } from "../../lib/prisma.js";
 describe("project: request.guard", () => {
   let res: Response | null;
   let next: NextFunction | null;
-  beforeEach(() => {
+  beforeEach(async () => {
     res = createResponseMock();
     next = vi.fn();
-    prisma.project.deleteMany();
-    prisma.user.deleteMany();
+    await prisma.project.deleteMany();
+    await prisma.user.deleteMany();
   }, 50000);
   afterEach(() => {
     res = null;

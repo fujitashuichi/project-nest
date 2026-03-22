@@ -19,8 +19,8 @@ describe("project.controller", () => {
     res = createResponseMock();
     next = vi.fn();
     res = createResponseMock();
-    prisma.project.deleteMany();
-    prisma.user.deleteMany();
+    await prisma.project.deleteMany();
+    await prisma.user.deleteMany();
   });
   afterEach(() => {
     res = null;

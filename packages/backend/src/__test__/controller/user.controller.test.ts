@@ -13,8 +13,8 @@ describe("user.controller", () => {
   beforeEach(async () => {
     res = createResponseMock();
     res = createResponseMock(); // resを設定し直さないとテストバグの原因になる（チェーンの呼び出し回数など）
-    prisma.project.deleteMany();
-    prisma.user.deleteMany();
+    await prisma.project.deleteMany();
+    await prisma.user.deleteMany();
   }, 50000);
   afterEach(() => {
     res = null;

@@ -69,6 +69,8 @@ describe("user.repositoryの各メソッドを検査", () => {
 
   describe("異常型", () => {
     it("userが存在しないときは、[]をresolveする", async () => {
+      await prisma.user.deleteMany();
+
       const result = repository!.getUsers();
       await expect(result).resolves.toStrictEqual([]);
     });
