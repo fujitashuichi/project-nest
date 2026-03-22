@@ -12,6 +12,7 @@ export class RegisterService {
   registerUser = async (dto: RegisterRequest): Promise<{ user: User, token: string }> => {
     if (await this.usersRepository.findByEmail(dto.email) !== null) {
       console.error(`${dto.email}: already registered`);
+      throw new EmailAlreadyRegisteredError(dto.email);
     }
 
     const hashed = await hashPassword(dto.password);

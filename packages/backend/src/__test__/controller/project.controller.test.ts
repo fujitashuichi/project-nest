@@ -4,12 +4,18 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authRequestMocks, createRequestMock, createResponseMock, projectRequestMocks } from "../../__mock__/index.js";
 import { NextFunction, Request, Response } from "express";
 import { createProject, getProjects, register } from "../../controller/index.js";
-import { PostProjectRequest } from "@pkg/shared";
+import { PostProjectRequest, Project } from "@pkg/shared";
 import { authorize } from "../../middleware/index.js";
 import { mockReq } from "sinon-express-mock";
 import { isUsersProject } from "../../middleware/isUsersProject.js";
 import { deleteProject, updateProject } from "../../controller/project.controller.js";
 import { prisma } from "../../lib/prisma.js";
+
+
+const getCreatedId = (res: Response) => {
+  const body = vi.mocked(res.json).mock.calls[0]![0];
+  return body.data.id;
+};
 
 describe("project.controller", () => {
   let res: Response | null;
@@ -23,10 +29,11 @@ describe("project.controller", () => {
     await prisma.user.deleteMany();
     let userCount = await prisma.user.count();
     let projectCount = await prisma.project.count();
+    console.log("userCount:", userCount, "projectCount:", projectCount);
     while (userCount > 0 || projectCount > 0) {
       await new Promise(resolve => setTimeout(resolve, 100));
       userCount = await prisma.user.count();
-      projectCount = await prisma.user.count();
+      projectCount = await prisma.project.count();
     }
   });
   afterEach(() => {
@@ -89,12 +96,24 @@ describe("project.controller", () => {
     console.log("authorize set userId:", res!.locals.userId);
     const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
     await createProject()(mockReq({ body, cookies }), res!);
+    const id: number = getCreatedId(res!);
 
-    // authorizeして、isUsersProjectを通した後に、updateProjectを実行
     res = createResponseMock();
     await authorize()(createRequestMock.withCookies(cookies), res!, next!);
-    await isUsersProject()(createRequestMock.withParams({ id: "1" }), res!, next!);
-    await updateProject()(projectRequestMocks.updateProject.validReq_1(), res!);
+
+    await isUsersProject()(createRequestMock.withParams({ id: id.toString() }), res!, next!);
+
+    const updateBody = projectRequestMocks.updateProject.validReq_1().body;
+    console.log("DEBUG: req.params ->", id);
+    console.log("DEBUG: req.body ->", updateBody);
+    await updateProject()(
+      mockReq({
+        body: updateBody,
+        params: { id: id.toString() },
+        cookies
+      }),
+      res!
+    );
 
     expect(res!.status).toHaveBeenCalledWith(201);
     expect(res!.json).toHaveBeenCalledWith(
@@ -117,12 +136,13 @@ describe("project.controller", () => {
     // authorizeして、Project作成
     await authorize()(createRequestMock.withCookies(cookies), res!, next!);
     await createProject()(mockReq({ body: body, cookies: cookies }), res!);
+    const id = getCreatedId(res!);
 
     // authorizeして、isUsersProjectを通した後に、deleteProjectを実行
     res = createResponseMock();
     await authorize()(createRequestMock.withCookies(cookies), res!, next!);
-    await isUsersProject()(createRequestMock.withParams({ id: "1" }), res!, next!);
-    await deleteProject()(createRequestMock.withParams({ id: "1" }), res!);
+    await isUsersProject()(createRequestMock.withParams({ id }), res!, next!);
+    await deleteProject()(createRequestMock.withParams({ id }), res!);
 
     expect(res!.status).toHaveBeenCalledWith(200);
     expect(res!.json).toHaveBeenCalledWith(

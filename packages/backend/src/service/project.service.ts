@@ -12,6 +12,7 @@ export class ProjectService {
   saveProject = async (dto: PostProjectRequest, userId: User["id"]): Promise<Project | null> => {
     if (await this.usersRepository.findById(userId) === null) {
       console.error("Cannot create Project because User undefined");
+      throw new UserUndefinedError();
     }
 
     const newProject: SaveProjectPayload = {
