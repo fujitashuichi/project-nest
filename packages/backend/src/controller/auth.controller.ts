@@ -41,7 +41,7 @@ export const login = () => {
     const dto: LoginRequest = req.body;
     const service = new LoginStateManagementService();
 
-    const result = await service.tryLogin({ email: dto.email, password: dto.password });
+    const result = await service.login({ email: dto.email, password: dto.password });
 
     console.info("Login succeed");
     const json: ResponseJson<LoginResponse> = {

@@ -24,9 +24,7 @@ describe("user.repositoryの各メソッドを検査", () => {
 
       const promise = repository!.saveUser(payload);
       const { passwordHash, ...required } = payload;
-      await expect(promise).resolves.toEqual(
-        expect.objectContaining(required)
-      );
+      await expect(promise).resolves.toStrictEqual(expect.objectContaining(required));
     });
 
     it("getUsersは正しく成功する", async () => {

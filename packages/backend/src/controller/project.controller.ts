@@ -1,4 +1,3 @@
-import { Database } from "sqlite3";
 import { ProjectService } from "../service/index.js";
 import { DeleteProjectResponse, GetProjectsResponse, PatchProjectRequest, PatchProjectResponse, PostProjectRequest, PostProjectResponse, Project, ResponseJson } from "@pkg/shared";
 import { Request, Response } from "express";
@@ -9,10 +8,10 @@ export const createProject = () => {
     const dto: PostProjectRequest = req.body;
     const service = new ProjectService();
 
-    const postResult = await service.saveProject(dto, res.locals.userId);
+    const result = await service.saveProject(dto, res.locals.userId);
     const json: ResponseJson<PostProjectResponse> = {
       success: true,
-      data: postResult
+      data: result
     }
 
     return res.status(201).json(json);

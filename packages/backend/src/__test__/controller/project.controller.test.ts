@@ -28,7 +28,7 @@ describe("project.controller", () => {
     vi.restoreAllMocks();
   });
 
-  it("createProject: 正常に作成が完了する", async () => {
+  it("createProject: 正常成功する", async () => {
     await register()(authRequestMocks.register.validReq(), res!);
 
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
@@ -36,7 +36,8 @@ describe("project.controller", () => {
 
     await authorize()(createRequestMock.withCookies(cookies), res!, next!);
 
-    await createProject()(mockReq({ body: { title: "Title" }, cookies: cookies }), res!);
+    const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
+    await createProject()(mockReq({ body, cookies }), res!);
 
     expect(res!.status).toHaveBeenCalledWith(201);
   });
@@ -68,10 +69,8 @@ describe("project.controller", () => {
     );
   });
 
-  it("updateProjects: 正常に成功する", async () => {
+  it("updateProject: 正常に成功する", async () => {
     await register()(authRequestMocks.register.validReq(), res!);
-
-    const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
 
     // 保存されたcookieを取得
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
@@ -79,13 +78,16 @@ describe("project.controller", () => {
 
     // authorizeして、Project作成
     await authorize()(createRequestMock.withCookies(cookies), res!, next!);
-    await createProject()(mockReq({ body: body, cookies: cookies }), res!);
+    if (!res!.locals.userId) throw new Error("authorize didn't set userId");
+    console.log("authorize set userId:", res!.locals.userId);
+    const body: PostProjectRequest = projectRequestMocks.postProject.validReq_1().body;
+    await createProject()(mockReq({ body, cookies }), res!);
 
     // authorizeして、isUsersProjectを通した後に、updateProjectを実行
     res = createResponseMock();
     await authorize()(createRequestMock.withCookies(cookies), res!, next!);
     await isUsersProject()(createRequestMock.withParams({ id: "1" }), res!, next!);
-    await updateProject()(createRequestMock.withParams({ id: "1" }), res!);
+    await updateProject()(projectRequestMocks.updateProject.validReq_1(), res!);
 
     expect(res!.status).toHaveBeenCalledWith(201);
     expect(res!.json).toHaveBeenCalledWith(
