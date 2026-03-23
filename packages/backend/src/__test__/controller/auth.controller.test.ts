@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authRequestMocks, createRequestMock, createResponseMock } from "../../__mock__/index.js";
 import { login, register } from "../../controller/index.js";
-import { prisma } from "../../lib/prisma.js";
 import { cleanupDb } from "../tools/cleanupDb.js";
 
 
