@@ -50,7 +50,7 @@ const runCommand = () => {
     console.log("running vitest...");
     const vitest = spawnSync(
       npxCommand,
-      ['vitest', '--config', `${vitestConfigPath}`, ...process.argv.slice(4)],
+      ['vitest', '--config', vitestConfigPath, ...process.argv.slice(4)],
       {
         stdio: "inherit",
         shell: process.platform === "win32",
@@ -71,7 +71,7 @@ const runCommand = () => {
     // DBクリーンアップ
     console.info("Cleaning up database...\n");
 
-    execute(["prisma", "migrate", "reset", "--force", `--config ${prismaConfigPath}`]);
+    execute(["prisma", "migrate", "reset", "--force", "--config", prismaConfigPath]);
 
     process.stdout.write(styleText(
       ["blueBright", "green"],
