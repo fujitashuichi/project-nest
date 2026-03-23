@@ -5,7 +5,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authRequestMocks, createRequestMock, createResponseMock } from "../../__mock__/index.js";
 import { logout, register, session } from "../../controller/index.js";
 import { UnAuthorizedError } from "../../error/index.js";
-import { prisma } from "../../lib/prisma.js";
 import { cleanupDb } from "../tools/cleanupDb.js";
 
 describe("user.controller", () => {
