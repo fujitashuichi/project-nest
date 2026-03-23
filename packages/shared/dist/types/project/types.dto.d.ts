@@ -28,7 +28,7 @@ export type GetProjectsResponse = z.infer<typeof GetProjectsResponseSchema>;
 export declare const PatchProjectRequestSchema: z.ZodObject<{
     description: z.ZodNullable<z.ZodString>;
     status: z.ZodNullable<z.ZodString>;
-    title: z.ZodNullable<z.ZodString>;
+    title: z.ZodOptional<z.ZodString>;
 }, z.z.core.$strict>;
 export type PatchProjectRequest = z.infer<typeof PatchProjectRequestSchema>;
 export declare const PatchProjectResponseSchema: z.ZodObject<{

@@ -6,6 +6,7 @@ import { authRequestMocks, createRequestMock, createResponseMock } from "../../_
 import { logout, register, session } from "../../controller/index.js";
 import { UnAuthorizedError } from "../../error/index.js";
 import { prisma } from "../../lib/prisma.js";
+import { cleanupDb } from "../tools/cleanupDb.js";
 
 describe("user.controller", () => {
   let res: Response | null;
@@ -13,15 +14,7 @@ describe("user.controller", () => {
   beforeEach(async () => {
     res = createResponseMock();
     res = createResponseMock();
-    await prisma.project.deleteMany();
-    await prisma.user.deleteMany();
-    let userCount = await prisma.user.count();
-    let projectCount = await prisma.project.count();
-    while (userCount > 0 || projectCount > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      userCount = await prisma.user.count();
-      projectCount = await prisma.user.count();
-    }
+    await cleanupDb();
   }, 50000);
   afterEach(() => {
     res = null;

@@ -9,11 +9,16 @@ export const schemaTransformer = {
     schema.transform(toPrismaUpdate)
   */
 
-  toPrismaUpdate: (data: Record<string, any>) => {
+  toPrismaUpdate: <T extends Record<string, any>>(data: T) => {
     return Object.fromEntries(
       Object.entries(data)
-        .filter(([_, v]) => v !== undefined) // 更新しない項目（undefined）を除外
-        .map(([k, v]) => [k, v === null ? { set: null } : v]) // null なら { set: null }
-    );
+        .filter(([_, v]) => v !== undefined)
+        .map(([k, v]) => [
+          k,
+          { set: v }
+        ])
+    ) as {
+      [K in keyof T]: T[K] extends null ? { set: null } : T[K]
+    };
   },
 }

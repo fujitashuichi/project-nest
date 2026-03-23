@@ -8,6 +8,7 @@ import { register } from "../../controller/index.js";
 import { authorize } from "../../middleware/index.js";
 import { createRequestMock } from "../../__mock__/createRequest.mock.js";
 import { prisma } from "../../lib/prisma.js";
+import { cleanupDb } from "../tools/cleanupDb.js";
 
 describe("authorize.ts", () => {
   let res: Response | null = null;
@@ -18,15 +19,7 @@ describe("authorize.ts", () => {
     res = createResponseMock();
     next = vi.fn();
     res = createResponseMock(); // resを設定し直さないとテストバグの原因になる（チェーンの呼び出し回数など）
-    await prisma.project.deleteMany();
-    await prisma.user.deleteMany();
-    let userCount = await prisma.user.count();
-    let projectCount = await prisma.project.count();
-    while (userCount > 0 || projectCount > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      userCount = await prisma.user.count();
-      projectCount = await prisma.user.count();
-    }
+    await cleanupDb();
   }, 50000);
   afterEach(() => {
     res = null;

@@ -17,5 +17,10 @@ export const SaveProjectPayloadSchema = ProjectSchema.omit({ id: true });
 export type SaveProjectPayload = z.infer<typeof SaveProjectPayloadSchema>;
 
 export const UpdateProjectPayloadSchema = PatchProjectRequestSchema
-  .transform(schemaTransformer.toPrismaUpdate);
+  .transform((data) => {
+    const result = schemaTransformer.toPrismaUpdate(data);
+    return result as {
+      [K in keyof typeof result as undefined extends typeof result[K] ? never : K]: typeof result[K]
+    };
+});
 export type UpdateProjectPayload = z.infer<typeof UpdateProjectPayloadSchema>;

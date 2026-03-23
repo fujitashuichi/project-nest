@@ -3,6 +3,7 @@ import { UsersRepository } from "../../repository/index.js";
 import { userMocks } from "../../__mock__/index.js";
 import { SaveUserPayload } from "../../types/type.db.js";
 import { prisma } from "../../lib/prisma.js";
+import { cleanupDb } from "../tools/cleanupDb.js";
 
 
 describe("user.repositoryの各メソッドを検査", () => {
@@ -10,15 +11,7 @@ describe("user.repositoryの各メソッドを検査", () => {
 
   beforeEach(async () => {
     repository = new UsersRepository();
-    await prisma.project.deleteMany();
-    await prisma.user.deleteMany();
-    let userCount = await prisma.user.count();
-    let projectCount = await prisma.project.count();
-    while (userCount > 0 || projectCount > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      userCount = await prisma.user.count();
-      projectCount = await prisma.user.count();
-    }
+    await cleanupDb();
   }, 50000);
   afterEach(async () => {
     repository = null;

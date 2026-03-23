@@ -7,9 +7,9 @@ import { createProject, register } from "../../controller/index.js";
 import { authorize } from "../../middleware/index.js";
 import { isUsersProject } from "../../middleware/isUsersProject.js";
 import { ProjectUndefinedError } from "../../error/ProjectError.js";
-import { prisma } from "../../lib/prisma.js";
 import { PostProjectRequest } from "@pkg/shared";
 import { RegisterService } from "../../service/register.service.js";
+import { cleanupDb } from "../tools/cleanupDb.js";
 
 
 describe("isUsersProject", () => {
@@ -20,16 +20,8 @@ describe("isUsersProject", () => {
   beforeEach(async () => {
     res = createResponseMock();
     next = vi.fn();
-    await prisma.project.deleteMany();
-    await prisma.user.deleteMany();
-    let userCount = await prisma.user.count();
-    let projectCount = await prisma.project.count();
-    while (userCount > 0 || projectCount > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      userCount = await prisma.user.count();
-      projectCount = await prisma.user.count();
-    }
-  }, 50000);
+    await cleanupDb();
+  }, 100000);
   afterEach(() => {
     res = null;
     next = null;

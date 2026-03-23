@@ -22,6 +22,8 @@ export class ProjectService {
       updatedAt: new Date()
     }
     const savedProject = await this.projectsRepository.saveProject(newProject);
+    if (!savedProject) throw new ProjectUndefinedError();
+
     return savedProject;
   }
 

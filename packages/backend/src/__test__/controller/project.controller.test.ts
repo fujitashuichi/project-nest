@@ -8,6 +8,7 @@ import { mockReq } from "sinon-express-mock";
 import { isUsersProject } from "../../middleware/isUsersProject.js";
 import { deleteProject, updateProject } from "../../controller/project.controller.js";
 import { prisma } from "../../lib/prisma.js";
+import { cleanupDb } from "../tools/cleanupDb.js";
 
 
 describe("project.controller", () => {
@@ -18,18 +19,8 @@ describe("project.controller", () => {
     res = createResponseMock();
     next = vi.fn();
     res = createResponseMock();
-
-    await prisma.project.deleteMany();
-    await prisma.user.deleteMany();
-    let userCount = await prisma.user.count();
-    let projectCount = await prisma.project.count();
-    console.log("userCount:", userCount, "projectCount:", projectCount);
-    while (userCount > 0 || projectCount > 0) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      userCount = await prisma.user.count();
-      projectCount = await prisma.project.count();
-    }
-  });
+    await cleanupDb();
+  }, 50000);
   afterEach(() => {
     res = null;
     next = null;

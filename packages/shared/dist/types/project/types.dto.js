@@ -13,7 +13,7 @@ export const PatchProjectRequestSchema = ProjectSchema.pick({
     description: true,
     status: true
 }).extend({
-    title: z.string().max(30).nullable()
+    title: z.string().max(30).optional()
 }).strict();
 export const PatchProjectResponseSchema = ProjectSchema;
 export const DeleteProjectRequestSchema = z.undefined();
