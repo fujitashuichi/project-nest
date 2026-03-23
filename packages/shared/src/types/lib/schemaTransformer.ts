@@ -18,7 +18,7 @@ export const schemaTransformer = {
           { set: v }
         ])
     ) as {
-      [K in keyof T]: T[K] extends null ? { set: null } : T[K]
+      [K in keyof T]?: { set: T[K] }
     };
   },
 }
