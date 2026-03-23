@@ -7,12 +7,14 @@ import { globalErrorHandler } from "./middleware/index.js";
 import { ENV } from "./config/env.js";
 import { styleText } from "node:util";
 
-const FE_URL = ENV.NODE_FE_URL;
 
 const app = express();
 
 app.use(cors({
-  origin: [FE_URL],
+  origin: [
+    ENV.NODE_FE_URL,
+    /-fujita-shuichis-projects\.vercel\.app$/
+  ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true
 }));
