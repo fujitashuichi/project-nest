@@ -7,7 +7,17 @@ import { styleText } from "node:util";
 const envPath = path.join(import.meta.dirname, "../../.env.test");
 dotenv.config({ path: envPath });
 
-const configPath = path.join(import.meta.dirname, "../prisma.config");
+const prismaConfigPath = path.join(import.meta.dirname, "../prisma.config");
+process.stdout.write(styleText(
+  ["gray"],
+  `prisma.config.ts: ${prismaConfigPath}\n`
+));
+
+const vitestConfigPath = path.join(import.meta.filename, "../../vitest.config.ts");
+process.stdout.write(styleText(
+  ["gray"],
+  `vitest.config.ts: ${vitestConfigPath}\n`
+));
 
 
 const databaseUrl = process.env.DATABASE_URL;
@@ -40,7 +50,7 @@ const runCommand = () => {
     console.log("running vitest...");
     const vitest = spawnSync(
       npxCommand,
-      ['vitest', ...process.argv.slice(2)],
+      ['vitest', '--config', `${vitestConfigPath}`, ...process.argv.slice(4)],
       {
         stdio: "inherit",
         shell: process.platform === "win32",
@@ -61,7 +71,7 @@ const runCommand = () => {
     // DBクリーンアップ
     console.info("Cleaning up database...\n");
 
-    execute(["prisma", "migrate", "reset", "--force", `--config ${configPath}`]);
+    execute(["prisma", "migrate", "reset", "--force", `--config ${prismaConfigPath}`]);
 
     process.stdout.write(styleText(
       ["blueBright", "green"],
