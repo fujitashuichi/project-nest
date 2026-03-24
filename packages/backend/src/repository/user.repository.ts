@@ -1,8 +1,8 @@
 import { SaveUserPayload } from "../types/type.db.js";
-import { User } from "../generated/prisma/client.js";
 import { prisma } from "../lib/prisma.js";
 import { User as AppUser } from "@pkg/shared";
 import { safeQuery } from "./safeQuery.js";
+import { User } from "../../generated/prisma/index.js";
 
 export class UsersRepository {
   private readonly select = {
