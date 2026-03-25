@@ -12,6 +12,7 @@
 #### BE
 * 要件: [BEセキュリティ](./docs/BE/BE_Security.md)
 * 資料: [DB図](./docs/BE/db.mermaid.md)
+* 注意: [例外的なキャスティング運用](./docs/BE/whiteListCasting.md)
 #### FE
 * 設計: [featuresのContext図](./docs/FE/contextFlow.md)
 
