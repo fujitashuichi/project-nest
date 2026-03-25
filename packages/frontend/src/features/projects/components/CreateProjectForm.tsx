@@ -36,7 +36,7 @@ export function CreateProjectForm() {
           placeholder="project description"
         />
 
-        <label htmlFor="status">Description</label>
+        <label htmlFor="status">Status</label>
         <input
           name="status"
           type="text"
