@@ -26,23 +26,23 @@ export declare const GetProjectsResponseSchema: z.ZodArray<z.ZodObject<{
 }, z.z.core.$strip>>;
 export type GetProjectsResponse = z.infer<typeof GetProjectsResponseSchema>;
 export declare const PatchProjectRequestSchema: z.ZodPipe<z.ZodObject<{
-    title: z.ZodString;
-    description: z.ZodNullable<z.ZodString>;
-    status: z.ZodNullable<z.ZodString>;
+    title: z.ZodOptional<z.ZodString>;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, z.z.core.$strip>, z.ZodTransform<{
     title?: {
-        set: string;
+        set: string | undefined;
     } | undefined;
     description?: {
-        set: string | null;
+        set: string | null | undefined;
     } | undefined;
     status?: {
-        set: string | null;
+        set: string | null | undefined;
     } | undefined;
 }, {
-    title: string;
-    description: string | null;
-    status: string | null;
+    title?: string | undefined;
+    description?: string | null | undefined;
+    status?: string | null | undefined;
 }>>;
 export type PatchProjectRequest = z.infer<typeof PatchProjectRequestSchema>;
 export declare const PatchProjectResponseSchema: z.ZodObject<{

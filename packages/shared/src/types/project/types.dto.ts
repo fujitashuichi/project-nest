@@ -18,11 +18,14 @@ export type GetProjectsResponse = z.infer<typeof GetProjectsResponseSchema>;
 
 
 // 更新可能にするプロパッティを設定する
-export const PatchProjectRequestSchema = ProjectWithoutTimeSchema.pick({
-  title: true,
-  description: true,
-  status: true
-}).transform(schemaTransformer.toPrismaUpdate);
+export const PatchProjectRequestSchema = ProjectWithoutTimeSchema
+  .pick({
+    title: true,
+    description: true,
+    status: true
+  })
+  .partial()
+  .transform(schemaTransformer.toPrismaUpdate);
 export type PatchProjectRequest = z.infer<typeof PatchProjectRequestSchema>;
 
 export const PatchProjectResponseSchema = ProjectSchema;

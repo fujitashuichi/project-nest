@@ -9,11 +9,14 @@ export const PostProjectRequestSchema = ProjectWithoutTimeSchema.pick({
 export const PostProjectResponseSchema = ProjectSchema;
 export const GetProjectsResponseSchema = ProjectSchema.array();
 // 更新可能にするプロパッティを設定する
-export const PatchProjectRequestSchema = ProjectWithoutTimeSchema.pick({
+export const PatchProjectRequestSchema = ProjectWithoutTimeSchema
+    .pick({
     title: true,
     description: true,
     status: true
-}).transform(schemaTransformer.toPrismaUpdate);
+})
+    .partial()
+    .transform(schemaTransformer.toPrismaUpdate);
 export const PatchProjectResponseSchema = ProjectSchema;
 export const DeleteProjectRequestSchema = z.undefined();
 export const DeleteProjectResponseSchema = z.object({}).or(z.void());

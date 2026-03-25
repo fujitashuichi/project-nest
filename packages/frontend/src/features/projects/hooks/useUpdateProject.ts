@@ -41,6 +41,7 @@ export const useUpdateProjects = (reload: ProjectCtxType["getProjects"]["get"]):
       useFor: "update"
     });
 
+    console.log(!parsed.success && parsed.errorMessage);
     if (!parsed.success) return alert("入力内容に不備があります");
 
     mutation.mutate({ project: parsed.data, id });
