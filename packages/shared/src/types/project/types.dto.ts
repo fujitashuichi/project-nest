@@ -1,6 +1,5 @@
 import z from "zod";
 import { ProjectSchema } from "./types.data.js";
-import { schemaTransformer } from "../lib/schemaTransformer.js";
 
 export const PostProjectRequestSchema = ProjectSchema.pick({
   title: true,
