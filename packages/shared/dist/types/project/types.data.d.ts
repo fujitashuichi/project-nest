@@ -5,7 +5,7 @@ export declare const ProjectSchema: z.ZodObject<{
     title: z.ZodString;
     description: z.ZodNullable<z.ZodString>;
     status: z.ZodNullable<z.ZodString>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
+    createdAt: z.z.ZodISODateTime;
+    updatedAt: z.z.ZodISODateTime;
 }, z.z.core.$strip>;
 export type Project = z.infer<typeof ProjectSchema>;
