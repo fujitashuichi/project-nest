@@ -52,7 +52,7 @@ export function EditProjectForm({ id }: { id: Project["id"] }) {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
             <p>
               <strong>Status</strong>
             </p>
