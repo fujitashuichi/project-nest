@@ -77,7 +77,7 @@ function HomeSkeleton() {
 }
 
 function DashBoard({ projects, time }: { projects: Project[], time: Date }) {
-  const sevenDaysAgo = time.getDate() - (7 * 24 * 60 * 60 * 1000);
+  const sevenDaysAgo = time.getTime() - (7 * 24 * 60 * 60 * 1000);
 
   return (
     <main className="mt-8 text-center">
