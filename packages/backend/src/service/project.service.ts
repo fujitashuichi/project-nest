@@ -17,9 +17,7 @@ export class ProjectService {
 
     const newProject: SaveProjectPayload = {
       ...dto,
-      userId: userId,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      userId: userId
     }
     const savedProject = await this.projectsRepository.saveProject(newProject);
     if (!savedProject) throw new ProjectUndefinedError();

@@ -18,14 +18,14 @@ export const dbUserMocks = {
 export const userMocks = {
   users: (): User[] => {
     return [
-      { id: "uuid1", email: "example1@gmail.com", createdAt: new Date().toISOString() },
-      { id: "uuid2", email: "example2@outlook.jp", createdAt: new Date().toISOString() },
-      { id: "uuid3", email: "example3@co.jp", createdAt: new Date().toDateString() }
+      { id: "uuid1", email: "example1@gmail.com", createdAt: new Date() },
+      { id: "uuid2", email: "example2@outlook.jp", createdAt: new Date() },
+      { id: "uuid3", email: "example3@co.jp", createdAt: new Date() }
     ]
   },
 
   user: (): User => {
-    return { id: "uuid", email: "example@gmail.com", createdAt: new Date().toISOString() }
+    return { id: "uuid", email: "example@gmail.com", createdAt: new Date() }
   },
 
   saveUserPayload: (): SaveUserPayload => {
