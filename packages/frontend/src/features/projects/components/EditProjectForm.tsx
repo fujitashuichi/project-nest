@@ -51,6 +51,18 @@ export function EditProjectForm({ id }: { id: Project["id"] }) {
           <p className="text-right text-xs text-gray-400">最大100文字</p>
         </div>
 
+        <div className="space-y-2">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+            <p>
+              <strong>Status</strong>
+            </p>
+          </label>
+          <input name="status" maxLength={10}
+            className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
+            placeholder="ステータス（任意）"
+          />
+        </div>
+
         <div className="flex justify-end pt-2">
           <AppButton variant="primary" type="submit">
             確定

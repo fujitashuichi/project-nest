@@ -27,7 +27,11 @@ export const useLogin = (setSessionStatus: AuthCtxType["session"]["setStatus"]):
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const parsed = await parseFormData(formData, LoginRequestSchema);
+    const parsed = await parseFormData({
+      formData,
+      schema: LoginRequestSchema,
+      useFor: "noEmptyValues"
+    });
 
     if (!parsed.success) {
       setSessionStatus("inactive");

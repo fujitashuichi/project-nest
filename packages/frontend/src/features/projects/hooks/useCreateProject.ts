@@ -38,7 +38,11 @@ export const useCreateProject = (reload: ProjectCtxType["getProjects"]["get"]): 
     e.preventDefault();
 
     const formData: FormData = new FormData(e.currentTarget);
-    const parsed = await parseFormData(formData, PostProjectRequestSchema);
+    const parsed = await parseFormData({
+      formData,
+      schema: PostProjectRequestSchema,
+      useFor: "create"
+    });
 
     if (!parsed.success) return alert("入力内容に不備があります");
 

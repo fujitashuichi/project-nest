@@ -50,7 +50,7 @@ describe("project.repositoryの各メソッドを検査", () => {
     const data: SaveProjectPayload = projectPayloadMock.SaveProjectPayload(user!);
     const saved = await projectsRepository!.saveProject(data);
 
-    const updatedData: PatchProjectRequest = { title: "title", description: null, status: "done" };
+    const updatedData: PatchProjectRequest = { title: { set: "title" }, description: { set: null }, status: { set: "done" } };
     const result = await projectsRepository!.updateProject(updatedData, saved!.id);
 
     expect(result).toEqual(
