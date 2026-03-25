@@ -8,11 +8,13 @@
 ### ・規約・実装資料
 #### FE/BE
 * メモ: [Projectドメイン: エラーレスポンスの形式](./docs/BE/BE_domainFlow/error/project.md)
+* 仕様: [dtoスキーマの仕様について](./docs/howToUseSchema.md)
 #### BE
 * 要件: [BEセキュリティ](./docs/BE/BE_Security.md)
 * 資料: [DB図](./docs/BE/db.mermaid.md)
+* 注意: [例外的なキャスティング運用](./docs/BE/whiteListCasting.md)
 #### FE
-* 要設計: [featuresのContext図](./docs/FE/contextFlow.md)
+* 設計: [featuresのContext図](./docs/FE/contextFlow.md)
 
 <details>
   <summary>その他レポートなど</summary>

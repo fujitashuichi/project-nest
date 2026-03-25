@@ -36,6 +36,14 @@ export function CreateProjectForm() {
           placeholder="project description"
         />
 
+        <label htmlFor="status">Status</label>
+        <input
+          name="status"
+          type="text"
+          maxLength={10}
+          placeholder="onDevelop, hobby, done, etc..."
+        />
+
         <AppButton variant="primary" type="submit" className="w-auto">
           新規作成＋
         </AppButton>

@@ -29,11 +29,18 @@ export function ProjectList() {
       {status === "success" && projects.length === 0 && (<>
         <p className="text-gray-500">プロジェクトがありません。新しく作成してください。</p>
         <CreateProjectForm />
+        <Link to="/">
+          <AppButton variant="primary" className="w-auto">
+            ダッシュボード
+          </AppButton>
+        </Link>
       </>)}
 
       {status === "success" && projects.length > 0 && (<>
         <Link to="/">
-          <AppButton variant="primary" className="w-auto">ダッシュボード</AppButton>
+          <AppButton variant="primary" className="w-auto">
+            ダッシュボード
+          </AppButton>
         </Link>
 
         <CreateProjectForm />

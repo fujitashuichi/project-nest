@@ -43,7 +43,11 @@ export const useRegister = (setSessionStatus: AuthCtxType["session"]["setStatus"
     e.preventDefault();
 
     const formData:FormData = new FormData(e.currentTarget);
-    const parsed = await parseFormData(formData, formDataSchema);
+    const parsed = await parseFormData({
+      formData,
+      schema: formDataSchema,
+      useFor: "noEmptyValues"
+    });
     if (!parsed.success) {
       alert("入力値が正しくありません");
       return;

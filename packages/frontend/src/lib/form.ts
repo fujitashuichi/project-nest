@@ -5,15 +5,31 @@ type Result<T> =
   | { success: false, errorMessage: string }
   | { success: true, data: T }
 
-export async function parseFormData<T extends z.ZodTypeAny>(
+type Props<T> = {
   formData: FormData,
-  schema: T
+  schema: T,
+  useFor: "create" | "update" | "noEmptyValues"
+}
+
+export async function parseFormData<T extends z.ZodTypeAny>({
+  formData, schema, useFor
+}: Props<T>
 ): Promise<Result<z.infer<T>>> {
-  const rawData = Object.fromEntries(formData);
+  const emptyValueMap = {
+    create: null,
+    update: undefined,
+    noEmptyValues: ""
+  } as const;
+
+  const rawData = Object.fromEntries(
+    Array.from(formData.entries()).map(([key, value]) => [
+      key,
+      value === "" ? emptyValueMap[useFor] : value
+    ])
+  );
+
   const parsed = schema.safeParse(rawData);
   if (!parsed.success) {
-    console.info("invalidFormData:", rawData);
-    console.info("parsed invalidFormData:", parsed);
     return {
       success: false,
       errorMessage: parsed.error.message

@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { useState } from "react";
 import { parseFormData } from "../../../lib";
 import { PatchProjectRequestSchema, type PatchProjectRequest } from "@pkg/shared";
@@ -16,10 +15,6 @@ const errorMap = {
   UnknownError: "エラーが発生しました"
 } as const;
 
-// 文字数制限を無効化（Formが "" を返すため）
-const FormDataSchema = PatchProjectRequestSchema.extend({
-  title: z.string().optional()
-});
 
 type Result = ProjectCtxType["update"];
 
@@ -40,8 +35,13 @@ export const useUpdateProjects = (reload: ProjectCtxType["getProjects"]["get"]):
     e.preventDefault();
 
     const formData: FormData = new FormData(e.currentTarget);
-    const parsed = await parseFormData(formData, FormDataSchema);
+    const parsed = await parseFormData({
+      formData,
+      schema: PatchProjectRequestSchema,
+      useFor: "update"
+    });
 
+    console.log(!parsed.success && parsed.errorMessage);
     if (!parsed.success) return alert("入力内容に不備があります");
 
     mutation.mutate({ project: parsed.data, id });

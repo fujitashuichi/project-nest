@@ -29,6 +29,6 @@ export const userMocks = {
   },
 
   saveUserPayload: (): SaveUserPayload => {
-    return { email: "example@gmail.com", createdAt: new Date(), passwordHash: "passwordHash" };
+    return { email: "example@gmail.com", passwordHash: "passwordHash" };
   }
 }

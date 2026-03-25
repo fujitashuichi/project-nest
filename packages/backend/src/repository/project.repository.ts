@@ -2,6 +2,7 @@ import { Project } from "@pkg/shared";
 import { SaveProjectPayload, UpdateProjectPayload } from "../types/index.js";
 import { prisma } from "../lib/prisma.js";
 import { safeQuery } from "./safeQuery.js";
+import { castForPrismaUpdate } from "../lib/castForPrismaUpdate.js";
 
 
 export class ProjectsRepository {
@@ -12,8 +13,9 @@ export class ProjectsRepository {
   }
 
   updateProject = async (data: UpdateProjectPayload, id: Project["id"]): Promise<Project | null> => {
+    const safeData = castForPrismaUpdate(data);
     return await safeQuery(() =>
-      prisma.project.update({ data, where: { id } })
+      prisma.project.update({ data: safeData, where: { id } })
     );
   }
 

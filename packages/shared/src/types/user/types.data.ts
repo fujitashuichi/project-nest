@@ -6,7 +6,14 @@ import { z } from "zod"
 export const UserSchema = z.object({
   id: z.uuid(),
   email: z.email(),
-  createdAt: z.date()
+  createdAt: z.coerce.date()
 });
 
 export type User = z.infer<typeof UserSchema>;
+
+
+export const UserWithoutTimeSchema = UserSchema.omit({
+  createdAt: true
+});
+
+export type UserWithoutTime = z.infer<typeof UserWithoutTimeSchema>;

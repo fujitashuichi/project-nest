@@ -11,8 +11,8 @@ export declare const PostProjectResponseSchema: z.ZodObject<{
     title: z.ZodString;
     description: z.ZodNullable<z.ZodString>;
     status: z.ZodNullable<z.ZodString>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
+    createdAt: z.z.ZodCoercedDate<unknown>;
+    updatedAt: z.z.ZodCoercedDate<unknown>;
 }, z.z.core.$strip>;
 export type PostProjectResponse = z.infer<typeof PostProjectResponseSchema>;
 export declare const GetProjectsResponseSchema: z.ZodArray<z.ZodObject<{
@@ -21,15 +21,29 @@ export declare const GetProjectsResponseSchema: z.ZodArray<z.ZodObject<{
     title: z.ZodString;
     description: z.ZodNullable<z.ZodString>;
     status: z.ZodNullable<z.ZodString>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
+    createdAt: z.z.ZodCoercedDate<unknown>;
+    updatedAt: z.z.ZodCoercedDate<unknown>;
 }, z.z.core.$strip>>;
 export type GetProjectsResponse = z.infer<typeof GetProjectsResponseSchema>;
-export declare const PatchProjectRequestSchema: z.ZodObject<{
-    description: z.ZodNullable<z.ZodString>;
-    status: z.ZodNullable<z.ZodString>;
+export declare const PatchProjectRequestSchema: z.ZodPipe<z.ZodObject<{
     title: z.ZodOptional<z.ZodString>;
-}, z.z.core.$strict>;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.z.core.$strip>, z.ZodTransform<{
+    title?: {
+        set: string | undefined;
+    } | undefined;
+    description?: {
+        set: string | null | undefined;
+    } | undefined;
+    status?: {
+        set: string | null | undefined;
+    } | undefined;
+}, {
+    title?: string | undefined;
+    description?: string | null | undefined;
+    status?: string | null | undefined;
+}>>;
 export type PatchProjectRequest = z.infer<typeof PatchProjectRequestSchema>;
 export declare const PatchProjectResponseSchema: z.ZodObject<{
     id: z.ZodNumber;
@@ -37,8 +51,8 @@ export declare const PatchProjectResponseSchema: z.ZodObject<{
     title: z.ZodString;
     description: z.ZodNullable<z.ZodString>;
     status: z.ZodNullable<z.ZodString>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
+    createdAt: z.z.ZodCoercedDate<unknown>;
+    updatedAt: z.z.ZodCoercedDate<unknown>;
 }, z.z.core.$strip>;
 export type PatchProjectResponse = z.infer<typeof PatchProjectResponseSchema>;
 export declare const DeleteProjectRequestSchema: z.ZodUndefined;

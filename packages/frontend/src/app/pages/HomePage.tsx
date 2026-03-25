@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { useAuth, useProject } from "../../Context";
 import { useEffect, useState } from "react";
 import { AppButton } from "../../components";
+import type { Project } from "@pkg/shared";
+
 
 export function HomePage() {
-  const [time, setTime] = useState<number | null>(null);
+  const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
-    const checkTime = () => setTime(Date.now());
+    const checkTime = () => setTime(new Date());
     const timerId = setInterval(() => {
       checkTime();
     }, 5 * 60 * 1000);
@@ -25,13 +27,22 @@ export function HomePage() {
   const { projects } = projectsData;
 
 
+  if (!user) return (<>
+    <h1>ユーザーデータが見つかりません</h1>
+    <Link to="/user">
+      <AppButton variant="secondary" className="w-auto">
+        ユーザーページへ
+      </AppButton>
+    </Link>
+  </>)
+
   return (
     <div className="min-h-screen p-4">
       <header className="fixed top-0 border-b pb-4">
         <ul className="flex gap-10">
           <li>
             <Link to="/user" className="hover:underline">
-              {status === "active" ? `${user?.email} でログイン中` : "ログイン"}
+              {status === "active" ? `${user.email} でログイン中` : "ログイン"}
             </Link>
           </li>
           <li>
@@ -45,28 +56,7 @@ export function HomePage() {
       {time === null ? (
         <HomeSkeleton />
       ) : (
-        <main className="mt-8 text-center">
-          <h1 className="text-2xl font-bold">Project Dashboard</h1>
-
-          <div>
-            <ul className="p-4 border border-gray-500 rounded-3xl">
-              <h2>過去7日以内に編集</h2>
-              {projects
-                .filter(item => item.updatedAt >= (time - 7 * 24*60*60*1000))
-                .map(project => {
-                  return (
-                    <li key={project.id} className="flex justify-between">
-                      <h3>{project.title}</h3>
-                      <Link to={`/projects/${project.id}`}>
-                        <AppButton variant="primary">見る</AppButton>
-                      </Link>
-                    </li>
-                  )
-                })
-              }
-            </ul>
-          </div>
-        </main>
+        <DashBoard projects={projects} time={time} />
       )}
     </div>
   );
@@ -84,4 +74,33 @@ function HomeSkeleton() {
       ))}
     </ul>
   );
+}
+
+function DashBoard({ projects, time }: { projects: Project[], time: Date }) {
+  const sevenDaysAgo = time.getTime() - (7 * 24 * 60 * 60 * 1000);
+
+  return (
+    <main className="mt-8 text-center">
+      <h1 className="text-2xl font-bold">Project Dashboard</h1>
+
+      <div>
+        <ul className="p-4 border border-gray-500 rounded-3xl">
+          <h2>過去7日以内に編集</h2>
+          {projects
+            .filter(item => new Date(item.updatedAt).getTime() >= sevenDaysAgo)
+            .map(project => {
+              return (
+                <li key={project.id} className="flex justify-between">
+                  <h3>{project.title}</h3>
+                  <Link to={`/projects/${project.id}`}>
+                    <AppButton variant="primary">見る</AppButton>
+                  </Link>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+    </main>
+  )
 }

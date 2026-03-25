@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { AppButton } from '../../../components';
 import { AppLoadingBar } from '../../../components/AppLoadingBar';
 import { useAuth } from '../../../Context';
@@ -16,7 +17,22 @@ export function User() {
 
   if (sessionStatus === "inactive") return <h1>ログインしていください</h1>
 
-  if (user === null) return <h1>データがありません</h1>;
+  if (!user) return (<>
+    <h1>ユーザーデータが見つかりません</h1>
+    <div className="border-2 p-10">
+      <h2>ログイン状態: {sessionStatus === "active" ? "ログイン中" : "未ログイン"}</h2>
+    </div>
+    <p>ログイン中にこの画面が出る場合は、お手数ですがお問い合わせください</p>
+  </>)
+
+  if (user === null) return (<>
+    <h1>データがありません</h1>
+    <Link to="/projects">
+      <AppButton variant="primary" className="w-auto">
+        新規作成✛
+      </AppButton>
+    </Link>
+  </>);
 
   return (<>
     {gettingStatus === "error" &&
@@ -36,10 +52,11 @@ export function User() {
         <h2>作成日時</h2>
         <p>{new Date(user.createdAt).toLocaleString()}</p>
 
-        <AppButton
-          variant="primary" className='w-auto'
-          onClick={() => window.location.replace("/")}
-        >ダッシュボード</AppButton>
+        <Link to="/">
+          <AppButton variant="primary" className='w-auto'>
+            ダッシュボード
+          </AppButton>
+        </Link>
       </div>
     }
   </>)
