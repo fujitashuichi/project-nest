@@ -1,8 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ProjectsRepository, UsersRepository } from "../../repository/index.js";
 import { projectPayloadMock, userMocks } from "../../__mock__/index.js";
-import { SaveProjectPayload } from "../../types/type.db.js";
-import { prisma } from "../../lib/prisma.js";
+import { SaveProjectPayload, UpdateProjectPayload } from "../../types/type.db.js";
 import { PatchProjectRequest } from "@pkg/shared";
 import { cleanupDb } from "../tools/cleanupDb.js";
 
@@ -50,11 +49,14 @@ describe("project.repositoryの各メソッドを検査", () => {
     const data: SaveProjectPayload = projectPayloadMock.SaveProjectPayload(user!);
     const saved = await projectsRepository!.saveProject(data);
 
-    const updatedData: PatchProjectRequest = { title: { set: "title" }, description: { set: null }, status: { set: "done" } };
-    const result = await projectsRepository!.updateProject(updatedData, saved!.id);
+    const updatePayload: UpdateProjectPayload = { title: { set: "Title" } };
+    const promise = projectsRepository!.updateProject(updatePayload, saved!.id);
 
-    expect(result).toEqual(
-      expect.objectContaining(updatedData)
+    await expect(promise).resolves.toStrictEqual(
+      expect.objectContaining({
+        title: "Title",
+        userId: user!.id
+      })
     );
   });
 
