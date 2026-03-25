@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { AppButton } from '../../../components';
 import { AppLoadingBar } from '../../../components/AppLoadingBar';
 import { useAuth } from '../../../Context';
@@ -16,7 +17,14 @@ export function User() {
 
   if (sessionStatus === "inactive") return <h1>ログインしていください</h1>
 
-  if (user === null) return <h1>データがありません</h1>;
+  if (user === null) return (<>
+    <h1>データがありません</h1>
+    <Link to="/projects">
+      <AppButton variant="primary" className="w-auto">
+        新規作成✛
+      </AppButton>
+    </Link>
+  </>);
 
   return (<>
     {gettingStatus === "error" &&
