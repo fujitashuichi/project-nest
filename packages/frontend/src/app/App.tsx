@@ -4,6 +4,7 @@ import { HomePage, ProjectsPage, UserPage } from './pages'
 import { ProjectPage } from '../features/projects/components/ProjectPage'
 import { TestRouter } from './routes/TestRouter'
 import { ProjectProvider } from '../Context'
+import { LoginAndSignUp } from './pages/loginAndSignUp'
 
 
 function AppRouter() {
@@ -11,6 +12,7 @@ function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomePage />} />
+        <Route path='/login' element={<LoginAndSignUp />} />
 
         <Route path='/projects' element={<ProjectsPage />} />
         <Route path='/projects/:id' element={<ProjectPage />} />
