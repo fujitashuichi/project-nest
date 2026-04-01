@@ -5,6 +5,8 @@ import { AppButton } from "../../components";
 import type { Project } from "@pkg/shared";
 import { get7daysProjects } from "../../lib/tools/get7daysProject";
 import { AppHeader } from "../../components/AppHeader";
+import { AppLoadingBar } from "../../components/AppLoadingBar";
+import Introduction from "./containers/Introduction";
 
 
 export function HomePage() {
@@ -21,12 +23,19 @@ export function HomePage() {
   }, []);
 
 
-  const { useUser } = useAuth();
+  const { useUser, session } = useAuth();
   const { projectsData } = useProject();
 
   const { user } = useUser;
+  const { status } = session;
   const { projects } = projectsData;
 
+
+  if (status === "idle") return <AppLoadingBar className="fixed top-0 left-1/2 -translate-x-1/2 z-10 w-20 h-1.5" />
+
+  if (status === "inactive") return (
+    <Introduction />
+  )
 
   if (!user) return (<>
     <h1>ユーザーデータが見つかりません</h1>
