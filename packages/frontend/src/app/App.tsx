@@ -9,7 +9,6 @@ import { VercelNotice } from '../components/VercelNotice'
 
 function AppRouter() {
   return (<>
-    <VercelNotice />
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<HomePage />} />
@@ -29,6 +28,7 @@ function AppRouter() {
 function App() {
   return (
     <ProjectProvider>
+      <VercelNotice />
       <AppRouter />
     </ProjectProvider>
   )

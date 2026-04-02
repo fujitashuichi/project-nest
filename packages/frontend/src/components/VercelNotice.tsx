@@ -5,7 +5,7 @@ export function VercelNotice() {
   const [isActive, setIsActive] = useState<boolean>(true);
 
   const isVercel = typeof window !== 'undefined' &&
-    (process.env.VERCEL === '1' || window.location.hostname.includes('vercel.app'));
+    (import.meta.env.VERCEL === '1' || window.location.hostname.includes('vercel.app'));
 
   if (!isVercel || !isActive) return null;
 
