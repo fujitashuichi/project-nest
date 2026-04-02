@@ -42,10 +42,12 @@ export function HomePage() {
       <AppHeader user={user} />
 
       <main className="max-w-7xl mx-auto pt-24 pb-12 px-6">
-        {time === null
-          ? <HomeSkeleton />
-          : <DashBoard projects={projects} time={time} />
-        }
+        <div className="animate-in slide-in-from-bottom-2 duration-700">
+          {time === null
+            ? <HomeSkeleton />
+            : <DashBoard projects={projects} time={time} />
+          }
+        </div>
       </main>
     </div>
   )
@@ -72,28 +74,36 @@ function DashBoard({ projects, time }: { projects: Project[], time: Date }) {
 
   return (
     <>
-      <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
-        Project Dashboard
-      </h1>
+      <header className="mb-10 space-y-2">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+          Project Dashboard
+        </h1>
+        <p className="text-sm text-slate-500 font-medium italic">Recent Activity</p>
+      </header>
 
-      <div className="bg-white border border-slate-200 rounded-4xl shadow-sm overflow-hidden text-left">
-        <div className="px-8 py-5 border-b border-slate-100 bg-slate-50/50">
-          <h2 className="text-xs font-bold text-slate-500 uppercase tracking-[0.15em]">
+      <section className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+        <div className="px-10 py-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">
             過去7日以内に編集
           </h2>
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
         </div>
 
         <ul className="divide-y divide-slate-100">
           {sevenDaysProjects.map((project) => (
             <li
               key={project.id}
-              className="flex items-center justify-between px-8 py-5 hover:bg-slate-50/30 transition-colors"
+              className="flex items-center justify-between px-10 py-7 hover:bg-slate-50/40 transition-all group"
             >
-              <h3 className="text-md font-semibold text-slate-800">
-                {project.title}
-              </h3>
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                  {project.title}
+                </h3>
+                <p className="text-[10px] text-slate-400 font-mono tracking-wider">REF: {project.id.slice(0, 8).toUpperCase()}</p>
+              </div>
+
               <Link to={`/projects/${project.id}`}>
-                <AppButton variant="primary" className="px-6 py-2 text-sm">
+                <AppButton variant="primary" className="w-auto">
                   見る
                 </AppButton>
               </Link>
@@ -101,12 +111,19 @@ function DashBoard({ projects, time }: { projects: Project[], time: Date }) {
           ))}
 
           {sevenDaysProjects.length === 0 && (
-            <li className="px-8 py-10 text-center text-sm text-slate-400 italic">
-              対象のプロジェクトはありません
+            <li className="px-10 py-16 text-center">
+              <p className="text-sm text-slate-400 italic font-medium mb-4">
+                対象のプロジェクトはありません
+              </p>
+              <Link to="/projects">
+                <AppButton variant="primary" className="w-auto font-medium bg-green-500">
+                  ＋新規作成
+                </AppButton>
+              </Link>
             </li>
           )}
         </ul>
-      </div>
+      </section>
     </>
   )
 }
