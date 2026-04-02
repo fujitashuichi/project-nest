@@ -22,21 +22,6 @@ export function User() {
     </div>
   )
 
-  if (!user) return (<>
-    <div className="max-w-md mx-auto mt-10 p-8 bg-white border border-slate-200 rounded-xl shadow-sm space-y-6">
-      <h1 className="text-lg font-bold text-red-600">ユーザーデータが見つかりません</h1>
-      <div className="bg-slate-50 p-6 rounded-lg border border-slate-100">
-        <h2 className="text-sm font-medium text-slate-500 uppercase tracking-wider">ログイン状態</h2>
-        <p className="text-md font-semibold text-slate-800 mt-1">
-          {sessionStatus === "active" ? "認証済み" : "未認証"}
-        </p>
-      </div>
-      <p className="text-xs text-slate-400 leading-relaxed text-center">
-        ログイン中にこの画面が出る場合は、<br />お手数ですがお問い合わせください
-      </p>
-    </div>
-  </>)
-
   if (user === null) return (<>
     <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50 gap-6">
       <div className="text-center space-y-2">
