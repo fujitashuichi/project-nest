@@ -6,7 +6,7 @@
       "destination": "https://project-nest-server.vercel.app/:path*"
     },
     {
-      "source": "/:path*",
+      "source": "/((?!api|_next/static|_next/image|favicon.ico).*)",
       "destination": "/index.html"
     }
   ]
