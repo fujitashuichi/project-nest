@@ -32,10 +32,11 @@ export const authConfig: ExpressAuthConfig = {
   // 認証成功時のデータ制御
   callbacks: {
     jwt: ({ token, user }) => {
-      if (!user.email) throw new UserUndefinedError();
-      token.email = user.email;
-
+      if (user?.email) {
+        token.email = user.email;
+      }
       return token;
+    },
     },
     session: ({ session, token }) => {
       if (session.user) {
