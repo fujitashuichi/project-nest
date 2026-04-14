@@ -37,7 +37,6 @@ export const authConfig: ExpressAuthConfig = {
       }
       return token;
     },
-    },
     session: ({ session, token }) => {
       if (session.user) {
         if (!token.email) throw new Error("token.sub undefined");
