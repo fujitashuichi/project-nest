@@ -11,9 +11,9 @@ import { SessionResponse } from "@pkg/shared";
 const service = new UserService();
 
 export const authConfig: ExpressAuthConfig = {
+  basePath: "/api/auth/v2",
   // どうやってユーザーを特定するか
   providers: [
-    Credentials({
       authorize: async (_credentials, req) => {
         const cookies: string[] | undefined = req.headers.get("cookie")?.split("; ");
         const token: string | undefined = cookies?.find(
