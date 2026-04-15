@@ -11,6 +11,7 @@ import { SessionResponse } from "@pkg/shared";
 const service = new UserService();
 
 export const authConfig: ExpressAuthConfig = {
+  basePath: "/api/auth/v2",
   // どうやってユーザーを特定するか
   providers: [
     Credentials({
