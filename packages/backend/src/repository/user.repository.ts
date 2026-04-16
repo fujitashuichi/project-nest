@@ -1,14 +1,21 @@
 import { SaveUserPayload } from "../types/type.db.js";
 import { prisma } from "../lib/prisma.js";
-import { User as AppUser } from "@pkg/shared";
+import { User as AppUser, RegisterRequest } from "@pkg/shared";
 import { safeQuery } from "./safeQuery.js";
 import { User } from "../../generated/prisma/index.js";
+import { CreateUserPayload } from "../types/types.payload.js";
 
 export class UsersRepository {
   private readonly select = {
     id: true,
     email: true,
     createdAt: true,
+  }
+
+  createUser = async (data: CreateUserPayload): Promise<AppUser | null> => {
+    return await safeQuery(() =>
+      prisma.user.create({ data })
+    )
   }
 
   getUsers = async (): Promise<AppUser[] | [] | null> => {
