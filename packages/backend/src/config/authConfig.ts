@@ -41,7 +41,12 @@ export const authConfig: ExpressAuthConfig = {
         const user = await service.findByEmail(parsed.email);
         if (!user) return null;
 
-        const isValid = await service.verifyUserPassword({ email: parsed.email, password: parsed.password });
+        let isValid = false;
+        try {
+          isValid = await service.verifyUserPassword({ email: parsed.email, password: parsed.password });
+        } catch {
+          return null;
+        }
 
         if (!isValid) return null;
 
