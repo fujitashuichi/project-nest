@@ -5,6 +5,7 @@ import { AuthError, UnAuthorizedError } from "../error/AuthError.js";
 import { ExpressAuthConfig } from "@auth/express";
 import { UserUndefinedError } from "../error/UserError.js";
 import { JWTPayload } from "../types/types.payload.js";
+import { LoginRequestSchema } from "@pkg/shared";
 
 
 const service = new UserService();
@@ -22,48 +23,30 @@ export const authConfig: ExpressAuthConfig = {
       },
     },
   },
-  jwt: {
-    decode: async ({ token }) => {
-      // getSession / auth() / getToken
-
-      if (!token) return null;
-
-      try {
-        const verified = verifyToken(token);
-
-        const user = await service.findByEmail(verified.email);
-        if (!user) throw new UserUndefinedError();
-
-        // これが callbacks.jwt( { token } ) の引数になる
-        return {
-          sub: user.id,
-          email: user.email
-        };
-      } catch (e) {
-        return null;
-      }
-    }
-  },
 
 
   // どうやってユーザーを特定するか
   providers: [
     Credentials({
-      authorize: async (_credentials, req) => {
+      authorize: async (credentials) => {
         // signIn (POSTリクエストのみ)
 
-        const cookies: string[] | undefined = req.headers.get("cookie")?.split("; ");
-        const token: string | undefined = cookies?.find(
-          str => str.startsWith("token=")
-        )?.split("=").slice(1).join("=");
-        if (!token) throw new UnAuthorizedError();
+        if (!credentials.email || !credentials.password) {
+          return null;
+        }
 
-        const verified: JWTPayload = verifyToken(token);
+        const verified = LoginRequestSchema.parse({
+          email: credentials.email,
+          password: credentials.password
+        });
 
         const user = await service.findByEmail(verified.email);
-        if (user === null) throw new UserUndefinedError();
+        if (!user) throw new UserUndefinedError();
 
-        return user;
+        return {
+          id: user.id,
+          email: user.email
+        };
       }
     })
   ],
