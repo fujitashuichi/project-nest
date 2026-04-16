@@ -5,6 +5,7 @@ import { TestRouter } from './routes/TestRouter'
 import { ProjectProvider } from '../Context'
 import { LoginAndSignUp } from './pages/LoginAndSignUp'
 import { VercelNotice } from '../components/VercelNotice'
+import { SessionProvider } from "next-auth/react";
 
 
 function AppRouter() {
@@ -27,10 +28,12 @@ function AppRouter() {
 
 function App() {
   return (
-    <ProjectProvider>
-      <VercelNotice />
-      <AppRouter />
-    </ProjectProvider>
+    <SessionProvider basePath="/api/auth/v2">
+      <ProjectProvider>
+        <VercelNotice />
+        <AppRouter />
+      </ProjectProvider>
+    </SessionProvider>
   )
 }
 
