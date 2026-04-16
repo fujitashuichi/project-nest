@@ -29,6 +29,7 @@ describe("auth_v2.controller", () => {
     await register()(authRequestMocks.register.validReq(), res!);
 
     const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
+    console.log('Cookie Name:', name);
     const cookies = { [name]: value };
 
     await session_v2(createRequestMock.withCookies(cookies), res!);
