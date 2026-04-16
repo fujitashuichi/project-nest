@@ -1,9 +1,9 @@
 import { LoginRequestSchema, type LoginRequest } from "@pkg/shared";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import type { AuthCtxType } from "../../../../Context";
-import { login_v2 } from "../../api/v2/login_v2";
-import { parseFormData } from "../../../../lib";
+import type { AuthCtxType } from "../../../Context";
+import { login } from "../api";
+import { parseFormData } from "../../../lib";
 
 type Result = AuthCtxType["login"];
 
@@ -18,7 +18,7 @@ export const useLogin_v2 = (setSessionStatus: AuthCtxType["session"]["setStatus"
   const [errorMessage, setErrorMessage] = useState<Result["errorMessage"]>(null);
 
   const mutation = useMutation({
-    mutationFn: (body: LoginRequest) => login_v2(body),
+    mutationFn: (body: LoginRequest) => login(body),
     onSuccess: (result) => {
       if (!result.ok) {
         setOverrideStatus("error");

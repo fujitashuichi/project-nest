@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { RegisterRequestSchema, type RegisterRequest } from "@pkg/shared";
-import type { AuthCtxType } from "../../../../Context";
-import { parseFormData } from "../../../../lib";
+import type { AuthCtxType } from "../../../Context";
+import { parseFormData } from "../../../lib";
 import { useState } from "react";
-import { register_v2 } from "../../api/v2/register_v2";
+import { register } from "../api";
 
 
 type Result = AuthCtxType["register"];
@@ -24,7 +24,7 @@ export const useRegister = (setSessionStatus: AuthCtxType["session"]["setStatus"
   const [overrideStatus, setOverrideStatus] = useState<"error" | null>(null);
 
   const mutation = useMutation({
-    mutationFn: (body: RegisterRequest) => register_v2(body),
+    mutationFn: (body: RegisterRequest) => register(body),
     onSuccess: (result) => {
       if (!result.ok) {
         setSessionStatus("inactive");
