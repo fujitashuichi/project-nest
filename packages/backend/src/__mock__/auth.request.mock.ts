@@ -1,4 +1,4 @@
-import { LoginRequest, RegisterRequest } from "@pkg/shared";
+import { RegisterRequest } from "@pkg/shared";
 import { Request } from "express"
 import { createRequest } from "node-mocks-http";
 
@@ -65,25 +65,5 @@ export const authRequestMocks = {
     },
 
     ...dosRequests
-  },
-
-  login: {
-    validReq: (): Request => {
-      const data: LoginRequest = {
-        email: "example@email.com",
-        password: "password"
-      }
-
-      return createRequest({ body: data });
-    },
-
-    ...dosRequests,
-
-    wrongPasswordReq: (): Request => {
-      return createRequest({
-        email: "example@email.com",
-        password: "ThIsISWroNGpaSswOrd"
-      });
-    }
-  },
+  }
 }
