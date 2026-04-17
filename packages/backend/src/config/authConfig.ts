@@ -139,7 +139,7 @@ export const authConfig: ExpressAuthConfig = {
     session: ({ session, token }) => {
       // getSession / auth()
 
-      prosesLog("blue", "jwt running...");
+      prosesLog("blue", "session running...");
 
       if (!session.user) {
         prosesLog("red", "session.user undefined");
