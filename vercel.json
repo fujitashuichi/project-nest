@@ -2,6 +2,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/auth/error",
+      "destination": "/auth/error"
+    },
+    {
       "source": "/api/:path*",
       "destination": "packages/backend/src/index.ts"
     },
