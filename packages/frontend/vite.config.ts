@@ -17,9 +17,6 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        "/api/auth/error": {
-          target: "/auth/error"
-        },
         '/api': {
           target: authUrl,
           changeOrigin: true,
