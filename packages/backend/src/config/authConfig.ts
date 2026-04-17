@@ -86,26 +86,35 @@ export const authConfig: ExpressAuthConfig = {
     jwt: ({ token, user }) => {
       // getSession / signIn
 
-      if (user) {
-        if (!user.id || !user.email) {
-          prosesLog("Invalid user data");
-          return null;
-        }
-
-        token.sub = user.id;
-        token.email = user.email;
+      if (!user) {
+        prosesLog("User data undefined");
+        return null;
       }
+
+      if (!user.id || !user.email) {
+        prosesLog("Invalid user data");
+        return null;
+      }
+
+      token.sub = user.id;
+      token.email = user.email;
+
       return token;
     },
     session: ({ session, token }) => {
       // getSession / auth()
 
-      if (session.user) {
-        if (token.sub && token.email) {
-          session.user.id = token.sub;
-          session.user.email = token.email
-        }
+      if (!session.user) {
+        prosesLog("session.user undefined");
       }
+
+      if (!token.sub || !token.email) {
+        prosesLog("Empty token");
+        return session;
+      }
+
+      session.user.id = token.sub;
+      session.user.email = token.email
 
       return session;
     }
