@@ -14,8 +14,6 @@ export const createAuthRouter = () => {
     requestValidator("register"),
     createUser
   );
-  router.post("/login", requestValidator("login"));
-  router.post("/logout", requestValidator("logout"));
 
   // ExpressAuth: エラー型を緩く設定している?
   // 致命的エラー以外は大抵素通しされるため、細かいエラーログを作るべきか?

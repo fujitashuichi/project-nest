@@ -2,8 +2,6 @@ import type { ResponseErrorName } from "./types.responseErrorName.js"
 
 export type AuthFetchPath =
   | "/api/auth/register"
-  | "/api/auth/login"
-  | "/api/auth/logout"
   | "/api/auth/session"
 
 export type ProjectFetchPath =
