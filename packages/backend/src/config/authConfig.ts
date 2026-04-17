@@ -51,6 +51,20 @@ export const authConfig: ExpressAuthConfig = {
     signOut: "/",
     error: '/auth/error',
   },
+  logger: {
+    error(err) {
+      console.error(err);
+    },
+    warn(code) {
+      console.warn(code);
+    },
+    debug(code, metadata) {
+      if (ENV.NODE_ENV === "production") {
+        return;
+      }
+      console.log(code, metadata);
+    },
+  },
 
 
   providers: [

@@ -15,6 +15,10 @@ export const createAuthRouter = () => {
     createUser
   );
 
+  router.post("/log", (_req, res) => {
+    res.status(200).json({ success: true });
+  })
+
   // ExpressAuth: エラー型を緩く設定している?
   // 致命的エラー以外は大抵素通しされるため、細かいエラーログを作るべきか?
   router.use("/", ExpressAuth(authConfig));

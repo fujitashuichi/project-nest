@@ -4,17 +4,8 @@ import { useAuth } from "../../../Context";
 import { LoginErrorPage } from "./errors/LoginErrorPage";
 
 export function LoginContainer() {
-  const { login, session } = useAuth();
+  const { login } = useAuth();
   const { status } = login;
-  const { status: sessionStatus } = session;
-
-  if (sessionStatus === "active") {
-    window.location.replace("/");
-  }
-
-  if (status === "loggedIn") {
-    window.location.replace("/");
-  }
 
   return (
     <div>
