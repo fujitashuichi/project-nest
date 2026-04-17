@@ -3,10 +3,22 @@ import { UserService } from "../service/user.service.js";
 import { ExpressAuthConfig } from "@auth/express";
 import { LoginRequestSchema } from "@pkg/shared";
 import { ENV } from "./env.js";
+import { styleText } from "node:util";
 
 
 const service = new UserService();
 const secret: ExpressAuthConfig["secret"] = ENV.AUTH_SECRET;
+
+const prosesLog = (text: string) => {
+  return process.stdout.write(styleText(
+    ["red", "bold"],
+    `\n\n` +
+    `- -`.repeat(3) + ` authConfig ` + `- -`.repeat(3) +
+    `\n\n${text}\n\n` +
+    `- -`.repeat(13) +
+    `\n\n`
+  ));
+}
 
 export const authConfig: ExpressAuthConfig = {
   basePath: "/api/auth",
@@ -32,6 +44,7 @@ export const authConfig: ExpressAuthConfig = {
         // signIn (POSTリクエストのみ)
 
         if (!credentials.email || !credentials.password) {
+          prosesLog("credentials doesn't have enough data");
           return null;
         }
 
@@ -41,16 +54,23 @@ export const authConfig: ExpressAuthConfig = {
         });
 
         const user = await service.findByEmail(parsed.email);
-        if (!user) return null;
+        if (!user) {
+          prosesLog("user undefined");
+          return null;
+        }
 
         let isValid = false;
         try {
           isValid = await service.verifyUserPassword({ email: parsed.email, password: parsed.password });
         } catch {
+          prosesLog("verification failed");
           return null;
         }
 
-        if (!isValid) return null;
+        if (!isValid) {
+          prosesLog("credentials not valid");
+          return null;
+        }
 
         return {
           id: user.id,
@@ -67,8 +87,10 @@ export const authConfig: ExpressAuthConfig = {
       // getSession / signIn
 
       if (user) {
-        if (!user.id) return null;
-        if (!user.email) return null;
+        if (!user.id || !user.email) {
+          prosesLog("Invalid user data");
+          return null;
+        }
 
         token.sub = user.id;
         token.email = user.email;
