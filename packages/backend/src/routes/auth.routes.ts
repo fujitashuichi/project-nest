@@ -1,35 +1,27 @@
-import { Router } from "express";
-import { session, login, logout, register, me } from "../controller/index.js";
-import { authorize, requestValidator } from "../middleware/index.js";
+import { Router } from "express"
+import { createUser, session } from "../controller/auth.controller.js";
+import { requestValidator } from "../middleware/index.js";
+import { ExpressAuth } from "@auth/express";
+import { authConfig } from "../config/authConfig.js";
 
 
 export const createAuthRouter = () => {
   const router = Router();
 
+  router.get("/session", session);
+
   router.post("/register",
     requestValidator("register"),
-    register()
+    createUser
   );
 
-  router.get("/session",
-    session()
-  );
+  router.post("/log", (_req, res) => {
+    res.status(200).json({ success: true });
+  })
 
-  router.post("/login",
-    requestValidator("login"),
-    login()
-  );
-
-  router.post("/logout",
-    requestValidator("logout"),
-    logout
-  );
-
-  router.post("/me",
-    requestValidator("me"),
-    authorize(),
-    me()
-  );
+  // ExpressAuth: エラー型を緩く設定している?
+  // 致命的エラー以外は大抵素通しされるため、細かいエラーログを作るべきか?
+  router.use("/", ExpressAuth(authConfig));
 
   return router;
 }

@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ProjectsRepository, UsersRepository } from "../../repository/index.js";
 import { projectPayloadMock, userMocks } from "../../__mock__/index.js";
 import { SaveProjectPayload, UpdateProjectPayload } from "../../types/type.db.js";
-import { PatchProjectRequest } from "@pkg/shared";
 import { cleanupDb } from "../tools/cleanupDb.js";
 
 

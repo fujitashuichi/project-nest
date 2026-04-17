@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UserSchema, UserWithoutTimeSchema } from "../user/types.data.js";
+import { UserSchema } from "../user/types.data.js";
 
 
 // register
@@ -14,9 +14,10 @@ export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
 
 
 // session
-export const SessionResponseSchema = UserSchema.pick({
-  id: true,
-  email: true
+  // Web通信によるDateオブジェクトの破壊を回避するため、
+  // isoStringを利用する
+export const SessionResponseSchema = UserSchema.extend({
+  createdAt: z.iso.datetime()
 });
 export type SessionResponse = z.infer<typeof SessionResponseSchema>;
 
@@ -35,8 +36,3 @@ export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 // logout
 export const LogoutResponseSchema = z.void().or(z.object({}));
 export type LogoutResponse = z.infer<typeof LogoutResponseSchema>;
-
-
-// me
-export const MeResponseSchema = UserSchema;
-export type MeResponse = z.infer<typeof MeResponseSchema>;

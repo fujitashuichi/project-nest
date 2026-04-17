@@ -14,6 +14,7 @@
     "@pkg/shared": "*",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.91.0",
+    "next-auth": "^4.24.14",
     "postcss": "^8.5.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

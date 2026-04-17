@@ -1,9 +1,9 @@
 import { LoginRequestSchema, type LoginRequest } from "@pkg/shared";
-import { parseFormData } from "../../../lib";
-import { login } from "../api";
-import type { AuthCtxType } from "../../../Context";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import type { AuthCtxType } from "../../../Context";
+import { isSessionActive, login } from "../api";
+import { parseFormData } from "../../../lib";
 
 type Result = AuthCtxType["login"];
 
@@ -28,9 +28,23 @@ export const useLogin = (setSessionStatus: AuthCtxType["session"]["setStatus"]):
       setSessionStatus("active");
       window.location.replace("/");
     },
-    onError: () => {
+    onError: async () => {
+      setSessionStatus("idle");
+
+      const session = await isSessionActive();
+      if (session) {
+        // auth.jsの通信による不整合が多いため、フォールバックを用意
+        /*
+          BE処理が成功しているにも関わらず通信が失敗することがあります。
+          Express/React間の整合性を保つには課題が多く、
+          BEのsessionコンテキストを直接参照する他ありませんでした。
+        */
+        mutation.status = "success";
+        setSessionStatus("active");
+        return window.location.replace("/");
+      }
+
       setSessionStatus("inactive");
-      alert("通信に失敗しました。時間をおいて再度お試しください。\n※学習用なのでSupabaseが停止していることがあります");
     }
   });
 

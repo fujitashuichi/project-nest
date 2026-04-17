@@ -1,7 +1,9 @@
 import { RegisterResponseSchema, type RegisterRequest } from "@pkg/shared";
-import { apiClient } from "../../../lib/api-client";
+import { login } from "./login";
 import type { ApiResult } from "../../../lib/types";
+import { apiClient } from "../../../lib";
 import type { RegisterResult } from "./types";
+
 
 export const register = async (body: RegisterRequest): Promise<RegisterResult> => {
   const response: ApiResult = await apiClient({
@@ -30,6 +32,17 @@ export const register = async (body: RegisterRequest): Promise<RegisterResult> =
     return {
       ok: false,
       errorType: "GetTokenFailed"
+    }
+  }
+
+  const loginResult = await login({
+    email: body.email,
+    password: body.password
+  });
+  if (loginResult.ok === false) {
+    return {
+      ok: false,
+      errorType: "Unknown"
     }
   }
 

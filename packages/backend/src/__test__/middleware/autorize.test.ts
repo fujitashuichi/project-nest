@@ -4,10 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authRequestMocks, createResponseMock } from "../../__mock__/index.js";
 import { NextFunction, Request, Response } from "express";
 import { Database } from "sqlite3";
-import { register } from "../../controller/index.js";
 import { authorize } from "../../middleware/index.js";
 import { createRequestMock } from "../../__mock__/createRequest.mock.js";
-import { prisma } from "../../lib/prisma.js";
 import { cleanupDb } from "../tools/cleanupDb.js";
 
 describe("authorize.ts", () => {
@@ -26,18 +24,6 @@ describe("authorize.ts", () => {
     next = null;
     db = null;
     vi.restoreAllMocks();
-  });
-
-  it("tokenがある場合はdtoにuserIdを付加する", async () => {
-    await register()(authRequestMocks.register.validReq(), res!);
-
-    const [name, value] = vi.mocked(res!.cookie).mock.calls[0]!;
-    const cookies: Request["cookies"] = { [name]: value };
-
-    await authorize()(createRequestMock.withCookies(cookies), res!, next!);
-
-    expect(res!.locals).toBeTruthy();
-    expect(res!.locals.userId).toBeTruthy();
   });
 
   it("tokenがない場合はUnAuthorizedErrorを投げる", async () => {

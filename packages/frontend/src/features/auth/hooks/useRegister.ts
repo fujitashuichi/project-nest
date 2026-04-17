@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { register } from "../api/register";
 import { RegisterRequestSchema, type RegisterRequest } from "@pkg/shared";
 import type { AuthCtxType } from "../../../Context";
 import { parseFormData } from "../../../lib";
 import { useState } from "react";
+import { register } from "../api";
 
 
 type Result = AuthCtxType["register"];
@@ -12,7 +12,7 @@ type Result = AuthCtxType["register"];
 const errorMap = {
   AlreadyRegistered: "登録済のアカウントです",
   GetTokenFailed: "認証トークンの取得に失敗しました",
-  UnknownError: "エラーが発生しました"
+  Unknown: "エラーが発生しました"
 } as const;
 
 const formDataSchema = RegisterRequestSchema.extend({

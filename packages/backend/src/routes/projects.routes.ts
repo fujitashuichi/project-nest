@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { authorize, requestValidator } from "../middleware/index.js";
+import { requestValidator } from "../middleware/index.js";
 import { createProject, deleteProject, getProjects, updateProject } from "../controller/index.js";
 import { isUsersProject } from "../middleware/isUsersProject.js";
+import { authorize } from "../middleware/index.js";
 
 
 export const createProjectRouter = () => {
@@ -19,6 +20,7 @@ export const createProjectRouter = () => {
   );
 
   router.patch("/:id",
+    requestValidator("patchProject"),
     authorize(),
     isUsersProject(),
     updateProject()
