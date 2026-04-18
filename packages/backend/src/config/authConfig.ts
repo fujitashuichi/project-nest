@@ -41,8 +41,8 @@ export const authConfig: ExpressAuthConfig = {
       name: "authjs.csrf-token",
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        secure: env === "production",
+        sameSite: env === "production" ? "none" : "lax",
         path: "/",
       },
     },
