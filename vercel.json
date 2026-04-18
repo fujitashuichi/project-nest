@@ -13,7 +13,7 @@
     },
     {
       "source": "/api/auth/providers",
-      "destination": "packages/backend/src/index.ts"
+      "destination": "https://project-nest-server.vercel.app/api/auth/providers"
     },
     {
       "source": "/api/:path*",
