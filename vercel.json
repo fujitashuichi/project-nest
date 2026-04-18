@@ -12,7 +12,7 @@
       "destination": "/auth/error"
     },
     {
-      "source": "/api/auth/provider",
+      "source": "/api/auth/providers",
       "destination": "packages/backend/src/index.ts"
     },
     {
