@@ -10,7 +10,7 @@ const errorMap = {
   UserUndefined: "ユーザーが存在しません",
   ProjectUndefined: "プロジェクトが存在しません",
   InvalidData: "エラーが発生しました",
-  UnknownError: "エラーが発生しました"
+  Unknown: "エラーが発生しました"
 }
 
 type Result = ProjectCtxType["delete"];
